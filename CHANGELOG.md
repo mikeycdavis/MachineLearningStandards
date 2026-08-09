@@ -12,6 +12,32 @@ Three versions travel independently: the **framework** version (`VERSION`, and a
 `standardVersion`), the **output schema** version (`schemaVersion` in every report), and the
 **package** version in `package.json`.
 
+## How a release is judged
+
+> **A new version is not better because it produces fewer unknowns. It is better when the unknowns
+> it reports more accurately correspond to what the system does not know.**
+
+Stated here because the obvious metrics are the wrong ones, and a future maintainer under pressure
+will reach for them. Compliance scores, the count of automated rules, and the number of outstanding
+evidence requests are all trivially improvable by making the framework claim more than it can
+support — and every one of those improvements would be a regression.
+
+Three consequences, binding on every release:
+
+- **A rising score is not evidence of a better release.** Scores describe target projects. They say
+  nothing about the framework, and a release that raised them by relaxing a check has made the
+  system worse while making its output look better.
+- **A falling evidence-request count is not progress.** `1.1.0` moved the measured ratio from 2
+  producible / 35 requiring human judgement to 5 / 36 — *upward*, because gaps that had been passing
+  in silence started asking. That is the direction a correct release moves in.
+- **Automation coverage is a property of the domain, not of the effort spent.** A rule that moves
+  from human judgement to automation must do so because a mechanism genuinely establishes it, never
+  because the gap was uncomfortable to report.
+
+Where a release cannot know something, the correct output is that it does not know, with the reason
+attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
+ownership model is exact when git answers, an approximation when git declines, and it says which.
+
 ## 1.1.0 — 2026-08-09
 
 Remediation of what three adoptions against real machine-learning repositories found. Every change

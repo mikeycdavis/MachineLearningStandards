@@ -171,3 +171,10 @@ measurable.
   found that truncation made findings order-dependent
 - [v1.1 comparison](artifacts/adoption/2026-08-09-v1.1-comparison.md) — the same three targets after
   remediation, measured against the frozen baseline
+- [Fourth adoption protocol](artifacts/adoption/2026-08-09-fourth-adoption-protocol.md) — selection
+  criteria for an independently owned target, written before the target is chosen
+
+All three targets so far share an owner, so what they establish is structural: the framework handles
+three different repository shapes. **External generalisation is untested.** How a release is judged
+is stated in [CHANGELOG.md](CHANGELOG.md) — a version is not better for reporting fewer unknowns,
+only for reporting them more accurately.
