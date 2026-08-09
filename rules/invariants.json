@@ -96,6 +96,30 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "invariant.no-self-satisfying-scaffolding",
+      "kind": "invariant",
+      "title": "Framework-generated scaffolding never satisfies the rules it was written to help meet",
+      "category": "invariant",
+      "standard": null,
+      "level": "required",
+      "severity": "error",
+      "verification": "structural",
+      "assurance": "partial",
+      "nonExemptible": true,
+      "attestable": false,
+      "triggers": [],
+      "introducedIn": "1.1.0",
+      "description": "An artifact this framework generates — a template written by `standards init`, or any future scaffolding — must not count as evidence that a project satisfies a substantive requirement, until a human has meaningfully completed it. A section that is empty, or contains only placeholder text, or still carries the scaffold marker, answers nothing.",
+      "rationale": "Observed in the first adoption against a real repository: running `standards init` flipped three required rules from failing to passed, with no work done on the project at all. The document that satisfied evaluation.baseline-exists was a table row reading “Baseline — REPLACE with the strongest simple thing that could reasonably work”. This is the standards-system form of leakage: the tool creates a placeholder, its own detector observes the placeholder, and the placeholder becomes evidence. Stated as an invariant rather than as three fixes because otherwise the same hole reopens for every template added later.",
+      "remediation": "Complete the document, then delete the scaffold marker. If the rule genuinely has no subject in this project, declare it not-applicable with a reason rather than leaving a template to answer for it.",
+      "evidenceExpected": "Documents that carry no scaffold marker and whose relevant sections contain substantive content rather than placeholders.",
+      "$assuranceNote": "Enforced by two independent signals — an explicit marker every generated document carries until a human removes it, and a substance check that rejects empty or placeholder-only sections. Together they establish that a document is not untouched scaffolding. They cannot establish that its content is true or adequate; a completed but wrong model card passes this and is caught, if at all, by review.",
+      "$exemptibilityNote": "Non-exemptible. An exception here would permit the framework to accept its own output as proof that a project met a requirement, which is the purest form of the false confidence this system exists to prevent.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

@@ -397,7 +397,11 @@ function summarise(results, policy, evidenceRequests) {
 
   return {
     status,
-    score,
+    // Blocked means unscored. Once an invariant has fired, the framework has declared this
+    // evaluation unacceptable, and a percentage computed against a ruler it has just called
+    // untrustworthy is worse than no number: it is the part a reader quotes. The first version
+    // printed "BLOCKED_BY_INVARIANT" and "83%" on adjacent lines, which undercut the whole point.
+    score: status === STATUS.BLOCKED_BY_INVARIANT ? null : score,
     summary: counts,
     assurance,
     denominator: {

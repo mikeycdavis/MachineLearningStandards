@@ -38,7 +38,18 @@ never replaces an existing file without being told to.
 | `standards status` | Decision freshness. Stale attestations, lapsed exceptions, and applicability declarations the scan now contradicts. |
 
 Flags: `--json`, `--dir=<path>`, `--strict` (scan only), `--dry-run` and
-`--force-overwrite=<path>` (init only).
+`--force-overwrite=<path>` (init only), `--include-unowned`.
+
+**Scope: the code you own.** By default the tool evaluates what your repository tracks, asked of
+git. Environments, caches, data, vendored libraries and generated output are not read — an early
+adoption found every leakage finding on one project coming from scikit-learn's own test suite inside
+a committed virtualenv. Where git cannot answer, unowned trees are recognised by structure and the
+report says the scope is an approximation. Pass `--include-unowned` where vendored code genuinely is
+the product you are assessing.
+
+**Scaffolding is not evidence.** The documents `init` writes carry a marker, and while it is present
+the evaluator treats their sections as unanswered. A template does not satisfy the rule it was
+written to help you meet. Complete the document, then delete the marker line.
 
 ---
 
@@ -51,7 +62,7 @@ The same contract across every command in the repository.
 | `0` | Ok. |
 | `1` | Findings, or non-compliant. The tool worked and your project has problems. |
 | `2` | Invocation or configuration error. The tool could not reach a verdict — nothing was evaluated. |
-| `3` | **Blocked by an invariant.** A standard, test, or evidence mechanism was weakened, so no verdict is produced. |
+| `3` | **Blocked by an invariant.** A standard, test, or evidence mechanism was weakened, so no verdict is produced — and no score, because a number computed with a ruler the framework has just called untrustworthy is worse than none. |
 
 The 1/2 split matters: a broken configuration reported as a compliance failure sends someone to fix
 the wrong thing. The separate `3` makes a refusal machine-visible to a CI job or an agent that sees

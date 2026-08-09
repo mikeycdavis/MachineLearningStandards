@@ -12,6 +12,45 @@ Three versions travel independently: the **framework** version (`VERSION`, and a
 `standardVersion`), the **output schema** version (`schemaVersion` in every report), and the
 **package** version in `package.json`.
 
+## 1.1.0 — 2026-08-09
+
+Remediation of what three adoptions against real machine-learning repositories found. Every change
+here answers recorded evidence in `artifacts/adoption/`; **no standard was changed, and no rule was
+reclassified, exempted, or lowered.** MINOR rather than MAJOR: one invariant was added and several
+checks became stricter, and nothing on the frozen surface moved.
+
+### Added
+
+- `invariant.no-self-satisfying-scaffolding` — framework-generated artifacts must not satisfy the
+  requirements they were generated to help someone meet. Running `init` previously flipped three
+  required rules to passed with no work done on the project.
+- An ownership model for scan scope (`scripts/ownership.mjs`). Scope is what the project tracks,
+  asked of git; where git cannot answer, unowned trees are recognised by structure. `--include-unowned`
+  evaluates everything, for the case where vendored code genuinely is the product.
+- `scripts/scaffolding.mjs` — three independent signals for recognising an unfilled document.
+- The scan envelope carries `scope`, stating how the scope was decided and why.
+
+### Fixed
+
+- **Bootstrap manufactured compliance.** Three required rules no longer pass on placeholder text.
+- **The scanner read unowned code.** Across three targets, no finding now cites code the project did
+  not write; twelve false leakage findings inside a vendored scikit-learn became zero.
+- **A general silent pass**, found while fixing the first. A rule whose detector is gated behind a
+  trigger reported `passed` when the trigger never fired — a project with no data was credited with
+  documenting its data. The evaluator now receives the rules actually examined on this target.
+- **Blocked runs printed a score.** Once an invariant fires the score is suppressed: a number
+  computed with a ruler the framework has just called untrustworthy should not be published.
+- **`explain` emitted a glob.** `standards/15-*.md` is not openable; locations now resolve to a real
+  file and a verified heading anchor.
+- **The scope reporter called a real repository "not a git repository"** when git declined under
+  `safe.directory`. It now names git's own reason.
+
+### Measured, and not to be optimised
+
+Evidence requests on the target evaluated both ways moved from 2 producible / 35 requiring human
+judgement, to 5 / 36. The rise is honest gaps surfaced rather than automation gained. No rule moved
+from judgement to automation, and future versions should not be judged by making that ratio larger.
+
 ## 1.0.0 — 2026-08-09
 
 First release.

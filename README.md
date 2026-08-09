@@ -155,4 +155,19 @@ aliases exist to reconcile a vocabulary that was allowed to fork.
 - [0004](artifacts/adr/0004-honest-automation.md) — honest automation, and the checks not built
 - [0005](artifacts/adr/0005-integrity-invariant-enforcement.md) — how the integrity invariant is enforced
 
+- [0006](artifacts/adr/0006-scaffolding-and-scope.md) — scaffolding is not evidence, and scope is ownership
+
 Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md)
+
+## Adoption record
+
+The framework has been run against three real machine-learning repositories, and what that found is
+recorded rather than summarised away. `v1.0.0` is tagged unchanged so the evidence against it stays
+measurable.
+
+- [First adoption](artifacts/adoption/2026-08-09-first-adoption.md) — two targets; found that the
+  bootstrap manufactured compliance and the scanner read code the project did not write
+- [Third adoption](artifacts/adoption/2026-08-09-third-adoption.md) — a differently shaped target;
+  found that truncation made findings order-dependent
+- [v1.1 comparison](artifacts/adoption/2026-08-09-v1.1-comparison.md) — the same three targets after
+  remediation, measured against the frozen baseline

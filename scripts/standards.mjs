@@ -17,7 +17,7 @@
  */
 
 import { readFile, readdir, stat } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import process from "node:process";
@@ -29,6 +29,8 @@ import { loadCatalog, resolve, assertBindings, coverage, CatalogError } from "./
 import { evaluate, envelope, STATUS, SCHEMA_VERSION } from "./compliance.mjs";
 import { checkIntegrity } from "./integrity.mjs";
 import { plan as initPlan, apply as initApply, renderPlan } from "./init.mjs";
+import { anyDocumentAnswers, isScaffold, isSubstantive, sectionBody } from "./scaffolding.mjs";
+import { resolveScope, isUnownedPath, isVirtualenv, isNestedCheckout } from "./ownership.mjs";
 
 const EXIT_OK = 0;
 const EXIT_FINDINGS = 1;
@@ -172,9 +174,26 @@ export function importPattern(pkg) {
 const CODE_EXT = new Set([".py", ".js", ".mjs", ".ts", ".r", ".jl"]);
 const TEXT_EXT = new Set([...CODE_EXT, ".md", ".txt", ".yml", ".yaml", ".json", ".toml", ".cfg", ".ini"]);
 
-async function walk(root) {
+async function walk(root, scope) {
   const files = [];
   let truncated = false;
+  let excluded = 0;
+  const rel = (f) => path.relative(root, f).split(path.sep).join("/");
+
+  // The fast path. When git has told us what the project tracks, there is nothing to walk and
+  // nothing to guess: the list is the answer, and it is exact rather than approximate.
+  if (scope.tracked) {
+    for (const r of scope.tracked) {
+      if (files.length >= MAX_FILES) { truncated = true; break; }
+      // Tracked is not the same as in scope. A repository legitimately commits test fixtures,
+      // vendored snapshots, and sample projects; those are owned but they are not the work being
+      // judged. The same skip list that excludes them from a heuristic walk applies here.
+      if (r.split("/").some((segment) => SKIP_DIRS.has(segment))) { excluded++; continue; }
+      files.push(path.join(root, r));
+    }
+    return { files, truncated, excluded };
+  }
+
   async function visit(dir) {
     if (files.length >= MAX_FILES) { truncated = true; return; }
     let entries;
@@ -187,7 +206,15 @@ async function walk(root) {
       if (files.length >= MAX_FILES) { truncated = true; return; }
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) {
-        if (SKIP_DIRS.has(entry.name)) continue;
+        if (scope.basis !== "everything") {
+          // Structure before names: a virtualenv is recognised by carrying pyvenv.cfg or a
+          // site-packages tree, because the directory it lives in can be called anything.
+          if (isUnownedPath(rel(full)) || isVirtualenv(full) || isNestedCheckout(full, root)) {
+            excluded++;
+            continue;
+          }
+        }
+        if (SKIP_DIRS.has(entry.name) && scope.basis !== "everything") continue;
         await visit(full);
       } else if (entry.isFile()) {
         files.push(full);
@@ -195,12 +222,13 @@ async function walk(root) {
     }
   }
   await visit(root);
-  return { files, truncated };
+  return { files, truncated, excluded };
 }
 
 /** Read the repository once into the shape every detector consumes. */
-async function readRepo(root) {
-  const { files, truncated } = await walk(root);
+async function readRepo(root, options = {}) {
+  const scope = resolveScope(root, options);
+  const { files, truncated, excluded } = await walk(root, scope);
   const rel = (f) => path.relative(root, f).split(path.sep).join("/");
 
   const entries = [];
@@ -256,7 +284,7 @@ async function readRepo(root) {
     }
     entries.push(entry);
   }
-  return { entries, truncated, fileCount: files.length };
+  return { entries, truncated, fileCount: files.length, scope, excluded, templates: shippedTemplateBodies() };
 }
 
 // ---------------------------------------------------------------------------
@@ -298,6 +326,18 @@ export function makeFinding(id, over) {
 export function detect(repo) {
   const findings = [];
   const add = (id, over) => findings.push(makeFinding(id, over));
+
+  /**
+   * The rules whose detector actually ran against THIS target.
+   *
+   * Distinct from EVALUATED_RULES, which is the set the evaluator can examine in principle. Several
+   * detectors are gated behind a trigger — the provenance check only runs where data exists — and a
+   * gated detector that never ran produced no finding, which the engine previously read as a pass.
+   * That is invariant.no-silent-pass failing in its general form, and it was found by a test asking
+   * why a project with no data was credited with documenting its data.
+   */
+  const examined = new Set();
+  const examine = (...ids) => ids.forEach((id) => examined.add(id));
   const files = repo.entries;
   const codeFiles = files.filter((f) => f.views && CODE_EXT.has(f.ext));
   const notebooks = files.filter((f) => f.notebook);
@@ -393,6 +433,7 @@ export function detect(repo) {
   // ---- Rule-bound ----
 
   // A1 — preprocessing fitted before the split, in the same file.
+  examine("leakage.no-preprocessing-leakage", "split.no-test-set-tuning");
   const a1 = [];
   for (const f of [...codeFiles, ...notebooks]) {
     if (!f.views || (f.ext !== ".py" && f.ext !== ".ipynb")) continue;
@@ -449,6 +490,7 @@ export function detect(repo) {
 
   // A3 — no seed anywhere in a project that does ML.
   if (isML) {
+    examine("reproducibility.seeds-recorded");
     const seeded = [...codeFiles, ...notebooks].some(
       (f) => f.views && SEED_SIGNALS.some((sig) => f.views.structure.includes(sig)),
     );
@@ -466,6 +508,9 @@ export function detect(repo) {
 
   // A4 — declared dependencies that name no exact version.
   const unpinned = [];
+  if (files.some((f) => /requirements[^/]*\.txt$|(^|\/)pyproject\.toml$|environment\.ya?ml$/.test(f.path))) {
+    examine("reproducibility.dependencies-pinned");
+  }
   for (const f of files) {
     if (!f.text) continue;
     if (/^requirements[^/]*\.txt$/.test(f.path) || /\/requirements[^/]*\.txt$/.test(f.path)) {
@@ -497,6 +542,7 @@ export function detect(repo) {
   }
 
   // A5 — notebooks carrying committed outputs or out-of-order execution.
+  if (notebooks.length > 0) examine("reproducibility.notebook-hygiene");
   const a5 = [];
   for (const f of notebooks) {
     const reasons = [];
@@ -517,6 +563,7 @@ export function detect(repo) {
 
   // A6 — data present, nothing pinning its version.
   if (triggers["data-artifacts"]) {
+    examine("data.version-pinned", "data.provenance-documented");
     const pinning = files.filter(
       (f) => f.ext === ".dvc" || /^dvc\.lock$/.test(f.path) || /(^|\/)(data-manifest|datasets?)\.(ya?ml|json)$/.test(f.path) || /\.(sha256|md5)$/.test(f.path),
     );
@@ -535,6 +582,7 @@ export function detect(repo) {
 
   // A7 — training code present, no experiment configuration.
   if (isML) {
+    examine("reproducibility.experiment-config-recorded");
     const callShapedTracking = codeFiles.some(
       (f) => /(mlflow\.(start_run|log_param)|wandb\.(init|config)|@hydra\.main|hydra\.initialize)/.test(f.views.structure),
     );
@@ -550,54 +598,102 @@ export function detect(repo) {
     }
   }
 
-  // Document checks. Headings, not word occurrences: a heading is a structural claim about a
-  // document's contents, and matching prose would let any passing mention satisfy the rule.
+  // Document checks.
+  //
+  // Two rules govern all of them, and both exist because of an observed failure.
+  //
+  // Headings, not word occurrences: a heading is a structural claim about a document's contents,
+  // and matching prose would let any passing mention satisfy a rule that asks for a section.
+  //
+  // And a heading is not enough on its own. `standards init` writes these very documents, and in
+  // the first adoption its placeholders flipped three required rules to passed on a project where
+  // nothing had been done. A section only answers a rule when it carries the scaffold marker no
+  // longer and says something (invariant.no-self-satisfying-scaffolding, scripts/scaffolding.mjs).
   const docs = files.filter((f) => f.ext === ".md" && f.text);
-  const heading = (re) => docs.some((f) => re.test(f.text));
-  const namedDoc = (re) => docs.some((f) => re.test(f.path));
+  const named = (re) => docs.filter((f) => re.test(f.path));
+  const shippedTemplates = repo.templates ?? [];
+
+  /**
+   * Resolve a document-shaped rule. `candidates` are the documents whose name marks them as the
+   * right place to look; when none is named, every markdown file is a candidate, because a project
+   * may answer the question inside a README.
+   */
+  const documentCheck = ({ id, rule, nameRe, headingRe, message, remediation, evidence }) => {
+    const candidates = nameRe && named(nameRe).length > 0 ? named(nameRe) : docs;
+    const verdict = anyDocumentAnswers(candidates, headingRe, shippedTemplates);
+    if (verdict.satisfied) return;
+    // Distinguish "you have no card" from "your card is still the template". They are different
+    // pieces of work, and reporting them identically sends the reader to the wrong one.
+    const scaffolded = verdict.reasons.filter((r) => /still the generated template|placeholder/.test(r));
+    add(id, {
+      rule,
+      severity: "error",
+      evidenceGap: true,
+      message: scaffolded.length > 0
+        ? `${message} A generated template is present but has not been completed, and scaffolding does not satisfy the rule it was written to help you meet.`
+        : message,
+      evidence: verdict.reasons.length > 0 ? verdict.reasons : evidence,
+      remediation,
+    });
+  };
 
   if (isML || triggers["deployment-surface"]) {
-    const card = namedDoc(/(^|\/)(MODEL_CARD|model-card)\.md$/i) || namedDoc(/^docs\/.*model.*card.*\.md$/i);
-    if (!card && !heading(/^##+\s*(Model card|Limitations)\s*$/im)) {
-      add("model-card-missing", {
-        rule: "deployment.model-card",
-        severity: "error",
-        evidenceGap: true,
-        message: "No model card and no model-card or limitations heading was found.",
-        evidence: docs.slice(0, 5).map((f) => f.path),
-        remediation: "Add MODEL_CARD.md covering intended use, training data, evaluation with a baseline and segment breakdown, and limitations.",
-      });
-    }
+    examine("deployment.model-card");
+    documentCheck({
+      id: "model-card-missing",
+      rule: "deployment.model-card",
+      nameRe: /(^|\/)(MODEL_CARD|model-card)\.md$|^docs\/.*model.*card.*\.md$/i,
+      headingRe: /^##+\s*(Model card|Limitations|Intended use)\s*$/i,
+      message: "No completed model card was found.",
+      evidence: docs.slice(0, 5).map((f) => f.path),
+      remediation: "Add MODEL_CARD.md covering intended use, training data, evaluation with a baseline and segment breakdown, and limitations — and fill it in.",
+    });
   }
 
   if (triggers["data-artifacts"]) {
-    const card = namedDoc(/(^|\/)(DATASET|DATA_CARD|dataset-card|data-card)\.md$/i);
-    if (!card && !heading(/^##+\s*(Provenance|Collection|Exclusions)\s*$/im)) {
-      add("data-card-missing", {
-        rule: "data.provenance-documented",
-        severity: "error",
-        evidenceGap: true,
-        message: "Data artifacts are present and no provenance documentation was found.",
-        evidence: dataArtifacts,
-        remediation: "Add a dataset card covering origin, collection, population, and an exclusions section with counts and proportions.",
-      });
-    }
+    documentCheck({
+      id: "data-card-missing",
+      rule: "data.provenance-documented",
+      nameRe: /(^|\/)(DATASET|DATA_CARD|dataset-card|data-card)\.md$/i,
+      headingRe: /^##+\s*(Provenance|Collection|Exclusions)\s*$/i,
+      message: "Data artifacts are present and no completed provenance documentation was found.",
+      evidence: dataArtifacts,
+      remediation: "Add a dataset card covering origin, collection, population, and an exclusions section with counts and proportions.",
+    });
   }
 
   if (isML) {
-    const evaluationDocs = docs.filter((f) => /^##+\s*(Evaluation|Results|Performance)\s*$/im.test(f.text));
-    if (evaluationDocs.length > 0) {
-      const baseline = evaluationDocs.some(
-        (f) => /^##+\s*Baseline/im.test(f.text) || /^\s*\|\s*[^|]*baseline/im.test(f.text),
-      );
+    examine("evaluation.baseline-exists");
+    const evaluationDocs = docs.filter((f) => !isScaffold(f.text) && isSubstantive(sectionBody(f.text, /^##+\s*(Evaluation|Results|Performance)\s*$/i)));
+    if (evaluationDocs.length === 0) {
+      // No completed evaluation document at all. Previously this made the rule silent, and a silent
+      // rule in the evaluated set reports as passed — so a project with no evaluation write-up was
+      // credited with having a baseline. Absence of the place a baseline would be recorded is
+      // absence of evidence, not evidence of a baseline (invariant.no-silent-pass).
+      add("evaluation-results-undocumented", {
+        rule: "evaluation.baseline-exists",
+        severity: "error",
+        evidenceGap: true,
+        message: "Training code is present and no completed evaluation write-up was found, so there is nowhere a baseline could have been reported.",
+        evidence: mlFootprint,
+        remediation: "Record the evaluation — the metric, the split, and the baseline it is compared against — in a model card or an evaluation document.",
+      });
+    } else {
+      const baseline = evaluationDocs.some((f) => {
+        const section = sectionBody(f.text, /^##+\s*Baseline/i);
+        if (section !== null && isSubstantive(section)) return true;
+        // A baseline row in a results table also counts — but only when the row carries a result.
+        const row = f.text.split("\n").find((l) => /^\s*\|\s*[^|]*baseline/i.test(l));
+        return row !== undefined && isSubstantive(row);
+      });
       if (!baseline) {
         add("baseline-section-missing", {
           rule: "evaluation.baseline-exists",
           severity: "error",
           evidenceGap: true,
-          message: "Evaluation results are documented with no baseline to compare against.",
+          message: "Evaluation results are documented with no baseline result to compare against.",
           evidence: evaluationDocs.map((f) => f.path),
-          remediation: "Add the baseline, evaluated on the same split and metric, to the results.",
+          remediation: "Add the baseline, evaluated on the same split and metric, with its score, to the results.",
         });
       }
     }
@@ -612,7 +708,7 @@ export function detect(repo) {
     });
   }
 
-  return { findings, triggers };
+  return { findings, triggers, examined: [...examined] };
 }
 
 // ---------------------------------------------------------------------------
@@ -680,12 +776,13 @@ async function integrityFindings() {
 // ---------------------------------------------------------------------------
 
 function parseArgs(argv) {
-  const args = { command: null, target: null, json: false, strict: false, dryRun: false, overwrite: [], subject: null };
+  const args = { command: null, target: null, json: false, strict: false, dryRun: false, overwrite: [], subject: null, includeUnowned: false };
   for (const arg of argv) {
     if (COMMANDS.has(arg) && !args.command) args.command = arg;
     else if (arg === "--json") args.json = true;
     else if (arg === "--strict") args.strict = true;
     else if (arg === "--dry-run") args.dryRun = true;
+    else if (arg === "--include-unowned") args.includeUnowned = true;
     else if (arg === "--all") args.subject = "--all";
     else if (arg.startsWith("--force-overwrite=")) args.overwrite.push(arg.slice("--force-overwrite=".length));
     else if (arg.startsWith("--dir=")) args.target = path.resolve(arg.slice("--dir=".length));
@@ -716,12 +813,15 @@ const USAGE = `Usage: standards <init|scan|evaluate|explain|status> [path] [flag
   --json                     emit the structured report instead of the readable one.
   --dir=<path>               target a directory other than the one given positionally.
   --strict                   scan only: exit 1 when any finding needs attention.
+  --include-unowned          evaluate dependency, environment and generated trees too. Off by
+                             default: a project is judged on the code it owns, and reading a
+                             vendored library reports that code as the project's own work.
 
 Exit 0 ok, 1 findings or non-compliant, 2 invocation or configuration error,
 3 blocked by an invariant. Gate CI on \`evaluate\`.`;
 
 async function cmdScan(args) {
-  const repo = await readRepo(args.target);
+  const repo = await readRepo(args.target, { includeUnowned: args.includeUnowned });
   const { findings, triggers } = detect(repo);
 
   if (args.json) {
@@ -730,11 +830,20 @@ async function cmdScan(args) {
       project: path.basename(args.target),
       scannedAt: new Date().toISOString(),
       filesScanned: repo.fileCount,
+      scope: { basis: repo.scope.basis, note: repo.scope.note, unownedTreesSkipped: repo.excluded },
       triggers,
       findings,
     }, null, 2) + "\n");
   } else {
-    const out = [`Scan: ${args.target}`, `  ${repo.fileCount} file(s) examined`, ""];
+    const out = [
+      `Scan: ${args.target}`,
+      `  ${repo.fileCount} file(s) examined  (scope: ${repo.scope.basis})`,
+      `  ${repo.scope.note}`,
+      ...(repo.excluded > 0
+        ? [`  A further ${repo.excluded} owned path(s) were held out as fixtures or vendored trees.`]
+        : []),
+      "",
+    ];
     if (findings.length === 0) {
       out.push("  Nothing observed. This is evidence discovery, not a verdict — run `standards evaluate`.");
     } else {
@@ -762,9 +871,10 @@ async function buildVerdict(args) {
   const { policy, error } = await loadPolicy(args.target);
   if (error) return { error };
 
-  const repo = await readRepo(args.target);
-  const { findings, triggers } = detect(repo);
+  const repo = await readRepo(args.target, { includeUnowned: args.includeUnowned });
+  const { findings, triggers, examined } = detect(repo);
   assertBindings(catalog, findings.filter((f) => f.rule).map((f) => f.rule));
+  assertBindings(catalog, examined);
 
   const digests = await attestationDigests(args.target, policy);
   const today = new Date().toISOString().slice(0, 10);
@@ -773,7 +883,9 @@ async function buildVerdict(args) {
     catalog,
     policy,
     findings,
-    evaluated: EVALUATED_RULES,
+    // What actually ran here, not what could run somewhere. A detector gated behind a trigger that
+    // did not fire examined nothing, and a rule nothing examined is not a rule that passed.
+    evaluated: examined,
     invariantFindings: await integrityFindings(),
     today,
     digests,
@@ -806,7 +918,9 @@ async function cmdEvaluate(args) {
     const out = [
       `Compliance: ${report.project}`,
       `  Status: ${report.status}`,
-      `  Score:  ${report.score === null ? "n/a" : report.score + "%"}  (${verdict.denominator.basis}: ${verdict.denominator.scored})`,
+      report.status === STATUS.BLOCKED_BY_INVARIANT
+        ? "  Score:  not computed — an invariant fired, so this evaluation is not a measurement"
+        : `  Score:  ${report.score === null ? "n/a" : report.score + "%"}  (${verdict.denominator.basis}: ${verdict.denominator.scored})`,
       `  Rules:  ${report.summary.passed} passed, ${report.summary.failed} failed, ${report.summary.warnings} warning(s), ${report.summary.skipped} skipped`,
       `  Cover:  ${a.automated} automated, ${a.manualReview} attested, ${a.insufficientEvidence} insufficient evidence, ${a.notEvaluated} not evaluated`,
       "",
@@ -858,6 +972,72 @@ async function cmdEvaluate(args) {
   return EXIT_OK;
 }
 
+/**
+ * Resolve a rule to the file and heading anchor that define it.
+ *
+ * The inventory already maps a standard number to its filename, so the path is looked up rather
+ * than guessed. Version one printed `standards/15-*.md`, which reads fine to a person and is
+ * useless to an agent — the first adoption found it being handed exactly that.
+ *
+ * The anchor is derived the way a Markdown renderer derives it, including the double hyphen an em
+ * dash leaves behind, and it is verified against the file rather than assumed.
+ */
+async function standardLocator() {
+  let inventory;
+  try {
+    inventory = JSON.parse(await readFile(path.join(HERE, "artifacts/standards-source-inventory.json"), "utf8"));
+  } catch {
+    return () => null;
+  }
+  const byNumber = new Map(inventory.standards.map((s) => [s.number, s.implementedBy]));
+  const headings = new Map();
+
+  return (rule) => {
+    if (!rule.standard || !rule.requirement) return null;
+    const file = byNumber.get(rule.standard);
+    if (!file || !existsSync(path.join(HERE, file))) return null;
+
+    if (!headings.has(file)) {
+      const text = readFileSyncSafe(path.join(HERE, file));
+      const map = new Map();
+      for (const m of text.matchAll(/^### ((?:R|P)\d+) — (.+)$/gm)) {
+        map.set(m[1], slugify(`${m[1]} — ${m[2]}`));
+      }
+      headings.set(file, map);
+    }
+    const anchor = headings.get(file).get(rule.requirement);
+    return anchor ? { path: file, anchor } : { path: file, anchor: null };
+  };
+}
+
+/** The templates this framework ships, read once so a detector can recognise its own output. */
+let TEMPLATE_CACHE = null;
+function shippedTemplateBodies() {
+  if (TEMPLATE_CACHE) return TEMPLATE_CACHE;
+  const dir = path.join(HERE, "templates");
+  TEMPLATE_CACHE = existsSync(dir)
+    ? readdirSync(dir).filter((f) => f.endsWith(".md")).map((f) => readFileSyncSafe(path.join(dir, f)))
+    : [];
+  return TEMPLATE_CACHE;
+}
+
+function readFileSyncSafe(p) {
+  try {
+    return readFileSync(p, "utf8");
+  } catch {
+    return "";
+  }
+}
+
+/** GitHub-flavoured heading slug: lowercase, strip punctuation, spaces to hyphens. */
+function slugify(heading) {
+  return heading
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
 async function cmdExplain(args) {
   const catalog = await loadCatalog();
   if (!args.subject) {
@@ -884,23 +1064,24 @@ async function cmdExplain(args) {
   }
 
   const { policy } = await loadPolicy(args.target);
-  const repo = existsSync(args.target) ? await readRepo(args.target) : null;
+  const repo = existsSync(args.target) ? await readRepo(args.target, { includeUnowned: args.includeUnowned }) : null;
   const triggers = repo ? detect(repo).triggers : {};
+  const locate = await standardLocator();
 
   if (args.json) {
     process.stdout.write(JSON.stringify({
       schemaVersion: SCHEMA_VERSION,
-      explanations: rules.map((r) => explainOne(r, policy, triggers)),
+      explanations: rules.map((r) => explainOne(r, policy, triggers, locate)),
     }, null, 2) + "\n");
     return EXIT_OK;
   }
 
   const out = [];
   for (const rule of rules) {
-    const e = explainOne(rule, policy, triggers);
+    const e = explainOne(rule, policy, triggers, locate);
     out.push(`${rule.id}  [${rule.kind}, ${rule.level}]`);
     out.push(`  ${rule.title}`);
-    if (rule.standard) out.push(`  Standard ${rule.standard} ${rule.requirement} — standards/${String(rule.standard).padStart(2, "0")}-*.md`);
+    if (e.location) out.push(`  Standard ${rule.standard} ${rule.requirement} — ${e.location.path}#${e.location.anchor}`);
     out.push(`  Applies here: ${e.applicability.verdict}`);
     out.push(`    ${e.applicability.why}`);
     out.push(`  Evidence that demonstrates compliance:`);
@@ -915,7 +1096,7 @@ async function cmdExplain(args) {
   return EXIT_OK;
 }
 
-function explainOne(rule, policy, triggers) {
+function explainOne(rule, policy, triggers, locate = () => null) {
   const declared = policy?.applicability?.[rule.id];
   const fired = (rule.triggers ?? []).filter((t) => triggers[t]);
   let verdict;
@@ -941,6 +1122,9 @@ function explainOne(rule, policy, triggers) {
     kind: rule.kind,
     standard: rule.standard ?? null,
     requirement: rule.requirement ?? null,
+    // A concrete path and anchor, never a glob. An agent cannot open standards/15-*.md, and the
+    // first adoption found it being told to.
+    location: locate(rule),
     applicability: { verdict, why, declared: declared ?? null, triggersFired: fired },
     evidenceExpected: rule.evidenceExpected,
     verification: rule.verification,
