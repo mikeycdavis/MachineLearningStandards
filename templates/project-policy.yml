@@ -1,0 +1,78 @@
+# Project policy — what THIS project is held to.
+#
+#   Validate:  node <standards-repo>/scripts/policy.mjs ./project-policy.yml
+#   Schema:    <standards-repo>/schemas/project-policy.schema.json
+#   Evaluate:  node <standards-repo>/scripts/standards.mjs evaluate .
+#
+# Three constraints the schema and the evaluator enforce, and one habit worth adopting.
+#
+#   1. Rule ids are canonical only: category.kebab-case-name. There is no alias mechanism, so a
+#      camelCase spelling fails validation rather than being quietly accepted.
+#
+#   2. This file SELECTS and CONFIGURES rules. It never redefines them. A level may be raised and
+#      may not be lowered — lowering one is reported as a weakening of the standard itself, and the
+#      run is blocked rather than scored.
+#
+#   3. `applicability` and `exceptions` are different mechanisms and never substitute for each
+#      other:
+#         not-applicable = the rule has no subject in this project.
+#         exception      = the rule applies, and this project knowingly does not satisfy it.
+#      Only the second needs an approver and an expiry, which is why collapsing them loses the
+#      thing that matters.
+#
+#   The habit: declare applicability explicitly, including for rules that obviously do not apply.
+#   A rule left undeclared falls to not-evaluated, and an unstated exclusion is indistinguishable
+#   from an oversight.
+#
+# Nothing in this file asserts compliance. What this project actually meets is the result of
+# `standards evaluate`.
+
+standardVersion: "1.0.0"
+project: "REPLACE-ME"
+
+# Rules whose level differs from the catalog default. Most projects need none: the catalog levels
+# are the framework's, and raising one is the only direction available.
+#
+# rules:
+#   reproducibility.seeds-recorded:
+#     level: required
+#     note: "Raised from recommended: our results are audited externally."
+
+# Whether each rule's subject exists here at all. `reason` is required and is read by a human, so
+# write it as one. `revisitWhen` names the event that would make the determination wrong — the
+# status command reports when the scan starts contradicting it.
+#
+# applicability:
+#   monitoring.production-monitoring-defined:
+#     status: not-applicable
+#     reason: "Models built here are handed to another team to deploy; nothing from this repository runs in production."
+#     reviewedAt: "2026-01-01"
+#     revisitWhen: "This repository begins serving a model directly."
+
+exceptions: []
+# exceptions:
+#   - rule: reproducibility.dependencies-pinned
+#     reason: "The upstream image pins transitively; we are replacing it in Q3."
+#     approvedBy: "name of the person accepting the risk"
+#     approvedAt: "2026-01-01"
+#     expires: "2026-09-30"
+#     reference: "artifacts/adr/0007-deferred-dependency-pinning.md"
+
+# Recorded human judgement, for rules no mechanism can establish from repository text. Only rules
+# the catalog marks attestable accept one — where an artifact is what is being asked for, create the
+# artifact instead. An attestation never overrides an automated finding.
+#
+# Supplying reviewedAgainst makes the approval expire on its own when the reviewed material changes.
+# Run `standards evaluate` once without a digest and it prints the value to record.
+#
+# attestations:
+#   leakage.no-target-in-features:
+#     status: approved
+#     reviewedBy: "name of the reviewer"
+#     reviewedAt: "2026-01-01"
+#     evidence: "Traced all 42 features to their source columns against the feature register; none is populated after the outcome is known, and the three derived from case history use windows that close before the prediction moment."
+#     reviewedAgainst:
+#       paths:
+#         - src/features.py
+#         - docs/feature-register.md
+#       digest: "0000000000000000000000000000000f"

@@ -1,0 +1,64 @@
+<!--
+  Dataset card template.
+
+  The compliant example for data.provenance-documented (Standard 3). The scanner looks for this
+  document or for its headings, and verifies nothing about the content.
+
+  The Exclusions section is the one most often omitted and the one that matters most. An exclusion
+  nobody wrote down cannot be reasoned about when the model behaves strangely on the population it
+  removed — and the absence of a documented exclusion is statically indistinguishable from the
+  absence of an exclusion, so nothing but this section will ever tell a reader.
+
+  Delete these comments and replace every placeholder.
+-->
+
+# Dataset card — REPLACE-ME
+
+## Identity
+
+- **Version:** the identifier that changes when the contents change (Standard 4). A filename is not
+  an identifier.
+- **Produced:** when
+- **Rows / size:**
+- **One row is:** the unit of observation
+- **Owner:**
+
+## Provenance
+
+Where the data came from and what real-world population or process it represents. If it was
+obtained from a third party, say from whom and what they documented.
+
+## Collection
+
+How the data came to exist. The collection mechanism determines the biases the dataset carries:
+data gathered from users who completed a flow excludes those who abandoned it, and data logged only
+while a downstream system was up excludes the periods it was down — frequently the periods that
+matter.
+
+The test to apply: could a reader predict which populations are under-represented without
+inspecting the data? If not, this section is a summary rather than a provenance record.
+
+## Exclusions
+
+Every operation that removed observations, with its rule, the count, and the proportion. The
+proportion because a rule that removes one percent and a rule that removes forty percent are
+different decisions expressed in the same sentence.
+
+| Rule applied | Rows removed | Proportion | Why |
+| --- | --- | --- | --- |
+| | | | |
+
+Record these whether or not they were reasonable. Most are. What this section prevents is not
+unreasonable exclusion but undisclosed exclusion.
+
+## Derivation
+
+If this dataset was built from others, name each input by version and describe the transformation
+that produced this one. Provenance that stops at the first join is provenance for a dataset nobody
+trained on.
+
+## Known limitations
+
+Populations that are under-represented, fields with systematic quality problems, and periods that
+are not comparable to the rest. Anything here that affects a model's behaviour belongs in that
+model's card as well.

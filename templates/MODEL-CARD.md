@@ -1,0 +1,77 @@
+<!--
+  Model card template.
+
+  This is the compliant example for deployment.model-card (Standard 25) and it is what the scanner
+  looks for. The headings matter: the check reads headings rather than prose, because a heading is a
+  structural claim about a document's contents while the word "limitations" in a sentence is a
+  mention.
+
+  What the check verifies is that this document exists with these sections. It cannot verify that
+  the limitations you write below are the model's actual limitations, and a card listing only what
+  was already obvious to its author would pass unchanged. That part is yours.
+
+  Delete these comments and replace every placeholder.
+-->
+
+# Model card — REPLACE-ME
+
+## Model details
+
+- **What it predicts:** the target definition, precise enough to label any observation unambiguously
+- **Unit of prediction:** one row per what
+- **Model type and version:**
+- **Trained on:** dataset name and version identifier
+- **Owner:**
+- **Last updated:**
+
+## Intended use
+
+The decision this output feeds, and who or what makes it. Say whether the output is consumed as a
+ranking, a threshold, or a probability — the answer determines whether calibration is required at
+all (Standard 13).
+
+**Out of scope:** the uses this model is not fit for, and the populations it was not trained on.
+
+## Training data
+
+Where the data came from, what population it represents, and what was excluded. Link the dataset
+card rather than repeating it.
+
+## Evaluation
+
+State the split, the period, and the metric, and say why that metric follows from the problem and
+the cost of each kind of error rather than from what looked best (Standard 12).
+
+| Model | Metric | Value | Uncertainty |
+| --- | --- | --- | --- |
+| Baseline — REPLACE with the strongest simple thing that could reasonably work | | | |
+| This model | | | |
+
+**Improvement claimed:** classify it (Standard 19). Is the difference unlikely to be noise? Is it
+large enough to change the decision it feeds? Does it survive production conditions? Name any of
+the three you did not assess rather than letting a reader assume all three.
+
+### Performance by segment
+
+Every consequential segment, including the ones that perform worst. A segment small in the data is
+not necessarily small in consequence, and the aggregate is the one number guaranteed not to show it.
+
+| Segment | Size | Metric | Value |
+| --- | --- | --- | --- |
+| | | | |
+
+## Calibration
+
+Whether the output has been measured against observed frequencies, and on what data. If it has not,
+say so here and call the output a score rather than a probability everywhere it appears.
+
+## Limitations
+
+What this model does not do, the conditions under which it performs worse, the assumptions it
+depends on, and the ways it is known to fail. Be concrete: "may underperform on unusual inputs" is
+not a limitation, it is a disclaimer.
+
+## Monitoring and retraining
+
+What is watched in production, the thresholds, who owns the response, and when the model is
+retrained. Link the drift and retraining policies.
