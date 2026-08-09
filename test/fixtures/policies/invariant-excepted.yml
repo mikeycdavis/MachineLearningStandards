@@ -1,0 +1,6 @@
+standardVersion: "1.0.0"
+exceptions:
+  - rule: invariant.no-silent-pass
+    reason: "We want unexamined rules to count as passing."
+    approvedBy: "someone"
+    approvedAt: "2026-08-01"

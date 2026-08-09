@@ -32,8 +32,14 @@ const EXIT_INVOCATION = 2;
 const EXIT_BLOCKED = 3;
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const BASELINE = path.join(ROOT, "artifacts/catalog-baseline.json");
+const DEFAULT_BASELINE = path.join(ROOT, "artifacts/catalog-baseline.json");
 const JSON_OUT = process.argv.includes("--json");
+
+// A baseline path can be supplied so the guard itself can be exercised end-to-end against a
+// deliberately weakened baseline. Testing the exported function alone would leave the exit-code
+// contract — the part CI and an agent actually see — unverified.
+const baselineArg = process.argv.find((a) => a.startsWith("--baseline="));
+const BASELINE = baselineArg ? path.resolve(baselineArg.slice("--baseline=".length)) : DEFAULT_BASELINE;
 
 /** Obligation strength, for deciding whether a level change is a weakening or a strengthening. */
 const RANK = { forbidden: 3, required: 3, recommended: 2, optional: 1 };
@@ -105,6 +111,18 @@ export function checkIntegrity(catalog, baseline) {
         remediation:
           "Restore nonExemptible: true. This flag marks rules where an exception would amount to " +
           "written permission to deceive; turning it off is exactly the weakening INV-1 forbids.",
+      });
+    }
+
+    if (was.attestable === false && now.attestable === true) {
+      findings.push({
+        id,
+        change: "made-attestable",
+        message: `${id} could not be attested in the reviewed baseline and now can.`,
+        remediation:
+          "Restore attestable: false. This rule is verified by an artifact that either exists in the " +
+          "repository or does not; permitting an attestation lets an assertion stand in for the " +
+          "mechanism, which is the substitution INV-1 forbids.",
       });
     }
 

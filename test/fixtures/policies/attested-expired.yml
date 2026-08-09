@@ -1,0 +1,8 @@
+standardVersion: "1.0.0"
+attestations:
+  leakage.no-target-in-features:
+    status: approved
+    reviewedBy: "reviewer"
+    reviewedAt: "2025-01-01"
+    evidence: "Reviewed the feature list."
+    expires: "2025-06-01"

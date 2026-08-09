@@ -13,8 +13,11 @@
       "verification": "document",
       "assurance": "partial",
       "nonExemptible": false,
-      "attestable": true,
-      "triggers": ["data-artifacts", "training-code"],
+      "attestable": false,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "Every dataset has a written record of where it came from, when it was obtained, what population or process it represents, what each row is, and what was excluded from it — discoverable from the dataset rather than only from the memory of whoever built it.",
       "rationale": "A dataset is a claim about the world, and the claim cannot be assessed without knowing how it was obtained and what was left out. Exclusions matter most and are recorded least: dropping rows with missing values does not remove noise, it removes the population for whom that field is missing.",
@@ -38,7 +41,10 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["data-artifacts", "training-code"],
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "Observations must not be removed because of what their removal does to a reported number. The prohibited act is the combination: removal, driven by the metric, undisclosed.",
       "rationale": "Removing hard cases raises every score while removing exactly the population the model most needs to handle. The resulting figure describes performance on a problem nobody has.",
@@ -61,8 +67,10 @@
       "verification": "configuration",
       "assurance": "partial",
       "nonExemptible": false,
-      "attestable": true,
-      "triggers": ["data-artifacts"],
+      "attestable": false,
+      "triggers": [
+        "data-artifacts"
+      ],
       "introducedIn": "1.0.0",
       "description": "Each dataset carries an identifier — a version, a content hash, a manifest of files and checksums, or a data-versioning tool's revision — that differs whenever the contents differ. A filename is not an identifier.",
       "rationale": "A dataset that can change while its name stays the same makes every past result unverifiable and every comparison unsound: two models said to have been evaluated on the same data may not have been, and nothing records which.",
@@ -86,7 +94,9 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["training-code"],
+      "triggers": [
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "For every feature, a record names the raw sources it derives from, the transformation that produced it, and when its underlying data becomes available relative to the prediction moment.",
       "rationale": "Lineage exists to make two other reviews possible: whether a feature will exist at inference, and whether it encodes the target. Both are properties of where a value comes from and when — never of the value itself — so without the record, neither question can be answered reliably.",

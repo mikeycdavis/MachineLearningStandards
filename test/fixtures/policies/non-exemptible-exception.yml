@@ -1,0 +1,6 @@
+standardVersion: "1.0.0"
+exceptions:
+  - rule: integrity.no-fabricated-datasets
+    reason: "We would like to keep the generated rows described as collected."
+    approvedBy: "someone"
+    approvedAt: "2026-08-01"

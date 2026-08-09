@@ -13,8 +13,11 @@
       "verification": "document",
       "assurance": "partial",
       "nonExemptible": false,
-      "attestable": true,
-      "triggers": ["training-code", "deployment-surface"],
+      "attestable": false,
+      "triggers": [
+        "training-code",
+        "deployment-surface"
+      ],
       "introducedIn": "1.0.0",
       "description": "A model card records what the model does, its intended use, the data it was trained on, its evaluation including segment-level results, and what it does not do — and travels with the model wherever its outputs are used.",
       "rationale": "The people who consume a model's outputs are rarely the people who built it, and the assumptions that make the outputs meaningful are invisible at the point of use. A card is where those assumptions become available to someone who was not there.",
@@ -38,7 +41,9 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["deployment-surface"],
+      "triggers": [
+        "deployment-surface"
+      ],
       "introducedIn": "1.0.0",
       "description": "The model's behaviour at prediction time is written down — input contract, preprocessing, output shape and meaning, thresholds, latency, and behaviour on missing or malformed input — and the transformations it applies are the ones training applied.",
       "rationale": "Training and serving that apply different transformations produce a model that is correct in neither, and the discrepancy does not raise an error: both paths run, and the columns silently disagree. Failure behaviour deserves the same specification as success, because a prediction path that substitutes a default for a missing feature is making an undisclosed decision.",

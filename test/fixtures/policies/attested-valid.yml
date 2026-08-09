@@ -1,0 +1,7 @@
+standardVersion: "1.0.0"
+attestations:
+  leakage.no-target-in-features:
+    status: approved
+    reviewedBy: "reviewer"
+    reviewedAt: "2026-08-01"
+    evidence: "Traced every feature to its source column and confirmed none is populated after the outcome."

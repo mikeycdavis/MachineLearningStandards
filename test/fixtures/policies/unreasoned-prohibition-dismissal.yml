@@ -1,0 +1,6 @@
+standardVersion: "1.0.0"
+applicability:
+  leakage.no-target-in-features:
+    status: not-applicable
+    reason: "n/a"
+    reviewedAt: "2026-08-01"

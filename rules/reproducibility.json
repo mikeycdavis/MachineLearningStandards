@@ -13,8 +13,10 @@
       "verification": "configuration",
       "assurance": "partial",
       "nonExemptible": false,
-      "attestable": true,
-      "triggers": ["training-code"],
+      "attestable": false,
+      "triggers": [
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "Each experiment's configuration is recorded in enough detail to rerun it: code version, data version, hyperparameters, environment and dependency versions, and random seeds.",
       "rationale": "Reproducibility is a property of the record, not of the code. Everything needed to obtain the result again either was written down at the time or is gone, and which of the two is the case is only discovered when someone tries.",
@@ -37,8 +39,10 @@
       "verification": "configuration",
       "assurance": "partial",
       "nonExemptible": false,
-      "attestable": true,
-      "triggers": ["training-code"],
+      "attestable": false,
+      "triggers": [
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "Declared dependencies name exact versions, and a lockfile captures the resolved set where the ecosystem provides one.",
       "rationale": "An unpinned dependency means the environment that produced a result cannot be rebuilt, and in this domain a minor version change in a numerical library moves results rather than breaking builds — so the failure is a quiet difference in the numbers rather than an error.",
@@ -62,7 +66,9 @@
       "assurance": "none",
       "nonExemptible": true,
       "attestable": true,
-      "triggers": ["training-code"],
+      "triggers": [
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "A result must not be described as reproducible unless the recorded configuration is sufficient to obtain it again. Describing work as reproducible because a seed was set, or because the code is in version control, is this prohibition.",
       "rationale": "A reproducibility claim is relied upon by everyone downstream who does not check it, which is everyone. The claim is cheap to make and expensive to falsify, so it must be earned rather than assumed.",
@@ -87,7 +93,9 @@
       "assurance": "partial",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["training-code"],
+      "triggers": [
+        "training-code"
+      ],
       "introducedIn": "1.0.0",
       "description": "Seeds are set explicitly for each source of randomness that affects the result — shuffling, initialisation, dropout, augmentation, and the split itself — and recorded alongside the result rather than only set in code.",
       "rationale": "Setting a seed is the cheapest step toward reproducibility. It is a recommendation rather than a requirement because it neither guarantees determinism nor is always achievable, and because the requirement that actually matters is the configuration record it forms part of.",
@@ -111,7 +119,9 @@
       "assurance": "partial",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["notebooks-present"],
+      "triggers": [
+        "notebooks-present"
+      ],
       "introducedIn": "1.0.0",
       "description": "A notebook whose outputs contributed to a reported result runs top to bottom, and the committed outputs correspond to that run rather than to an earlier session.",
       "rationale": "A notebook executed out of order carries state no reader can reconstruct, and its committed outputs then document a computation that the code as written does not perform.",

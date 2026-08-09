@@ -1,0 +1,5 @@
+standardVersion: "1.0.0"
+rules:
+  leakage.no-target-in-features:
+    level: optional
+    note: "Lowered because it was inconvenient."

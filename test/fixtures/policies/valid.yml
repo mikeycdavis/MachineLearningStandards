@@ -1,0 +1,12 @@
+standardVersion: "1.0.0"
+project: "Valid"
+rules:
+  data.version-pinned:
+    level: required
+applicability:
+  monitoring.drift-response-defined:
+    status: not-applicable
+    reason: "Nothing from this project is deployed to production."
+    reviewedAt: "2026-08-01"
+    revisitWhen: "A model is deployed."
+exceptions: []

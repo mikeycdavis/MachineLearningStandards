@@ -1,0 +1,7 @@
+standardVersion: "1.0.0"
+attestations:
+  deployment.model-card:
+    status: approved
+    reviewedBy: "someone"
+    reviewedAt: "2026-08-01"
+    evidence: "Trust me, the card exists somewhere."

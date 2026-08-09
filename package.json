@@ -5,7 +5,7 @@
   "type": "module",
   "bin": { "standards": "scripts/standards.mjs" },
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test",
     "scan": "node scripts/standards.mjs scan .",
     "evaluate": "node scripts/standards.mjs evaluate .",
     "explain": "node scripts/standards.mjs explain",

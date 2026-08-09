@@ -1,0 +1,6 @@
+standardVersion: "1.0.0"
+applicability:
+  invariant.standards-integrity:
+    status: not-applicable
+    reason: "We would rather this did not apply to us."
+    reviewedAt: "2026-08-01"

@@ -1,0 +1,7 @@
+standardVersion: "1.0.0"
+exceptions:
+  - rule: split.holdout-designated
+    reason: "Deferred to the next quarter."
+    approvedBy: "owner"
+    approvedAt: "2025-01-01"
+    expires: "2025-06-01"

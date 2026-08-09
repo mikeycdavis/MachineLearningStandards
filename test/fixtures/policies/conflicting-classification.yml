@@ -1,0 +1,11 @@
+standardVersion: "1.0.0"
+applicability:
+  split.holdout-designated:
+    status: not-applicable
+    reason: "We do not train models in this repository at all."
+    reviewedAt: "2026-08-01"
+exceptions:
+  - rule: split.holdout-designated
+    reason: "We do train models and knowingly skip the split."
+    approvedBy: "owner"
+    approvedAt: "2026-08-01"
