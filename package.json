@@ -1,0 +1,22 @@
+{
+  "name": "machine-learning-standards",
+  "version": "1.0.0",
+  "description": "Auditable machine-learning standards: requirements, prohibitions, invariants, and the commands that evaluate a project against them.",
+  "type": "module",
+  "bin": { "standards": "scripts/standards.mjs" },
+  "scripts": {
+    "test": "node --test test/",
+    "scan": "node scripts/standards.mjs scan .",
+    "evaluate": "node scripts/standards.mjs evaluate .",
+    "explain": "node scripts/standards.mjs explain",
+    "status": "node scripts/standards.mjs status .",
+    "policy": "node scripts/policy.mjs",
+    "integrity": "node scripts/integrity.mjs",
+    "inventory": "node scripts/inventory.mjs",
+    "fidelity": "node scripts/fidelity.mjs",
+    "diagrams": "node scripts/diagrams.mjs"
+  },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED",
+  "private": true
+}

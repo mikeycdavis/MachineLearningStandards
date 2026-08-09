@@ -1,0 +1,8 @@
+# Line endings are normalised to LF in the working tree, not just in the index.
+#
+# This is load-bearing rather than cosmetic. Attestations pin a digest over the
+# contents of the files they reviewed, and the fidelity check compares quoted
+# blocks against the source specification. If a checkout on Windows produced
+# CRLF and one on Linux produced LF, the same commit would yield two different
+# digests and every attestation would read as stale on one of the platforms.
+* text=auto eol=lf

@@ -1,0 +1,33 @@
+{
+  "$comment": "CANONICAL ENUMERATION. Reviewed by a human against artifacts/prompts/ml-standards-spec.md and committed as the source of truth for how many standards exist and what they are called. scripts/inventory.mjs extracts from the specification and compares the result AGAINST this file; this file is never regenerated from a run. A parser that becomes more or less forgiving can disagree with the series but must not be able to redefine it. See artifacts/adr/0002-the-spec-is-a-derived-enumeration.md.",
+  "source": "artifacts/prompts/ml-standards-spec.md",
+  "reviewedOn": "2026-08-09",
+  "expectedCount": 25,
+  "standards": [
+    { "number": 1, "title": "Problem Formulation", "implementedBy": null },
+    { "number": 2, "title": "Baseline Models", "implementedBy": null },
+    { "number": 3, "title": "Dataset Provenance", "implementedBy": null },
+    { "number": 4, "title": "Dataset Versioning", "implementedBy": null },
+    { "number": 5, "title": "Train, Validation, and Test Separation", "implementedBy": null },
+    { "number": 6, "title": "Temporal Splitting", "implementedBy": null },
+    { "number": 7, "title": "Feature Availability", "implementedBy": null },
+    { "number": 8, "title": "Leakage", "implementedBy": null },
+    { "number": 9, "title": "Target Leakage", "implementedBy": null },
+    { "number": 10, "title": "Cross-Validation", "implementedBy": null },
+    { "number": 11, "title": "Class Imbalance", "implementedBy": null },
+    { "number": 12, "title": "Metric Selection", "implementedBy": null },
+    { "number": 13, "title": "Calibration", "implementedBy": null },
+    { "number": 14, "title": "Hyperparameter Tuning", "implementedBy": null },
+    { "number": 15, "title": "Reproducibility", "implementedBy": null },
+    { "number": 16, "title": "Random Seeds", "implementedBy": null },
+    { "number": 17, "title": "Feature Lineage", "implementedBy": null },
+    { "number": 18, "title": "Ablation", "implementedBy": null },
+    { "number": 19, "title": "Model Comparison", "implementedBy": null },
+    { "number": 20, "title": "Uncertainty", "implementedBy": null },
+    { "number": 21, "title": "Drift", "implementedBy": null },
+    { "number": 22, "title": "Retraining", "implementedBy": null },
+    { "number": 23, "title": "Inference Behavior", "implementedBy": null },
+    { "number": 24, "title": "Monitoring", "implementedBy": null },
+    { "number": 25, "title": "Model Limitations", "implementedBy": null }
+  ]
+}

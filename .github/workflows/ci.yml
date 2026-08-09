@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # There is no install step, and that is a decision rather than an omission.
+      # This repository has zero third-party dependencies (design/architecture.md §12).
+      # Because CI cannot install anything, adding a dependency breaks the build — which
+      # is the only form of that rule that survives contact with a deadline. If an
+      # `npm ci` ever appears here, the decision changed and the ADR should say so.
+
+      - name: Source inventory
+        run: npm run inventory
+
+      - name: Source fidelity
+        run: npm run fidelity
+
+      - name: Project policy
+        run: npm run policy
+
+      - name: Catalog integrity
+        run: npm run integrity
+
+      - name: Diagram freshness
+        run: npm run diagrams
+
+      - name: Test
+        run: npm test
+
+      # Deliberately not `--strict`. That flag fails the build on warnings too, and a
+      # build that breaks on heuristics is a build someone eventually disables. The
+      # error-level gate is the assertion inside the test suite that this repository
+      # produces no error-severity findings.
+      - name: Scan this repository
+        run: npm run scan
+
+      # The gate. Exits 1 on a required-rule failure, 2 if the policy cannot be read,
+      # and 3 if an invariant was violated.
+      - name: Evaluate this repository
+        run: npm run evaluate
