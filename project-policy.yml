@@ -1,0 +1,264 @@
+# Project policy — MachineLearningStandards, evaluated against itself.
+#
+# This repository is dogfooded rather than special-cased out of evaluation. Every rule in the
+# catalog is machine-learning work, and this repository does none of it, so every rule is
+# declared not-applicable WITH A REASON — not left to fall silently into not-evaluated. An
+# unstated exclusion is indistinguishable from an oversight, which is the whole argument for
+# making applicability an explicit declaration.
+#
+# Each declaration carries revisitWhen, so the assumption has an expiry condition rather than
+# being permanent by default. `standards status` reports when a trigger contradicts one.
+#
+# Note what is NOT here: the invariants. A policy may not address them, and naming one is
+# itself reported as an attempted weakening. They are checked by scripts/integrity.mjs and by
+# the test suite, which is what self-evaluation in this repository actually exercises.
+
+standardVersion: "1.0.0"
+project: "MachineLearningStandards"
+
+exceptions: []
+
+applicability:
+
+  # ---- data ----
+  data.feature-lineage-documented:
+    status: not-applicable
+    reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
+  data.no-silent-exclusions:
+    status: not-applicable
+    reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
+  data.provenance-documented:
+    status: not-applicable
+    reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
+  data.version-pinned:
+    status: not-applicable
+    reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
+
+  # ---- deployment ----
+  deployment.inference-contract:
+    status: not-applicable
+    reason: "No model is deployed from here. The command-line tool is software with its own documentation, not a model with an inference contract or a model card."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "A model is served or distributed from this repository."
+  deployment.model-card:
+    status: not-applicable
+    reason: "No model is deployed from here. The command-line tool is software with its own documentation, not a model with an inference contract or a model card."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "A model is served or distributed from this repository."
+
+  # ---- evaluation ----
+  evaluation.ablation-performed:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.baseline-exists:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.calibration-evidence:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.class-imbalance-addressed:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.improvement-classification:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.metric-selection-justified:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-accuracy-by-default:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-baseline-free-claims:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-cherry-picked-periods:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-complexity-by-default:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-hidden-segments:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-incompatible-comparisons:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-result-driven-metrics:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-training-metrics-as-production:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.no-uncalibrated-confidence-claims:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.segment-performance-reported:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.uncertainty-reported:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+
+  # ---- framing ----
+  framing.problem-documented:
+    status: not-applicable
+    reason: "This repository formulates no prediction problem. It contains normative documents, a command-line tool, and its tests; nothing here predicts anything."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any modelling work is added to this repository."
+
+  # ---- integrity ----
+  integrity.no-fabricated-datasets:
+    status: not-applicable
+    reason: "No datasets, training results, or evaluation metrics are produced here, so there is nothing that could be fabricated. The repository reports only on what its own checks observed."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset, training run, or evaluation is produced in this repository."
+  integrity.no-fabricated-evaluation-metrics:
+    status: not-applicable
+    reason: "No datasets, training results, or evaluation metrics are produced here, so there is nothing that could be fabricated. The repository reports only on what its own checks observed."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset, training run, or evaluation is produced in this repository."
+  integrity.no-fabricated-training-results:
+    status: not-applicable
+    reason: "No datasets, training results, or evaluation metrics are produced here, so there is nothing that could be fabricated. The repository reports only on what its own checks observed."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any dataset, training run, or evaluation is produced in this repository."
+
+  # ---- leakage ----
+  leakage.feature-availability-verified:
+    status: not-applicable
+    reason: "No model is trained here, so there is no path by which information could reach one. The repository has no features, no target, and no prediction moment."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training code or feature engineering is added to this repository."
+  leakage.no-future-information:
+    status: not-applicable
+    reason: "No model is trained here, so there is no path by which information could reach one. The repository has no features, no target, and no prediction moment."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training code or feature engineering is added to this repository."
+  leakage.no-preprocessing-leakage:
+    status: not-applicable
+    reason: "No model is trained here, so there is no path by which information could reach one. The repository has no features, no target, and no prediction moment."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training code or feature engineering is added to this repository."
+  leakage.no-target-in-features:
+    status: not-applicable
+    reason: "No model is trained here, so there is no path by which information could reach one. The repository has no features, no target, and no prediction moment."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training code or feature engineering is added to this repository."
+  leakage.no-unavailable-features-at-inference:
+    status: not-applicable
+    reason: "No model is trained here, so there is no path by which information could reach one. The repository has no features, no target, and no prediction moment."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training code or feature engineering is added to this repository."
+
+  # ---- monitoring ----
+  monitoring.drift-response-defined:
+    status: not-applicable
+    reason: "Nothing from this repository runs as a model in production, so there is no prediction distribution to watch and no retraining decision to govern."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "A model from this repository is deployed to production."
+  monitoring.no-ignored-shift:
+    status: not-applicable
+    reason: "Nothing from this repository runs as a model in production, so there is no prediction distribution to watch and no retraining decision to govern."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "A model from this repository is deployed to production."
+  monitoring.production-monitoring-defined:
+    status: not-applicable
+    reason: "Nothing from this repository runs as a model in production, so there is no prediction distribution to watch and no retraining decision to govern."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "A model from this repository is deployed to production."
+  monitoring.retraining-policy:
+    status: not-applicable
+    reason: "Nothing from this repository runs as a model in production, so there is no prediction distribution to watch and no retraining decision to govern."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "A model from this repository is deployed to production."
+
+  # ---- reproducibility ----
+  reproducibility.dependencies-pinned:
+    status: not-applicable
+    reason: "No experiments are run here. The test suite is deterministic and dependency-free, which is a property of the tooling rather than a reproducibility claim about a model."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any experiment or training run is added to this repository."
+  reproducibility.experiment-config-recorded:
+    status: not-applicable
+    reason: "No experiments are run here. The test suite is deterministic and dependency-free, which is a property of the tooling rather than a reproducibility claim about a model."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any experiment or training run is added to this repository."
+  reproducibility.no-unsubstantiated-claims:
+    status: not-applicable
+    reason: "No experiments are run here. The test suite is deterministic and dependency-free, which is a property of the tooling rather than a reproducibility claim about a model."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any experiment or training run is added to this repository."
+  reproducibility.notebook-hygiene:
+    status: not-applicable
+    reason: "No experiments are run here. The test suite is deterministic and dependency-free, which is a property of the tooling rather than a reproducibility claim about a model."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any experiment or training run is added to this repository."
+  reproducibility.seeds-recorded:
+    status: not-applicable
+    reason: "No experiments are run here. The test suite is deterministic and dependency-free, which is a property of the tooling rather than a reproducibility claim about a model."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any experiment or training run is added to this repository."
+
+  # ---- split ----
+  split.cv-scheme-justified:
+    status: not-applicable
+    reason: "Nothing is trained here, so there is no partition to separate and no held-out estimate to protect."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training or evaluation code is added to this repository."
+  split.holdout-designated:
+    status: not-applicable
+    reason: "Nothing is trained here, so there is no partition to separate and no held-out estimate to protect."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training or evaluation code is added to this repository."
+  split.no-inappropriate-cv-scheme:
+    status: not-applicable
+    reason: "Nothing is trained here, so there is no partition to separate and no held-out estimate to protect."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training or evaluation code is added to this repository."
+  split.no-test-set-tuning:
+    status: not-applicable
+    reason: "Nothing is trained here, so there is no partition to separate and no held-out estimate to protect."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Any training or evaluation code is added to this repository."

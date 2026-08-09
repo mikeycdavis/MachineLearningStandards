@@ -1,0 +1,29 @@
+{
+  "$comment": "Rule catalog — framing. Standard 1. One requirement, covering the record that must exist before modelling begins. Not machine-checkable: whether a target definition is precise enough to label an observation unambiguously is a semantic question, and a check confirming a heading exists would be read as confirming the problem was well formulated.",
+  "rules": [
+    {
+      "id": "framing.problem-documented",
+      "kind": "requirement",
+      "title": "The problem is formulated in writing before modelling begins",
+      "standard": 1,
+      "requirement": "R1",
+      "category": "framing",
+      "level": "required",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": ["training-code"],
+      "introducedIn": "1.0.0",
+      "description": "A record states what is being predicted, at what unit and for which population, what decision the output feeds, and the relative cost of each kind of error — and it exists before the first model is trained.",
+      "rationale": "Every later choice follows from these answers: the metric from the cost asymmetry, the split from the unit of prediction, the calibration requirement from the decision the output feeds. A project that skips the record does not avoid the decisions, it makes them implicitly and can never afterwards explain them.",
+      "remediation": "Write the formulation: target definition precise enough to label any observation, unit of prediction, deployment population, the decision consuming the output, and the relative cost of a false positive against a false negative. Qualitative cost is acceptable where quantitative is not available; silence is not, because it reads downstream as a claim of symmetry.",
+      "evidenceExpected": "A problem-definition document, or a model card whose intended-use and target sections carry that content, together with an attestation stating when it was written relative to the first model.",
+      "$assuranceNote": "Nothing automated establishes this. Presence of a document is visible; whether its target definition is unambiguous, whether the stated population matches the deployment population, and whether the record predates the modelling are all invisible to a repository scan.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    }
+  ]
+}

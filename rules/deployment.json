@@ -1,0 +1,53 @@
+{
+  "$comment": "Rule catalog — deployment. Standards 23, 25. The contract the model presents at prediction time, and the document that travels with it. deployment.model-card carries the only detector in this category, and it checks for a document with the right headings — never for whether the limitations it states are the model's actual limitations.",
+  "rules": [
+    {
+      "id": "deployment.model-card",
+      "kind": "requirement",
+      "title": "A model card documents the model and its limitations",
+      "standard": 25,
+      "requirement": "R1",
+      "category": "deployment",
+      "level": "required",
+      "severity": "error",
+      "verification": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": ["training-code", "deployment-surface"],
+      "introducedIn": "1.0.0",
+      "description": "A model card records what the model does, its intended use, the data it was trained on, its evaluation including segment-level results, and what it does not do — and travels with the model wherever its outputs are used.",
+      "rationale": "The people who consume a model's outputs are rarely the people who built it, and the assumptions that make the outputs meaningful are invisible at the point of use. A card is where those assumptions become available to someone who was not there.",
+      "remediation": "Add a MODEL_CARD.md covering model details, intended use, training data, evaluation with a baseline and a segment breakdown, calibration, and limitations. The templates directory ships a conforming example.",
+      "evidenceExpected": "A model card carrying at minimum an intended-use section, an evaluation section, and a limitations section.",
+      "$assuranceNote": "The check looks for a model-card document or the corresponding headings, and headings only — a heading is a structural claim, a word occurrence in prose is a mention. It verifies that a card with the expected sections exists; whether the limitations stated are the model's actual limitations is human judgement, and a limitations section listing only what was already obvious to its author would pass this check unchanged.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "deployment.inference-contract",
+      "kind": "requirement",
+      "title": "The inference contract is specified and matches training",
+      "standard": 23,
+      "requirement": "R1",
+      "category": "deployment",
+      "level": "required",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": ["deployment-surface"],
+      "introducedIn": "1.0.0",
+      "description": "The model's behaviour at prediction time is written down — input contract, preprocessing, output shape and meaning, thresholds, latency, and behaviour on missing or malformed input — and the transformations it applies are the ones training applied.",
+      "rationale": "Training and serving that apply different transformations produce a model that is correct in neither, and the discrepancy does not raise an error: both paths run, and the columns silently disagree. Failure behaviour deserves the same specification as success, because a prediction path that substitutes a default for a missing feature is making an undisclosed decision.",
+      "remediation": "Write the contract, and share the fitted transformation artifact between training and serving rather than reimplementing it on each side.",
+      "evidenceExpected": "An inference specification covering inputs, transformations, outputs, thresholds, latency, and failure behaviour, plus an attestation that serving applies the training transformations.",
+      "$assuranceNote": "Nothing automated establishes this. Training-serving skew is a disagreement between a repository and a deployed system, and only one of the two is present to be read.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    }
+  ]
+}

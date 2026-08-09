@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MachineLearningStandards/schemas/project-policy.schema.json",
+  "title": "Project Policy",
+  "description": "What a specific project is held to. The policy selects and configures rules; it never redefines them. Rule identity and metadata belong to the catalog in rules/, and evidence belongs to the evaluator. Nothing in this document asserts compliance — what a project actually meets is the result of `standards evaluate`.",
+  "type": "object",
+  "required": ["standardVersion"],
+  "additionalProperties": false,
+  "properties": {
+    "standardVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "description": "The framework version this project is evaluated against. A version that cannot be resolved is a configuration error, not a compliance failure, and exits 2."
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Project identity, carried into the evaluator's output so a report can be attributed."
+    },
+    "rules": {
+      "type": "object",
+      "description": "Per-rule level. A rule absent here takes its catalog level. A policy may raise an obligation and may never lower one: setting a rule below its catalog level is a weakening of the standard and is reported as an integrity violation.",
+      "propertyNames": { "$ref": "#/$defs/ruleId" },
+      "additionalProperties": { "$ref": "#/$defs/ruleSetting" }
+    },
+    "applicability": {
+      "type": "object",
+      "description": "Whether each rule's SUBJECT exists in this project at all. Distinct from an exception, and the two must never collapse into one mechanism: not-applicable means the rule has nothing to bite on here; an exception means the rule applies and the project knowingly does not satisfy it. Only the second needs an approver and an expiry.",
+      "propertyNames": { "$ref": "#/$defs/ruleId" },
+      "additionalProperties": { "$ref": "#/$defs/applicabilityDeclaration" }
+    },
+    "exceptions": {
+      "type": "array",
+      "description": "Approved, time-bounded waivers of rules that DO apply. An exception against a non-exemptible rule is rejected rather than honoured, and rejection is checked before expiry so a lapsed non-exemptible waiver does not report as merely expired.",
+      "items": { "$ref": "#/$defs/exception" }
+    },
+    "attestations": {
+      "type": "object",
+      "description": "Recorded human judgement for rules no mechanism can establish from repository text. An attestation never overrides an automated finding; where a check observed a violation, an approving attestation is reported as contradicted and the rule still fails.",
+      "propertyNames": { "$ref": "#/$defs/ruleId" },
+      "additionalProperties": { "$ref": "#/$defs/attestation" }
+    }
+  },
+  "$defs": {
+    "ruleId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z0-9]+(-[a-z0-9]+)*)+$",
+      "description": "Canonical rule identity, `category.kebab-case-name`. There is no alias mechanism: any other spelling is rejected here rather than quietly accepted, because a vocabulary allowed to fork is one that will need reconciling later."
+    },
+    "level": {
+      "type": "string",
+      "enum": ["required", "recommended", "optional", "forbidden"],
+      "description": "The strength of the obligation."
+    },
+    "ruleSetting": {
+      "type": "object",
+      "required": ["level"],
+      "additionalProperties": false,
+      "properties": {
+        "level": { "$ref": "#/$defs/level" },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this project set the rule as it did."
+        }
+      }
+    },
+    "applicabilityDeclaration": {
+      "type": "object",
+      "required": ["status", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["applicable", "not-applicable"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required, and required to be substantive. A not-applicable declaration with no reason is indistinguishable from an oversight, which is exactly what declaring it is meant to prevent."
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "When a human last confirmed this. Paired with an equivalent pattern because `format` is an annotation and is not validated."
+        },
+        "revisitWhen": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The event that would make this determination wrong. Reported by `standards status` alongside the mechanical revisit triggers."
+        }
+      }
+    },
+    "exception": {
+      "type": "object",
+      "required": ["rule", "reason", "approvedBy", "approvedAt"],
+      "additionalProperties": false,
+      "properties": {
+        "rule": { "$ref": "#/$defs/ruleId" },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Why this project knowingly does not satisfy an applicable rule."
+        },
+        "approvedBy": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Who accepted the risk. An exception with no approver is a mute button."
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "expires": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "After this date the waiver stops waiving and the rule fails again."
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A decision record or ticket where the approval is documented."
+        }
+      }
+    },
+    "attestation": {
+      "type": "object",
+      "required": ["status", "reviewedBy", "reviewedAt", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["approved", "rejected"],
+          "description": "A recorded rejection is a failure, not silence. Both outcomes are worth writing down."
+        },
+        "reviewedBy": { "type": "string", "minLength": 1 },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What the reviewer examined and what they found. Required, because an attestation without it is an assertion rather than evidence."
+        },
+        "reference": { "type": "string", "minLength": 1 },
+        "expires": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "After this date the attestation stops establishing the rule, which returns to not-evaluated rather than failing."
+        },
+        "reviewedAgainst": { "$ref": "#/$defs/reviewedAgainst" }
+      }
+    },
+    "reviewedAgainst": {
+      "type": "object",
+      "required": ["paths"],
+      "additionalProperties": false,
+      "description": "What the reviewer actually looked at. Supplying a digest is what makes the attestation expire on its own when the reviewed material changes — the difference between a review and a permanent approval.",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16,64}$",
+          "description": "Digest over the contents of `paths`, as printed by `standards evaluate`. Content-based rather than commit-based on purpose: invalidating every attestation on every commit would make the mechanism unusable, and an unusable mechanism gets abandoned rather than obeyed."
+        },
+        "revision": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
