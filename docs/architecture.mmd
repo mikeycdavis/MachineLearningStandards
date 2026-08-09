@@ -1,0 +1,64 @@
+flowchart TB
+  subgraph source["Source of truth"]
+    prompt["artifacts/prompts/<br/>original-prompt.md"]
+    spec["artifacts/prompts/<br/>ml-standards-spec.md"]
+    inventory["artifacts/<br/>standards-source-inventory.json<br/><i>reviewed, never regenerated</i>"]
+  end
+
+  subgraph normative["Normative content"]
+    standards["standards/NN-*.md<br/>requirements, prohibitions,<br/>evidence, verification"]
+  end
+
+  subgraph contracts["Machine-readable contracts"]
+    catalog["rules/*.json<br/>requirement | prohibition |<br/>recommendation"]
+    invariants["rules/invariants.json<br/><i>not project-adjustable</i>"]
+    baseline["artifacts/<br/>catalog-baseline.json<br/><i>reviewed lock</i>"]
+    schema["schemas/<br/>project-policy.schema.json"]
+  end
+
+  subgraph project["The project under evaluation"]
+    policy["project-policy.yml<br/>levels, applicability,<br/>exceptions, attestations"]
+    code["source, data, notebooks,<br/>documents"]
+  end
+
+  subgraph tools["Commands"]
+    scan["scan<br/><i>evidence, never a verdict</i>"]
+    engine["evaluate<br/><i>the verdict</i>"]
+    explain["explain"]
+    status["status<br/><i>decision freshness</i>"]
+    init["init<br/><i>plan then apply</i>"]
+  end
+
+  subgraph guards["Guards"]
+    fidelity["fidelity<br/><i>quotations are verbatim</i>"]
+    invcheck["inventory<br/><i>the series is intact</i>"]
+    integrity["integrity<br/><i>no standard was weakened</i>"]
+  end
+
+  result["status + score + assurance<br/>+ coverage + evidence requests"]
+  blocked["BLOCKED_BY_INVARIANT<br/>exit 3"]
+
+  prompt -->|"derived, human-reviewed"| spec
+  spec --> inventory
+  spec -->|"cited by item, quoted verbatim"| standards
+  spec --> fidelity
+  inventory --> invcheck
+  standards --> invcheck
+  standards -->|"formalised by"| catalog
+  catalog --> baseline
+  baseline --> integrity
+  catalog --> integrity
+  catalog --> engine
+  invariants --> engine
+  schema -->|"validates"| policy
+  policy --> engine
+  code --> scan
+  scan -->|"findings + triggers"| engine
+  scan --> explain
+  catalog --> explain
+  policy --> explain
+  engine --> result
+  engine --> status
+  integrity --> blocked
+  policy --> blocked
+  init -->|"writes templates"| policy

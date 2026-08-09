@@ -4,30 +4,130 @@
   "reviewedOn": "2026-08-09",
   "expectedCount": 25,
   "standards": [
-    { "number": 1, "title": "Problem Formulation", "implementedBy": null },
-    { "number": 2, "title": "Baseline Models", "implementedBy": null },
-    { "number": 3, "title": "Dataset Provenance", "implementedBy": null },
-    { "number": 4, "title": "Dataset Versioning", "implementedBy": null },
-    { "number": 5, "title": "Train, Validation, and Test Separation", "implementedBy": null },
-    { "number": 6, "title": "Temporal Splitting", "implementedBy": null },
-    { "number": 7, "title": "Feature Availability", "implementedBy": null },
-    { "number": 8, "title": "Leakage", "implementedBy": null },
-    { "number": 9, "title": "Target Leakage", "implementedBy": null },
-    { "number": 10, "title": "Cross-Validation", "implementedBy": null },
-    { "number": 11, "title": "Class Imbalance", "implementedBy": null },
-    { "number": 12, "title": "Metric Selection", "implementedBy": null },
-    { "number": 13, "title": "Calibration", "implementedBy": null },
-    { "number": 14, "title": "Hyperparameter Tuning", "implementedBy": null },
-    { "number": 15, "title": "Reproducibility", "implementedBy": null },
-    { "number": 16, "title": "Random Seeds", "implementedBy": null },
-    { "number": 17, "title": "Feature Lineage", "implementedBy": null },
-    { "number": 18, "title": "Ablation", "implementedBy": null },
-    { "number": 19, "title": "Model Comparison", "implementedBy": null },
-    { "number": 20, "title": "Uncertainty", "implementedBy": null },
-    { "number": 21, "title": "Drift", "implementedBy": null },
-    { "number": 22, "title": "Retraining", "implementedBy": null },
-    { "number": 23, "title": "Inference Behavior", "implementedBy": null },
-    { "number": 24, "title": "Monitoring", "implementedBy": null },
-    { "number": 25, "title": "Model Limitations", "implementedBy": null }
+    {
+      "number": 1,
+      "title": "Problem Formulation",
+      "implementedBy": "standards/01-problem-formulation.md"
+    },
+    {
+      "number": 2,
+      "title": "Baseline Models",
+      "implementedBy": "standards/02-baseline-models.md"
+    },
+    {
+      "number": 3,
+      "title": "Dataset Provenance",
+      "implementedBy": "standards/03-dataset-provenance.md"
+    },
+    {
+      "number": 4,
+      "title": "Dataset Versioning",
+      "implementedBy": "standards/04-dataset-versioning.md"
+    },
+    {
+      "number": 5,
+      "title": "Train, Validation, and Test Separation",
+      "implementedBy": "standards/05-train-validation-test-separation.md"
+    },
+    {
+      "number": 6,
+      "title": "Temporal Splitting",
+      "implementedBy": "standards/06-temporal-splitting.md"
+    },
+    {
+      "number": 7,
+      "title": "Feature Availability",
+      "implementedBy": "standards/07-feature-availability.md"
+    },
+    {
+      "number": 8,
+      "title": "Leakage",
+      "implementedBy": "standards/08-leakage.md"
+    },
+    {
+      "number": 9,
+      "title": "Target Leakage",
+      "implementedBy": "standards/09-target-leakage.md"
+    },
+    {
+      "number": 10,
+      "title": "Cross-Validation",
+      "implementedBy": "standards/10-cross-validation.md"
+    },
+    {
+      "number": 11,
+      "title": "Class Imbalance",
+      "implementedBy": "standards/11-class-imbalance.md"
+    },
+    {
+      "number": 12,
+      "title": "Metric Selection",
+      "implementedBy": "standards/12-metric-selection.md"
+    },
+    {
+      "number": 13,
+      "title": "Calibration",
+      "implementedBy": "standards/13-calibration.md"
+    },
+    {
+      "number": 14,
+      "title": "Hyperparameter Tuning",
+      "implementedBy": "standards/14-hyperparameter-tuning.md"
+    },
+    {
+      "number": 15,
+      "title": "Reproducibility",
+      "implementedBy": "standards/15-reproducibility.md"
+    },
+    {
+      "number": 16,
+      "title": "Random Seeds",
+      "implementedBy": "standards/16-random-seeds.md"
+    },
+    {
+      "number": 17,
+      "title": "Feature Lineage",
+      "implementedBy": "standards/17-feature-lineage.md"
+    },
+    {
+      "number": 18,
+      "title": "Ablation",
+      "implementedBy": "standards/18-ablation.md"
+    },
+    {
+      "number": 19,
+      "title": "Model Comparison",
+      "implementedBy": "standards/19-model-comparison.md"
+    },
+    {
+      "number": 20,
+      "title": "Uncertainty",
+      "implementedBy": "standards/20-uncertainty.md"
+    },
+    {
+      "number": 21,
+      "title": "Drift",
+      "implementedBy": "standards/21-drift.md"
+    },
+    {
+      "number": 22,
+      "title": "Retraining",
+      "implementedBy": "standards/22-retraining.md"
+    },
+    {
+      "number": 23,
+      "title": "Inference Behavior",
+      "implementedBy": "standards/23-inference-behavior.md"
+    },
+    {
+      "number": 24,
+      "title": "Monitoring",
+      "implementedBy": "standards/24-monitoring.md"
+    },
+    {
+      "number": 25,
+      "title": "Model Limitations",
+      "implementedBy": "standards/25-model-limitations.md"
+    }
   ]
 }
