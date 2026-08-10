@@ -189,6 +189,9 @@ measurable.
   normative claims assessed against the methodology literature. 95 established, 0 contested, 0
   unsupported; 18 findings, one of them an internal contradiction between two standards, six of them
   candidate gaps. **Evidence only — no standard was changed.**
+- [Candidate disposition](artifacts/review/2026-08-09-candidate-disposition.md) — each of the 18
+  findings put through evidence, a candidate remedy, and a counterexample to that remedy. **One
+  finding of eighteen supports changing an existing claim.** Dispositions only; nothing scheduled
 
 The adoptions establish that the evaluation mechanism generalises; the review is the separate and
 harder question of whether the standards themselves are correct and complete.
