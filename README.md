@@ -183,6 +183,18 @@ measurable.
   three releases, each run from its own tag. Scores fell on unchanged repositories, which is the
   point
 
+## Review record
+
+- [Normative standards review](artifacts/review/2026-08-09-normative-standards-review.md) — all 108
+  normative claims assessed against the methodology literature. 95 established, 0 contested, 0
+  unsupported; 18 findings, one of them an internal contradiction between two standards, six of them
+  candidate gaps. **Evidence only — no standard was changed.**
+
+The adoptions establish that the evaluation mechanism generalises; the review is the separate and
+harder question of whether the standards themselves are correct and complete.
+
+## Adoption notes
+
 The first three targets share an owner, so what they establish is structural. The fourth is
 independently owned, and establishes that the **evaluation mechanism** generalises. Neither
 establishes that the twenty-five standards are true or complete — a different claim, and untested.

@@ -85,11 +85,21 @@ The discipline this extends, stated in full:
 mention        ≠ use
 use            ≠ relevant use
 relevant use   ≠ sufficient evidence
+no finding     ≠ compliance
 ```
 
 The existing use/mention rule handles the first line. The third is what these two defects violate,
 and it needs subject identity carried all the way through: **evidence for a rule must establish the
-subject of that rule, not a structurally similar activity.**
+subject of that rule, not a structurally similar activity.** The fourth is the coverage rule above,
+in its shortest form.
+
+The whole chain reduces to one sentence, and this is the durable statement of it:
+
+> **Detector silence can support compliance only when that silence follows from something the
+> detector positively established about the relevant subject.**
+
+Seven of ten checks satisfy it and three did not, so this is an empirical result about this
+codebase before it is a philosophical preference.
 
 ## Noted, not remediated
 
