@@ -172,9 +172,13 @@ measurable.
 - [v1.1 comparison](artifacts/adoption/2026-08-09-v1.1-comparison.md) — the same three targets after
   remediation, measured against the frozen baseline
 - [Fourth adoption protocol](artifacts/adoption/2026-08-09-fourth-adoption-protocol.md) — selection
-  criteria for an independently owned target, written before the target is chosen
+  criteria for an independently owned target, written before the target was chosen
+- [Fourth adoption](artifacts/adoption/2026-08-09-fourth-adoption.md) — `ultralytics/yolov5`,
+  unrelated owner, six years older than this repository, run against unmodified `v1.1.0`. Two
+  framework defects established; no standard required changing
 
-All three targets so far share an owner, so what they establish is structural: the framework handles
-three different repository shapes. **External generalisation is untested.** How a release is judged
-is stated in [CHANGELOG.md](CHANGELOG.md) — a version is not better for reporting fewer unknowns,
-only for reporting them more accurately.
+The first three targets share an owner, so what they establish is structural. The fourth is
+independently owned, and establishes that the **evaluation mechanism** generalises. Neither
+establishes that the twenty-five standards are true or complete — a different claim, and untested.
+How a release is judged is stated in [CHANGELOG.md](CHANGELOG.md): a version is not better for
+reporting fewer unknowns, only for reporting them more accurately.
