@@ -49,6 +49,19 @@ reasons, and none was used as one.
 recommendation added, one requirement's accepted evidence widened, five prose clarifications that
 change no rule's contract.
 
+### Acceptance moved — one state, in the permissive direction
+
+Required by `invariant.acceptance-locked`, added in 1.3.0 precisely because this change was invisible
+to the catalog integrity check the first time it was made.
+
+| State | Was | Now | Direction |
+| --- | --- | --- | --- |
+| `deps.ranged-with-lock` — a ranged manifest beside a committed lock artifact | failed | **passed** | **widened** |
+
+Nothing else moved. `deps.ranged` — ranges and nothing else — still fails, and so does
+`deps.pyproject-no-lock`. The gate blocked with exit 3 until `artifacts/acceptance-baseline.json` was
+updated with the reason, which is the transition working rather than an obstacle to it.
+
 ### Changed
 
 - **Standard 15 R2** — *Dependencies are pinned to exact versions* becomes *The resolved environment

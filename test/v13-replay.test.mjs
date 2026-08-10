@@ -13,7 +13,7 @@
  *   A SEMANTIC-DELTA TEST for each clarification. A clarification that changes any project's
  *   disposition is not a clarification, it is a normative change wearing the word. The machine-
  *   readable contract of every rule that existed in v1.2.0 is snapshotted in
- *   test/fixtures/v12-rule-contracts.json and asserted unchanged.
+ *   test/fixtures/v13-rule-contracts.json and asserted unchanged.
  *
  * Dispositions: artifacts/review/2026-08-09-candidate-disposition.md, commit 80a5a82.
  */
@@ -130,11 +130,13 @@ test("N10 · a bare range is still insufficient even where some entries are pinn
 // Clarifications · semantic-delta
 // ===========================================================================
 
-test("clarification delta — no rule that existed in v1.2.0 changed its machine-readable contract", async () => {
-  // The operative question for N1, N2, N7, N9 and N12. Each edited prose in a standard; none was
+test("clarification delta — no rule that predates the normative work changed its machine-readable contract", async () => {
+  // The operative question for N1, N2, N7, N9 and N12. The snapshot is taken from the 1.3.0
+  // framework release, which is this candidate's parent and contains no normative change of its
+  // own. Each clarification edited prose in a standard; none was
   // authorised to change what any rule requires, how it is verified, or what evidence satisfies it.
   // If one of them moved a contract field, it was a normative change and must re-enter disposition.
-  const before = JSON.parse(await readFile(path.join(ROOT, "test/fixtures/v12-rule-contracts.json"), "utf8"));
+  const before = JSON.parse(await readFile(path.join(ROOT, "test/fixtures/v13-rule-contracts.json"), "utf8"));
   const catalog = await loadCatalog();
   const live = new Map();
   for (const r of [...catalog.rules.values(), ...catalog.invariants.values()]) live.set(r.id, r);
@@ -208,7 +210,7 @@ test("N16 · the added rule is a recommendation and is locked in the baseline", 
     "a requirement here would be MAJOR and would contradict its own disposition");
   assert.equal(rule.level, "recommended");
   assert.equal(rule.severity, "warning");
-  assert.equal(rule.introducedIn, "1.3.0");
+  assert.equal(rule.introducedIn, "1.4.0");
 
   const baseline = JSON.parse(await readFile(path.join(ROOT, "artifacts/catalog-baseline.json"), "utf8"));
   const locked = baseline.rules.find((r) => r.id === AUTHORISED_ADDITION);
@@ -235,7 +237,7 @@ test("held back — no new requirement or prohibition entered the catalog", asyn
   // N3, N5 and N8 are supported additions and are NOT in this candidate: adding a requirement is
   // MAJOR under the versioning policy in CHANGELOG.md, and a 1.3.0 cannot carry one. Asserting it
   // here means a later edit cannot slip one in under a MINOR release.
-  const before = JSON.parse(await readFile(path.join(ROOT, "test/fixtures/v12-rule-contracts.json"), "utf8"));
+  const before = JSON.parse(await readFile(path.join(ROOT, "test/fixtures/v13-rule-contracts.json"), "utf8"));
   const catalog = await loadCatalog();
   const added = [...catalog.rules.values(), ...catalog.invariants.values()]
     .filter((r) => !(r.id in before));

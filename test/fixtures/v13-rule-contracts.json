@@ -748,5 +748,18 @@
     "requirement": null,
     "triggers": [],
     "evidenceExpected": "Documents that carry no scaffold marker and whose relevant sections contain substantive content rather than placeholders."
+  },
+  "invariant.acceptance-locked": {
+    "kind": "invariant",
+    "level": "required",
+    "severity": "error",
+    "verification": "structural",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": false,
+    "standard": null,
+    "requirement": null,
+    "triggers": [],
+    "evidenceExpected": "A clean run of scripts/acceptance.mjs, or a baseline update whose reasoning is recorded in the changelog entry for the release that made it."
   }
 }

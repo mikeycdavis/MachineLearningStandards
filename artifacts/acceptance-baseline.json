@@ -1,7 +1,7 @@
 {
   "$comment": "REVIEWED ACCEPTANCE BASELINE. A committed lock of what each machine-examined rule actually accepts, written as project states and the disposition the evaluator reaches on each. It exists because artifacts/catalog-baseline.json locks a rule's classification and not its satisfaction semantics: the v1.3 normative candidate widened Standard 15 R2 from exact pins to pins-or-lock, enlarging the set of compliant states, while every locked catalog field stayed identical and the integrity check said nothing. Expectations here were written from the standards before the checker was first run; where reality disagreed, the disagreement is recorded in artifacts/adr/0008-acceptance-lock.md rather than quietly overwritten. Change a row only when the change is intended, and say in CHANGELOG.md which direction it moved.",
   "reviewedOn": "2026-08-09",
-  "frameworkVersion": "1.2.0",
+  "frameworkVersion": "1.4.0",
   "states": [
     {
       "id": "deps.exact-pins",
@@ -39,9 +39,10 @@
         "poetry.lock": "# resolved\nscikit-learn = \"1.5.1\"\n"
       },
       "expect": {
-        "status": "failed",
+        "status": "passed",
         "disposition": "evaluated"
-      }
+      },
+      "reviewNote": "WIDENED at 1.4.0, deliberately. Standard 15 R2 changed from 'exact pins' to 'the resolved environment is recorded, by pins or by a lock artifact' under disposition N10. This is the state that moved, it moved in the permissive direction, and the acceptance lock reported it as a widening and blocked with exit 3 until this line was written. The catalog integrity check did not and could not see it, which is why this baseline exists. The adjacent row deps.ranged is unchanged: ranges alone remain insufficient."
     },
     {
       "id": "deps.pyproject-no-lock",
