@@ -109,9 +109,11 @@ verdict, `3` blocked by an invariant.
 > or manipulate a standard, test, applicability determination, evidence requirement, or
 > verification mechanism solely because it prevents the desired implementation or conclusion.
 
-Stated as a sentence, that is a sentence. It is enforced along five routes, each closing a specific
+Stated as a sentence, that is a sentence. It is enforced along six routes, each closing a specific
 way somebody under deadline pressure gets to a false green: a reviewed
-[catalog baseline](artifacts/catalog-baseline.json) that makes a weakened rule visible; policy
+[catalog baseline](artifacts/catalog-baseline.json) that makes a weakened rule visible; a reviewed
+[acceptance baseline](artifacts/acceptance-baseline.json) that makes a widened rule visible, which
+the catalog baseline could not — it locks what a rule *is*, not what it *accepts*; policy
 weakening detection, so a rule cannot be neutered locally instead; attestations that never override
 a mechanism; content digests, so an approval expires when what it approved changes; and mutation
 tests that reintroduce each defect and confirm the guard still fires.
@@ -137,9 +139,9 @@ docs/          generated architecture documentation
 ## Commands
 
 `npm test` · `npm run scan` · `npm run evaluate` · `npm run policy` · `npm run integrity` ·
-`npm run inventory` · `npm run fidelity` · `npm run diagrams`
+`npm run acceptance` · `npm run inventory` · `npm run fidelity` · `npm run diagrams`
 
-CI runs all eight, and gates on `evaluate`.
+CI runs all nine, and gates on `evaluate`.
 
 ## Conventions
 
@@ -157,6 +159,7 @@ aliases exist to reconcile a vocabulary that was allowed to fork.
 
 - [0006](artifacts/adr/0006-scaffolding-and-scope.md) — scaffolding is not evidence, and scope is ownership
 - [0007](artifacts/adr/0007-evidence-must-establish-its-subject.md) — evidence must establish its subject, and silence must be earned
+- [0008](artifacts/adr/0008-acceptance-lock.md) — lock what a rule accepts, not only how it is classified
 
 Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md) ·
 [negative-evidence audit](design/negative-evidence-audit.md)

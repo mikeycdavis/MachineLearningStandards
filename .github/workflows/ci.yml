@@ -32,6 +32,11 @@ jobs:
       - name: Catalog integrity
         run: npm run integrity
 
+      # The catalog check locks what each rule IS. This one locks what each rule ACCEPTS,
+      # which is the part that moved unnoticed when Standard 15 R2 was widened. Exits 3.
+      - name: Acceptance lock
+        run: npm run acceptance
+
       - name: Diagram freshness
         run: npm run diagrams
 

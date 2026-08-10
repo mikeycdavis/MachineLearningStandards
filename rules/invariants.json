@@ -120,6 +120,30 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "invariant.acceptance-locked",
+      "kind": "invariant",
+      "title": "What a rule accepts does not change without deliberate review",
+      "category": "invariant",
+      "standard": null,
+      "level": "required",
+      "severity": "error",
+      "verification": "structural",
+      "assurance": "partial",
+      "nonExemptible": true,
+      "attestable": false,
+      "triggers": [],
+      "introducedIn": "1.3.0",
+      "description": "The set of project states a machine-examined rule treats as compliant is locked in artifacts/acceptance-baseline.json and compared against the live evaluator. A state that newly passes, and a state that newly fails, are both reported and both block until the baseline is deliberately updated with its reasoning recorded.",
+      "rationale": "Found by trying to use the integrity check on a real change. invariant.standards-integrity locks every rule's kind, level, severity, verification method, assurance, exemptibility and attestability. Widening Standard 15 R2 from exact pins to pins-or-lock enlarged the set of compliant projects and moved none of those fields, so the guard said nothing about a change to what the standard demands. A guard that locks a rule's classification but not its satisfaction semantics cannot establish that the rule was not weakened. Strengthening is caught for a different reason: silently making existing adopters non-compliant deserves the same deliberate review as silently excusing them.",
+      "remediation": "Run `npm run acceptance` and read which states moved and in which direction. If the movement is intended, update artifacts/acceptance-baseline.json and record in CHANGELOG.md which states moved and why. If it is not, the change to the detector or the rule is the defect.",
+      "evidenceExpected": "A clean run of scripts/acceptance.mjs, or a baseline update whose reasoning is recorded in the changelog entry for the release that made it.",
+      "$assuranceNote": "Covers only the ten rules a mechanism examines. The other thirty-five rest on human judgement and have no observable acceptance predicate, so nothing here would detect a semantic weakening of one of them. The states are also representative rather than exhaustive: they lock the behaviour they enumerate, and a change confined to a state nobody wrote is invisible.",
+      "$exemptibilityNote": "Non-exemptible. An exception would permit the acceptance semantics of a standard to move without anyone noticing, which is invariant.standards-integrity restated at the level this check exists to reach.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

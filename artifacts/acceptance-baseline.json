@@ -1,0 +1,341 @@
+{
+  "$comment": "REVIEWED ACCEPTANCE BASELINE. A committed lock of what each machine-examined rule actually accepts, written as project states and the disposition the evaluator reaches on each. It exists because artifacts/catalog-baseline.json locks a rule's classification and not its satisfaction semantics: the v1.3 normative candidate widened Standard 15 R2 from exact pins to pins-or-lock, enlarging the set of compliant states, while every locked catalog field stayed identical and the integrity check said nothing. Expectations here were written from the standards before the checker was first run; where reality disagreed, the disagreement is recorded in artifacts/adr/0008-acceptance-lock.md rather than quietly overwritten. Change a row only when the change is intended, and say in CHANGELOG.md which direction it moved.",
+  "reviewedOn": "2026-08-09",
+  "frameworkVersion": "1.2.0",
+  "states": [
+    {
+      "id": "deps.exact-pins",
+      "rule": "reproducibility.dependencies-pinned",
+      "note": "requirements.txt with exact pins",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "requirements.txt": "scikit-learn==1.5.1\nnumpy==1.26.4\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "deps.ranged",
+      "rule": "reproducibility.dependencies-pinned",
+      "note": "ranged manifest and nothing else",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "requirements.txt": "scikit-learn>=1.5\nnumpy>=1.23\n"
+      },
+      "expect": {
+        "status": "failed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "deps.ranged-with-lock",
+      "rule": "reproducibility.dependencies-pinned",
+      "note": "ranged manifest beside a committed lock artifact - the N10 row",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "requirements.txt": "scikit-learn>=1.5\nnumpy>=1.23\n",
+        "poetry.lock": "# resolved\nscikit-learn = \"1.5.1\"\n"
+      },
+      "expect": {
+        "status": "failed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "deps.pyproject-no-lock",
+      "rule": "reproducibility.dependencies-pinned",
+      "note": "pyproject with no lockfile",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "pyproject.toml": "[project]\nname = \"t\"\n"
+      },
+      "expect": {
+        "status": "failed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "seeds.present",
+      "rule": "reproducibility.seeds-recorded",
+      "note": "a seed is set in the ML code",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\nimport numpy as np\nnp.random.seed(0)\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "seeds.absent",
+      "rule": "reproducibility.seeds-recorded",
+      "note": "ML code with no seed anywhere",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "insufficient-evidence"
+      },
+      "reviewNote": "Written from the standard as warning/evaluated and corrected to reality on the first run. The detector marks seed absence as an evidence gap rather than an observed violation, because a seed can be set through a configuration file or a framework helper the check does not read. Routing it to produce-the-evidence is the conservative answer and the code is right; the expectation was wrong."
+    },
+    {
+      "id": "leakage.pipeline-scoped",
+      "rule": "leakage.no-preprocessing-leakage",
+      "note": "preprocessing inside a pipeline, fitted after the split",
+      "files": {
+        "src/train.py": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.pipeline import Pipeline\nX_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)\npipe = Pipeline([('s', StandardScaler()), ('m', model)])\npipe.fit(X_train, y_train)\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "leakage.fit-before-split",
+      "rule": "leakage.no-preprocessing-leakage",
+      "note": "scaler fitted over everything before the split",
+      "files": {
+        "src/train.py": "from sklearn.preprocessing import StandardScaler\nfrom sklearn.model_selection import train_test_split\nsc = StandardScaler()\nXs = sc.fit_transform(X)\nX_train, X_test = train_test_split(Xs, random_state=0)\n"
+      },
+      "expect": {
+        "status": "failed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "split.test-in-fit",
+      "rule": "split.no-test-set-tuning",
+      "note": "a test-named object passed to a fit call",
+      "files": {
+        "src/train.py": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.pipeline import Pipeline\nX_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)\npipe = Pipeline([('s', StandardScaler()), ('m', model)])\npipe.fit(X_train, y_train)\nmodel.fit(X_test, y_test)\n"
+      },
+      "expect": {
+        "status": "failed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "split.clean",
+      "rule": "split.no-test-set-tuning",
+      "note": "the idiom is present and the test set is not fitted on",
+      "files": {
+        "src/train.py": "from sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.pipeline import Pipeline\nX_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)\npipe = Pipeline([('s', StandardScaler()), ('m', model)])\npipe.fit(X_train, y_train)\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "dialect.torch-only-split",
+      "rule": "split.no-test-set-tuning",
+      "note": "an ML project containing no scikit-learn at all - the v1.2 coverage rule",
+      "files": {
+        "src/train.py": "import torch\nfor epoch in range(3):\n    loss.backward()\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "not-evaluated"
+      }
+    },
+    {
+      "id": "dialect.torch-only-leakage",
+      "rule": "leakage.no-preprocessing-leakage",
+      "note": "the same project, the other coverage-gated prohibition",
+      "files": {
+        "src/train.py": "import torch\nfor epoch in range(3):\n    loss.backward()\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "not-evaluated"
+      }
+    },
+    {
+      "id": "notebook.clean",
+      "rule": "reproducibility.notebook-hygiene",
+      "note": "a notebook with cleared outputs and ordered counts",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "explore.ipynb": "{\n \"cells\": [\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 1,\n   \"outputs\": [],\n   \"source\": [\n    \"x=1\"\n   ]\n  }\n ],\n \"metadata\": {},\n \"nbformat\": 4,\n \"nbformat_minor\": 5\n}"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "notebook.committed-outputs",
+      "rule": "reproducibility.notebook-hygiene",
+      "note": "a notebook carrying committed outputs",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "explore.ipynb": "{\n \"cells\": [\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": 1,\n   \"outputs\": [\n    {\n     \"output_type\": \"stream\",\n     \"text\": [\n      \"1\"\n     ]\n    }\n   ],\n   \"source\": [\n    \"x=1\"\n   ]\n  }\n ],\n \"metadata\": {},\n \"nbformat\": 4,\n \"nbformat_minor\": 5\n}"
+      },
+      "expect": {
+        "status": "warning",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "data.no-versioning",
+      "rule": "data.version-pinned",
+      "note": "data present and nothing pinning its version",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "data/train.csv": "a,b\n1,2\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "insufficient-evidence"
+      }
+    },
+    {
+      "id": "data.dvc-lock",
+      "rule": "data.version-pinned",
+      "note": "data pinned by a dvc lockfile",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "data/train.csv": "a,b\n1,2\n",
+        "dvc.lock": "schema: 2.0\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "data.model-artifact-only",
+      "rule": "data.version-pinned",
+      "note": "artifact logging whose subject is the model - the v1.2 subject rule",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "data/train.csv": "a,b\n1,2\n",
+        "src/log.py": "import wandb\nart = wandb.Artifact(name=\"run_model\", type=\"model\")\nwandb.log_artifact(art)\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "insufficient-evidence"
+      }
+    },
+    {
+      "id": "data.dataset-artifact",
+      "rule": "data.version-pinned",
+      "note": "artifact logging whose subject is the dataset",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "data/train.csv": "a,b\n1,2\n",
+        "src/log.py": "import wandb\nwandb.use_artifact(\"training-set:v3\", type=\"dataset\")\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "config.params-yaml",
+      "rule": "reproducibility.experiment-config-recorded",
+      "note": "a committed configuration artifact",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "params.yaml": "lr: 0.01\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "config.bare-init",
+      "rule": "reproducibility.experiment-config-recorded",
+      "note": "a tracking session opened without the parameters - the v1.2 subject rule",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "src/track.py": "import wandb\nwandb.init(project=\"p\")\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "insufficient-evidence"
+      }
+    },
+    {
+      "id": "config.init-with-config",
+      "rule": "reproducibility.experiment-config-recorded",
+      "note": "the tracker is handed the parameter set",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "src/track.py": "import wandb\nwandb.init(project=\"p\", config=opt)\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "docs.model-card-complete",
+      "rule": "deployment.model-card",
+      "note": "a completed model card",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "MODEL_CARD.md": "# Model card\n\n## Intended use\nRanking candidate records for manual review, not an automated decision.\n\n## Evaluation\nMeasured on the held-out 2024 quarter, which no model selection touched.\n\n| Model | Split | AUC |\n| --- | --- | --- |\n| Baseline - most frequent class | 2024Q4 | 0.500 |\n| Gradient boosting | 2024Q4 | 0.731 |\n\n## Limitations\nRecords older than 2019 are untested and the smallest segment holds under two hundred examples.\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "docs.model-card-absent",
+      "rule": "deployment.model-card",
+      "note": "no model card of any kind",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "insufficient-evidence"
+      }
+    },
+    {
+      "id": "docs.dataset-card-complete",
+      "rule": "data.provenance-documented",
+      "note": "a completed dataset card beside real data",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "data/train.csv": "a,b\n1,2\n",
+        "DATASET.md": "# Dataset\n\n## Provenance\nExtracted from the internal claims warehouse, snapshot 2024-12-31.\n\n## Collection\nOne row per settled claim, assembled nightly by the ETL job in etl/claims.py.\n\n## Exclusions\nClaims with no settlement date were dropped: 1,204 rows, 0.8 percent of the extract.\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "docs.baseline-in-results",
+      "rule": "evaluation.baseline-exists",
+      "note": "an evaluation section carrying a baseline row",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n",
+        "MODEL_CARD.md": "# Model card\n\n## Intended use\nRanking candidate records for manual review, not an automated decision.\n\n## Evaluation\nMeasured on the held-out 2024 quarter, which no model selection touched.\n\n| Model | Split | AUC |\n| --- | --- | --- |\n| Baseline - most frequent class | 2024Q4 | 0.500 |\n| Gradient boosting | 2024Q4 | 0.731 |\n\n## Limitations\nRecords older than 2019 are untested and the smallest segment holds under two hundred examples.\n"
+      },
+      "expect": {
+        "status": "passed",
+        "disposition": "evaluated"
+      }
+    },
+    {
+      "id": "docs.no-evaluation-writeup",
+      "rule": "evaluation.baseline-exists",
+      "note": "training code and nowhere a baseline could have been reported",
+      "files": {
+        "src/train.py": "import sklearn\nfrom sklearn.linear_model import LogisticRegression\n"
+      },
+      "expect": {
+        "status": "skipped",
+        "disposition": "insufficient-evidence"
+      }
+    }
+  ]
+}

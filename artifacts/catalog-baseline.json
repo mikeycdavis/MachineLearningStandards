@@ -1,7 +1,7 @@
 {
   "$comment": "REVIEWED BASELINE. A committed lock of what every rule is, reviewed by a human and compared against the live catalog on every run by scripts/integrity.mjs. It exists to close the most direct route past invariant.standards-integrity: a required rule fails, a deadline is close, and the cheapest path to green is to edit the rule rather than the work. The point is not that the catalog can never change — it must — but that it cannot change invisibly. A legitimate change updates this file deliberately and records the reason in CHANGELOG.md. Regenerating it from a failing run would destroy the guarantee it exists to provide.",
   "reviewedOn": "2026-08-09",
-  "frameworkVersion": "1.1.0",
+  "frameworkVersion": "1.3.0",
   "rules": [
     {
       "id": "data.feature-lineage-documented",
@@ -502,6 +502,16 @@
       "assurance": "partial",
       "nonExemptible": true,
       "attestable": true
+    },
+    {
+      "id": "invariant.acceptance-locked",
+      "kind": "invariant",
+      "level": "required",
+      "severity": "error",
+      "verification": "structural",
+      "assurance": "partial",
+      "nonExemptible": true,
+      "attestable": false
     }
   ]
 }

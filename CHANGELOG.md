@@ -38,6 +38,49 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 1.3.0 — 2026-08-09
+
+Framework only. **No standard was changed and no project-facing rule was added, reclassified,
+exempted or lowered.** MINOR: one system invariant added, one gate added, nothing on the frozen
+surface moved.
+
+This release closes a gap in `invariant.standards-integrity` that was found by trying to use it. A
+normative candidate widened Standard 15 R2 from *exact pins* to *pins or a committed lock artifact* —
+enlarging the set of project states treated as compliant — and the integrity check reported nothing,
+because every field it locks was identical before and after.
+
+> A standards-integrity guard that locks a rule's classification but not its satisfaction semantics
+> cannot establish that the rule was not weakened.
+
+### Added
+
+- `invariant.acceptance-locked` and `scripts/acceptance.mjs`. Twenty-six project states, with literal
+  file contents, locked in `artifacts/acceptance-baseline.json` against the disposition the evaluator
+  reaches on each. Any difference blocks with exit 3 until the baseline is deliberately updated.
+- **Both directions block.** A state that newly passes is a weakening. A state that newly fails makes
+  existing adopters non-compliant without their having changed anything, and gets the same review. A
+  move between two equally favourable dispositions is reported as a reclassification, because
+  `insufficient-evidence` and `not-evaluated` tell an adopter to do different things.
+- `npm run acceptance`, wired into CI. The gate is now nine commands.
+- `artifacts/adr/0008-acceptance-lock.md`, including why hashing `evidenceExpected` or the standards
+  text would not have worked.
+
+### Coverage, stated rather than implied
+
+**Ten rules of forty-five.** The other thirty-five rest on human judgement and have no observable
+acceptance predicate — no state's disposition would move if their meaning changed. Nothing here
+detects a semantic weakening of one of them, and the gate prints that beside its clean result. The
+states are representative, not exhaustive: a behavioural change confined to a state nobody wrote is
+invisible.
+
+### Method note
+
+Expectations for all twenty-six states were written from the standards **before** the checker was
+first run. Twenty-five matched. The one that did not is recorded in the baseline rather than
+overwritten — seed absence routes to `insufficient-evidence` rather than `warning`, because a seed
+may be set through configuration the detector does not read. The expectation was wrong; the code was
+right.
+
 ## 1.2.0 — 2026-08-09
 
 A narrow epistemic-correctness release. Not new standards, not more automation, not higher
