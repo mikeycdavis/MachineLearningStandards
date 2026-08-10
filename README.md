@@ -196,6 +196,8 @@ measurable.
   findings put through evidence, a candidate remedy, and a counterexample to that remedy. **One
   finding of eighteen supports changing an existing claim.** Dispositions only; nothing scheduled
 
+- [Release isolation, v1.4.0](artifacts/review/2026-08-09-v1.4-release-isolation.md) — the check that
+  the release contains the intended lineage and nothing else
 - [Review method](artifacts/review/review-method.md) — standing rules for future normative audits,
   written after the first one produced two false findings by reading normative sentences without
   their qualifications

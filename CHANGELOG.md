@@ -38,12 +38,28 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
-## 1.4.0 — 2026-08-09 — **candidate, not released**
+## 1.4.0 — 2026-08-09
 
-The first release to touch the normative corpus. Every change is traceable to a supported
-disposition in `artifacts/review/2026-08-09-candidate-disposition.md` (`80a5a82`); implementation
-convenience, adoption results, and a wish for the release to feel substantial are not independent
-reasons, and none was used as one.
+The first release to touch the normative corpus.
+
+**On the version sequence.** `1.3.0` is framework work and `1.4.0` is the normative work, in that
+order, because the stronger framework had to exist before these changes could safely pass through
+it. Building this release against `1.2.0` showed that widening Standard 15 R2 was invisible to the
+integrity check; `1.3.0` closed that hole with `invariant.acceptance-locked`; and the normative
+changes were then replayed through it, where the widening was caught, named, and admitted through a
+deliberate baseline transition. The sequence is provenance rather than accident, and reading the two
+entries together is the point.
+
+Every change is traceable to a supported disposition in
+`artifacts/review/2026-08-09-candidate-disposition.md` (`80a5a82`); implementation convenience,
+adoption results, and a wish for the release to feel substantial are not independent reasons, and
+none was used as one.
+
+**What this release claims, and nothing wider.** v1.4.0 introduces seven review-supported normative
+changes after replay through the acceptance-lock invariant. The acceptance lock protects observable
+semantics for the ten machine-examined rules. It does **not** establish semantic integrity for the
+remaining thirty-five human-judgement rules, and it says nothing about the completeness of the
+normative corpus. That 10-of-45 figure is an assurance boundary, not a gap awaiting work.
 
 **Twelve supported dispositions entered normative replay and seven survived it.** MINOR: one
 recommendation added, one requirement's accepted evidence widened, five prose clarifications that
