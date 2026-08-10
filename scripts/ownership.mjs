@@ -74,17 +74,11 @@ export function isUnownedPath(rel) {
   return rel.split("/").some((segment) => UNOWNED_DIRS.has(segment));
 }
 
-/**
- * Ask git what this project tracks.
- *
- * Returns null when git cannot answer — not a repository, git absent, or the command failed — so
- * the caller falls back rather than treating "no answer" as "nothing is owned". A scope model that
- * silently scoped to zero files would report every project as clean.
- */
-export function gitTrackedFiles(root) {
+/** Run `git ls-files` with the given selectors, returning null when git declines. */
+function gitLsFiles(root, selectors) {
   let result;
   try {
-    result = spawnSync("git", ["-C", root, "ls-files", "-z", "--cached", "--exclude-standard"], {
+    result = spawnSync("git", ["-C", root, "ls-files", "-z", ...selectors, "--exclude-standard"], {
       encoding: "utf8",
       maxBuffer: 64 * 1024 * 1024,
       windowsHide: true,
@@ -100,11 +94,55 @@ export function gitTrackedFiles(root) {
     const reason = (result.stderr || "").trim().split("\n")[0] || `git exited ${result.status}`;
     return { files: null, why: reason };
   }
-  const files = (result.stdout ?? "").split("\0").filter(Boolean);
-  // A repository with no tracked files is a real state, but it is indistinguishable here from a
-  // failure mode, and guessing wrong in that direction hides everything. Fall back.
-  if (files.length === 0) return { files: null, why: "the repository tracks no files" };
-  return { files, why: null };
+  return { files: (result.stdout ?? "").split("\0").filter(Boolean), why: null };
+}
+
+/**
+ * Is this path inside a Python virtual environment somewhere above it?
+ *
+ * Only needed for untracked files. Tracked files are the project's own by definition; untracked
+ * ones arrive without that guarantee, and an environment that nobody remembered to ignore is
+ * exactly the tree the ownership model exists to keep out.
+ */
+function insideVirtualenv(root, rel, memo) {
+  const parts = rel.split("/");
+  for (let i = parts.length - 1; i > 0; i--) {
+    const dirRel = parts.slice(0, i).join("/");
+    if (!memo.has(dirRel)) memo.set(dirRel, isVirtualenv(path.join(root, dirRel)));
+    if (memo.get(dirRel)) return true;
+  }
+  return false;
+}
+
+/**
+ * Ask git what this project owns: what it tracks, plus the work in progress beside it.
+ *
+ * WHY NOT `--cached` ALONE. The first version asked only for tracked files, which equates "owned"
+ * with "committed". The fourth adoption showed what that costs: `standards init` writes a policy and
+ * four documents, all untracked, so the documented workflow — init, edit, evaluate — reported that
+ * the documents the operator had just written did not exist. Staging them, with no change to their
+ * contents, moved a rule from insufficient-evidence to passed. Identical evidence, different answer.
+ *
+ * Owned project content is tracked files *plus* relevant untracked ones, and "relevant" excludes
+ * everything the heuristics already know is nobody's own work. Ignored trees never appear at all:
+ * `--exclude-standard` applies .gitignore, which is the project's own statement about what it
+ * disowns. The structural filters catch the rest — an environment or a nested checkout that was
+ * never added to .gitignore is still not the project's code.
+ */
+export function gitOwnedFiles(root) {
+  const tracked = gitLsFiles(root, ["--cached"]);
+  if (!tracked.files) return { files: null, tracked: 0, untracked: 0, why: tracked.why };
+  const others = gitLsFiles(root, ["--others"]);
+  const memo = new Map();
+  const relevant = (others.files ?? []).filter(
+    (rel) => !isUnownedPath(rel) && !insideVirtualenv(root, rel, memo),
+  );
+  const files = [...new Set([...tracked.files, ...relevant])];
+  // A repository with nothing tracked and nothing untracked is a real state, but it is
+  // indistinguishable here from a failure mode, and guessing wrong in that direction hides
+  // everything. Fall back.
+  if (files.length === 0) return { files: null, tracked: 0, untracked: 0, why: "the repository holds no files git will report" };
+  return { files, tracked: tracked.files.length, untracked: relevant.length, why: null };
 }
 
 /**
@@ -122,11 +160,14 @@ export function resolveScope(root, { includeUnowned = false } = {}) {
       tracked: null,
     };
   }
-  const { files, why } = gitTrackedFiles(root);
+  const { files, tracked, untracked, why } = gitOwnedFiles(root);
   if (files) {
     return {
-      basis: "git-tracked",
-      note: `Scope is the ${files.length} file(s) this repository tracks. Untracked and ignored trees — environments, caches, data, generated output — were not read.`,
+      basis: "git-owned",
+      note:
+        `Scope is the ${files.length} file(s) this repository owns — ${tracked} tracked and ` +
+        `${untracked} untracked but not ignored. Ignored trees, environments, dependency trees, ` +
+        "caches and generated output were not read.",
       tracked: new Set(files.map((f) => f.split(path.sep).join("/"))),
     };
   }

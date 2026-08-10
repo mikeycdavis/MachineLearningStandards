@@ -49,16 +49,21 @@ export const SCHEMA_VERSION = "1.0.0";
  * @param evaluated        the rule ids the evaluator actually examined. The crucial input: a rule
  *                         absent from this set was not checked, and reporting it as passing because
  *                         nothing failed is the false green this whole system exists to stop.
+ * @param coverageGaps     Map of ruleId → why the detector had no subject to read on this target.
+ *                         A rule listed here ran and found nothing, which is not the same as having
+ *                         established the rule: absence of a finding is probative only where the
+ *                         detector could have seen a violation had one been there.
  * @param invariantFindings violations of invariant.* rules, from the integrity and policy checks
  * @param today            ISO date, for expiry
  * @param digests          Map of ruleId → current digest of that attestation's reviewed paths
  */
-export function evaluate({ catalog, policy, findings, evaluated, invariantFindings, today, digests }) {
+export function evaluate({ catalog, policy, findings, evaluated, coverageGaps, invariantFindings, today, digests }) {
   const declaredRules = policy?.rules ?? {};
   const applicability = policy?.applicability ?? {};
   const exceptions = Array.isArray(policy?.exceptions) ? policy.exceptions : [];
   const attestations = policy?.attestations ?? {};
   const examined = new Set(evaluated ?? []);
+  const gaps = coverageGaps instanceof Map ? coverageGaps : new Map(coverageGaps ?? []);
   const currentDigests = digests ?? new Map();
   const results = [];
 
@@ -194,6 +199,28 @@ export function evaluate({ catalog, policy, findings, evaluated, invariantFindin
     }
 
     if (hits.length === 0) {
+      // Silence from a detector that had nothing to read is not a pass. "No violation was observed"
+      // and "the rule was established as satisfied" are different propositions, and a detector
+      // whose subject is absent from the target supports only the first. Routed to human judgement,
+      // because no additional file will give the detector the dialect it reads.
+      const gap = gaps.get(rule.id);
+      if (gap) {
+        const result = base(rule, level, RESULT.skipped, "not-evaluated",
+          `No violation of ${rule.id} was observed, and the observation is not probative here: ${gap}.`);
+        result.evidenceExpected = rule.evidenceExpected;
+        results.push(result);
+        evidenceRequests.push({
+          rule: rule.id,
+          kind: rule.kind,
+          standard: rule.standard,
+          disposition: "not-evaluated",
+          needs: rule.evidenceExpected,
+          how: rule.attestable
+            ? `The mechanism could not see this rule's subject on this project. Record an attestation for ${rule.id}, citing what was reviewed.`
+            : `${rule.id} is not attestable; satisfy it and supply the evidence its verification requires.`,
+        });
+        continue;
+      }
       results.push(base(rule, level, RESULT.passed, "evaluated",
         `No violation of ${rule.id} was observed.`));
       continue;

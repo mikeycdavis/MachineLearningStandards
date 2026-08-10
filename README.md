@@ -156,8 +156,10 @@ aliases exist to reconcile a vocabulary that was allowed to fork.
 - [0005](artifacts/adr/0005-integrity-invariant-enforcement.md) — how the integrity invariant is enforced
 
 - [0006](artifacts/adr/0006-scaffolding-and-scope.md) — scaffolding is not evidence, and scope is ownership
+- [0007](artifacts/adr/0007-evidence-must-establish-its-subject.md) — evidence must establish its subject, and silence must be earned
 
-Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md)
+Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md) ·
+[negative-evidence audit](design/negative-evidence-audit.md)
 
 ## Adoption record
 
@@ -176,6 +178,10 @@ measurable.
 - [Fourth adoption](artifacts/adoption/2026-08-09-fourth-adoption.md) — `ultralytics/yolov5`,
   unrelated owner, six years older than this repository, run against unmodified `v1.1.0`. Two
   framework defects established; no standard required changing
+
+- [v1.2 comparison](artifacts/adoption/2026-08-09-v1.2-comparison.md) — the four-target corpus across
+  three releases, each run from its own tag. Scores fell on unchanged repositories, which is the
+  point
 
 The first three targets share an owner, so what they establish is structural. The fourth is
 independently owned, and establishes that the **evaluation mechanism** generalises. Neither

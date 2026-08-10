@@ -19,7 +19,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { isScaffold, isSubstantive, sectionBody, documentAnswers, SCAFFOLD_MARKER } from "../scripts/scaffolding.mjs";
-import { isUnownedPath, isVirtualenv, isNestedCheckout, resolveScope, gitTrackedFiles } from "../scripts/ownership.mjs";
+import { isUnownedPath, isVirtualenv, isNestedCheckout, resolveScope, gitOwnedFiles } from "../scripts/ownership.mjs";
 import { evaluate, STATUS } from "../scripts/compliance.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -218,7 +218,7 @@ test("B · mutation — traversing into a fixture virtualenv brings the false po
 
 test("B · git tracking decides scope when the target is a repository", () => {
   const scope = resolveScope(ROOT);
-  assert.equal(scope.basis, "git-tracked");
+  assert.equal(scope.basis, "git-owned");
   assert.ok(scope.tracked.size > 0);
   assert.ok(scope.tracked.has("package.json"), "a tracked file is in scope");
   assert.ok(!scope.tracked.has("node_modules/x"), "an untracked path is not");
@@ -226,7 +226,7 @@ test("B · git tracking decides scope when the target is a repository", () => {
 
 test("B · a non-repository falls back to structure rather than to nothing", async () => {
   await scratch(async (dir) => {
-    const answer = gitTrackedFiles(dir);
+    const answer = gitOwnedFiles(dir);
     assert.equal(answer.files, null, "git has no answer here");
     assert.ok(answer.why, "and it says why");
     const scope = resolveScope(dir);
@@ -242,9 +242,9 @@ test("B · a declined repository is not reported as 'not a repository'", () => {
   // was not a git repository. That is a false statement about someone's own work, and the two cases
   // lead to different actions — fix your git config, versus this is not version-controlled.
   const scope = resolveScope(ROOT);
-  assert.equal(scope.basis, "git-tracked", "the control: this repository answers");
+  assert.equal(scope.basis, "git-owned", "the control: this repository answers");
 
-  const answer = gitTrackedFiles(path.join(ROOT, "no-such-directory-here"));
+  const answer = gitOwnedFiles(path.join(ROOT, "no-such-directory-here"));
   assert.equal(answer.files, null);
   assert.ok(answer.why && answer.why.length > 0, "the reason is carried, not discarded");
   assert.ok(!/^Not a git repository$/.test(answer.why), "and it is not a guess");
@@ -253,8 +253,8 @@ test("B · a declined repository is not reported as 'not a repository'", () => {
 test("B · the report states how scope was decided", () => {
   const { json } = run(["scan", `--dir=${ROOT}`, "--json"]);
   assert.ok(json.scope, "the envelope carries the scope");
-  assert.equal(json.scope.basis, "git-tracked");
-  assert.match(json.scope.note, /tracks/);
+  assert.equal(json.scope.basis, "git-owned");
+  assert.match(json.scope.note, /owns/);
   // A clean result means something different at 41 files than at 20,000, and a reader deciding how
   // much to trust it needs to be told which.
 });

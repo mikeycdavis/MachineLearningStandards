@@ -40,16 +40,23 @@ never replaces an existing file without being told to.
 Flags: `--json`, `--dir=<path>`, `--strict` (scan only), `--dry-run` and
 `--force-overwrite=<path>` (init only), `--include-unowned`.
 
-**Scope: the code you own.** By default the tool evaluates what your repository tracks, asked of
-git. Environments, caches, data, vendored libraries and generated output are not read — an early
-adoption found every leakage finding on one project coming from scikit-learn's own test suite inside
-a committed virtualenv. Where git cannot answer, unowned trees are recognised by structure and the
-report says the scope is an approximation. Pass `--include-unowned` where vendored code genuinely is
-the product you are assessing.
+**Scope: the code you own.** By default the tool evaluates what your repository owns, asked of git:
+the files it tracks **plus the ones beside them that git does not consider ignored**, so the work
+you did five minutes ago counts before you commit it. Ignored trees, environments, caches, data,
+vendored libraries and generated output are not read — an early adoption found every leakage finding
+on one project coming from scikit-learn's own test suite inside a committed virtualenv. Where git
+cannot answer, unowned trees are recognised by structure and the report says the scope is an
+approximation. Pass `--include-unowned` where vendored code genuinely is the product you are
+assessing.
 
 **Scaffolding is not evidence.** The documents `init` writes carry a marker, and while it is present
 the evaluator treats their sections as unanswered. A template does not satisfy the rule it was
 written to help you meet. Complete the document, then delete the marker line.
+
+**A pass means a mechanism looked and saw compliance.** Where a check's subject is absent — the
+leakage detectors read a scikit-learn idiom, and your project may not use one — the rule reports
+`not-evaluated` with the reason, not `passed`. Absence of a finding is only evidence when the check
+could have found something.
 
 ---
 
@@ -80,7 +87,7 @@ Per rule:
 | `evaluated` → failed | A mechanism observed a violation | Fix it |
 | `not-applicable` | You declared the rule has no subject here | Nothing, until `revisitWhen` fires |
 | `insufficient-evidence` | A mechanism exists and the evidence it needs is absent | **Produce the evidence** |
-| `not-evaluated` | No mechanism can establish this from repository text | **Human judgement, recorded as an attestation** |
+| `not-evaluated` | No mechanism can establish this from repository text — either none exists, or the one that does could not find its subject here | **Human judgement, recorded as an attestation** |
 | `excepted` | Applies, knowingly unmet, waiver approved and current | Fix it before the waiver expires |
 | `attested` | A human reviewed it and recorded what they found | Nothing, until the reviewed material changes |
 | `contradicted-attestation` | Approved by a human, and a check found the opposite | Fix the finding — the attestation does not win |
@@ -201,3 +208,6 @@ prevent.
 | Nothing verifies that a document's content is true | The card checks confirm a document exists with the expected sections, never that what it says is accurate. |
 | Applicability triggers propose, they do not decide | A project that declares nothing gets a report full of not-evaluated. That is the safe default, and it is also less useful than a declared policy. |
 | The scanner recognises Python most fully | ML code in R, Julia, or Scala registers a footprint but the leakage and seed checks are Python-shaped. |
+| The leakage checks read a scikit-learn idiom specifically | A project that splits and preprocesses some other way reports `not-evaluated` on those rules rather than `passed`. Honest, and less useful than a check that could read it. |
+| Document checks match section headings exactly | A results table under a heading the check does not recognise is invisible to it. Observed on a real target whose README headings carry emoji. |
+| Where git declines, scope is a heuristic | A repository git refuses — a `safe.directory` setting, for instance — falls back to structural guessing, and large ignored data trees can still exhaust the file cap. |

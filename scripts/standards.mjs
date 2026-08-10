@@ -338,6 +338,22 @@ export function detect(repo) {
    */
   const examined = new Set();
   const examine = (...ids) => ids.forEach((id) => examined.add(id));
+
+  /**
+   * Rules whose detector ran but had no subject to read, with the reason.
+   *
+   * The distinction the fourth adoption forced. A detector's silence carries two different
+   * propositions — "no violation was observed" and "the prohibition was established as satisfied" —
+   * and only the first is always true. Absence of a finding is probative only where the detector had
+   * sufficient subject coverage for absence to mean something.
+   *
+   * The case that showed it: a target containing no scikit-learn at all. Two detectors that read
+   * only the scikit-learn idiom found nothing, and two nonExemptible prohibitions reported passed on
+   * a repository whose hyperparameter search they had never looked at. Nothing was wrong with the
+   * detectors; the wrong thing was converting their silence into a pass.
+   */
+  const coverageGaps = new Map();
+  const noCoverage = (id, why) => coverageGaps.set(id, why);
   const files = repo.entries;
   const codeFiles = files.filter((f) => f.views && CODE_EXT.has(f.ext));
   const notebooks = files.filter((f) => f.notebook);
@@ -435,9 +451,13 @@ export function detect(repo) {
   // A1 — preprocessing fitted before the split, in the same file.
   examine("leakage.no-preprocessing-leakage", "split.no-test-set-tuning");
   const a1 = [];
+  let sawPreprocessor = false;
+  let sawSplitter = false;
   for (const f of [...codeFiles, ...notebooks]) {
     if (!f.views || (f.ext !== ".py" && f.ext !== ".ipynb")) continue;
     const s = f.views.structure;
+    if (PREPROCESSORS.some((p) => s.includes(p + "("))) sawPreprocessor = true;
+    if (SPLITTERS.some((sp) => s.includes(sp + "("))) sawSplitter = true;
     let earliestFit = -1;
     for (const p of PREPROCESSORS) {
       const ctor = s.indexOf(p + "(");
@@ -457,6 +477,16 @@ export function detect(repo) {
       a1.push(`${f.path}:${s.slice(0, earliestFit).split("\n").length}`);
     }
   }
+  // The detector reads one dialect: a scikit-learn preprocessor fitted before a scikit-learn
+  // splitter. Where neither appears, it has examined nothing about this rule, and its silence says
+  // nothing about whether preprocessing sees data it should not.
+  if (!sawPreprocessor || !sawSplitter) {
+    noCoverage(
+      "leakage.no-preprocessing-leakage",
+      "the fit-before-split check reads scikit-learn preprocessing and splitting calls, and " +
+        `this project uses ${sawPreprocessor ? "no recognised splitter" : sawSplitter ? "no recognised preprocessor" : "neither"}`,
+    );
+  }
   if (a1.length > 0) {
     add("preprocessing-fit-before-split", {
       rule: "leakage.no-preprocessing-leakage",
@@ -469,15 +499,29 @@ export function detect(repo) {
   // A2 — a test-named identifier passed to a fit-family call.
   const a2 = [];
   const TEST_IDENT = /\b(X_test|y_test|x_test|test_X|test_y|df_test|test_df|X_holdout|y_holdout)\b/;
+  let sawTestIdent = false;
+  let sawFitCall = false;
   for (const f of [...codeFiles, ...notebooks]) {
     if (!f.views) continue;
     const s = f.views.structure;
+    if (TEST_IDENT.test(s)) sawTestIdent = true;
     for (const m of s.matchAll(/\.fit(?:_transform)?\s*\(([^)]*)\)/g)) {
+      sawFitCall = true;
       if (TEST_IDENT.test(m[1])) {
         a2.push(`${f.path}:${s.slice(0, m.index).split("\n").length}`);
         break;
       }
     }
+  }
+  // Same reasoning as A1. This detector reads a naming convention passed to a fit-family call, so
+  // where the convention or the call shape is absent it has no subject, and a project that names its
+  // holdout differently — or trains through a loop rather than a `.fit()` — is invisible to it.
+  if (!sawTestIdent || !sawFitCall) {
+    noCoverage(
+      "split.no-test-set-tuning",
+      "the test-set-tuning check reads a conventionally test-named object passed to a fit-family " +
+        `call, and this project shows ${sawTestIdent ? "no such call" : sawFitCall ? "no such naming convention" : "neither"}`,
+    );
   }
   if (a2.length > 0) {
     add("test-identifier-in-fit", {
@@ -567,7 +611,23 @@ export function detect(repo) {
     const pinning = files.filter(
       (f) => f.ext === ".dvc" || /^dvc\.lock$/.test(f.path) || /(^|\/)(data-manifest|datasets?)\.(ya?ml|json)$/.test(f.path) || /\.(sha256|md5)$/.test(f.path),
     );
-    const artifactApi = codeFiles.some((f) => /(use_artifact|log_artifact|mlflow\.data|dvc\.api)/.test(f.views.structure));
+    // Subject identity, not structural similarity. The first version accepted any artifact call,
+    // and the fourth adoption passed a repository with no dataset versioning of any kind because
+    // four `wandb.log_artifact` sites logged `type="model"`. Versioning a model is not versioning
+    // the data it was trained on: the activity has the same shape and a different subject, and only
+    // the subject decides whether the evidence establishes the rule.
+    const artifactApi = codeFiles.some((f) => {
+      // The module names are identifiers, so they are read from `structure` like any other use.
+      if (/\bdvc\.api\b|\bmlflow\.data\b/.test(f.views.structure)) return true;
+      // The subject label, though, is a string literal by construction — `type="dataset"` — and
+      // `structure` blanks string contents on purpose. This is the same exemption import matching
+      // already takes: read `source`, where comments are still stripped, so a call is a call and
+      // prose about one is not.
+      for (const m of f.views.source.matchAll(/\b(use_artifact|log_artifact)\s*\(([^)]*)\)/g)) {
+        if (/dataset/i.test(m[2])) return true;
+      }
+      return false;
+    });
     if (pinning.length === 0 && !artifactApi) {
       add("dataset-manifest-missing", {
         rule: "data.version-pinned",
@@ -583,9 +643,18 @@ export function detect(repo) {
   // A7 — training code present, no experiment configuration.
   if (isML) {
     examine("reproducibility.experiment-config-recorded");
-    const callShapedTracking = codeFiles.some(
-      (f) => /(mlflow\.(start_run|log_param)|wandb\.(init|config)|@hydra\.main|hydra\.initialize)/.test(f.views.structure),
-    );
+    // Same subject test as A6. `mlflow.start_run` opens a run and `wandb.init` opens a session;
+    // neither records a parameter set, and the rule asks for the parameters. What establishes the
+    // rule is a call that actually writes them — a logged parameter, a config handed to the tracker,
+    // or a configuration framework that owns the parameters by construction.
+    const callShapedTracking = codeFiles.some((f) => {
+      const s = f.views.structure;
+      if (/mlflow\.log_params?\b|\bwandb\.config\b|@hydra\.main|hydra\.initialize/.test(s)) return true;
+      for (const m of s.matchAll(/\b(wandb\.init|mlflow\.start_run)\s*\(([^)]*)\)/g)) {
+        if (/\bconfig\s*=/.test(m[2])) return true;
+      }
+      return false;
+    });
     if (configArtifacts.length === 0 && !callShapedTracking) {
       add("experiment-config-missing", {
         rule: "reproducibility.experiment-config-recorded",
@@ -708,7 +777,7 @@ export function detect(repo) {
     });
   }
 
-  return { findings, triggers, examined: [...examined] };
+  return { findings, triggers, examined: [...examined], coverageGaps: [...coverageGaps] };
 }
 
 // ---------------------------------------------------------------------------
@@ -872,7 +941,7 @@ async function buildVerdict(args) {
   if (error) return { error };
 
   const repo = await readRepo(args.target, { includeUnowned: args.includeUnowned });
-  const { findings, triggers, examined } = detect(repo);
+  const { findings, triggers, examined, coverageGaps } = detect(repo);
   assertBindings(catalog, findings.filter((f) => f.rule).map((f) => f.rule));
   assertBindings(catalog, examined);
 
@@ -886,6 +955,7 @@ async function buildVerdict(args) {
     // What actually ran here, not what could run somewhere. A detector gated behind a trigger that
     // did not fire examined nothing, and a rule nothing examined is not a rule that passed.
     evaluated: examined,
+    coverageGaps,
     invariantFindings: await integrityFindings(),
     today,
     digests,

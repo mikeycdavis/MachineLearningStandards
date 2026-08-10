@@ -38,6 +38,53 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 1.2.0 — 2026-08-09
+
+A narrow epistemic-correctness release. Not new standards, not more automation, not higher
+coverage — **coverage is unchanged at 10 of 45 rules.** Every change here answers the question
+"does the evidence actually establish the proposition the verdict claims it establishes?", raised by
+the fourth adoption in `artifacts/adoption/2026-08-09-fourth-adoption.md`. **No standard was
+changed, and no rule was reclassified, exempted, or lowered.** MINOR: nothing on the frozen surface
+moved, and no disposition was added.
+
+Scores on the unchanged corpus fell — `yolov5` 80% → 50%, `Numerai` 67% → 0%. Every point removed
+was a pass the framework was not entitled to. See "How a release is judged" above.
+
+### Fixed
+
+- **Owned is not the same as committed.** Scope was `git ls-files --cached`, so everything `init`
+  writes was invisible until staged: the documented workflow told operators the documents they had
+  just written did not exist. Identical evidence now receives an identical disposition before and
+  after `git add`, and that is a permanent regression test. Ignored trees, environments, dependency
+  trees and generated output are still excluded — the structural filters apply to the untracked set
+  too.
+- **Evidence must establish the subject of its rule.** A required rule reported a pass on a
+  repository with no dataset versioning of any kind, because a regex read any `log_artifact` call as
+  dataset versioning and every call site logged `type="model"`. Versioning a model is not versioning
+  the data. The same subject test found a second case by audit: opening a tracking session is not
+  recording a parameter set.
+- **Silence is probative only where the detector had a subject to read.** Two nonExemptible
+  prohibitions passed on a target containing no scikit-learn, because the detectors that read only
+  that dialect found nothing. A detector with no subject now reports `not-evaluated` with the reason
+  stated. A detector whose idiom *is* present and clean still passes — asserted from both
+  directions, because a check that converted every pass into a shrug would be worthless.
+
+### Added
+
+- `design/negative-evidence-audit.md` — all ten machine-examined rules classified against "when this
+  detector emits nothing, what does that mean?". Seven sound, three not, one of the three found by
+  the audit rather than by any target. The audit ran before the remediation so that fixing the
+  observed cases could not conceal a general problem.
+- `artifacts/adr/0007-evidence-must-establish-its-subject.md`.
+- `artifacts/adoption/2026-08-09-fourth-adoption.md` and the three-way corpus comparison in
+  `artifacts/adoption/2026-08-09-v1.2-comparison.md`.
+
+### Measured, and not to be optimised
+
+Evidence requests on `Numerai` moved 5 producible / 36 human → **5 / 38**, the increase entirely in
+the human column. Two consecutive releases have now moved this ratio upward for the right reason. A
+future version that reduces it must show which mechanism newly establishes what.
+
 ## 1.1.0 — 2026-08-09
 
 Remediation of what three adoptions against real machine-learning repositories found. Every change
