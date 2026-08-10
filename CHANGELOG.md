@@ -38,6 +38,36 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 1.4.1 — 2026-08-09
+
+**Interoperability metadata. No normative or evaluator semantic change.**
+
+A PATCH under this changelog's own rule — a release that changes no conclusion. No rule was added,
+removed, reclassified or relevelled; the acceptance lock is untouched; the output schema version is
+unchanged.
+
+Adds `standards-adapter.json`, a machine-readable declaration of how this pack is invoked and how its
+result is read, against the schema owned by StandardsEnforcer. It states what was already true: the
+authoritative verdict comes from `evaluate` — not `scan`, which answers a different question — the
+target is given as `--dir=<path>`, and the status vocabulary is the five values this pack emits.
+
+`test/adapter-contract.test.mjs` builds the invocation from the contract, runs it, runs the
+documented invocation directly, and requires the two results to be identical. A declaration that
+drifts from the CLI it describes fails this pack's own suite, which is what makes the declaration
+evidence rather than a comment.
+
+### Why a new release rather than a retag
+
+The contract did not exist at `v1.4.0`, so `v1.4.0` cannot be made to claim it, and a consumer reads
+the declaration out of the pinned checkout rather than from `main`. A released product acquired a new
+public machine-readable interface, so a new release publishes that interface.
+
+### Unchanged
+
+The normative corpus delivered in 1.4.0 in full, and the framework version, output `schemaVersion`,
+verdict vocabulary, scoring and exit codes. The adapter declaration and its fidelity test are the
+only changes since `v1.4.0`. 207 tests pass, as at `v1.4.0`.
+
 ## 1.4.0 — 2026-08-09
 
 The first release to touch the normative corpus.
