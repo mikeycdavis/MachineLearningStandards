@@ -50,7 +50,31 @@ jobs:
       - name: Scan this repository
         run: npm run scan
 
-      # The gate. Exits 1 on a required-rule failure, 2 if the policy cannot be read,
-      # and 3 if an invariant was violated.
+      # The gate. Exits 1 on a required-rule failure, 2 on NOT_EVALUATED, 3 if an
+      # invariant was violated.
+      #
+      # This step used to be a bare `npm run evaluate`, and it was green for the wrong
+      # reason. Every domain rule in project-policy.yml is declared not-applicable —
+      # correctly, since there is no ML work in a standards repository — so from 1.4.2
+      # this evaluation honestly reports NOT_EVALUATED and exits 2. Before 1.4.2 it
+      # reported COMPLIANT on having established nothing, and this step passed on that.
+      #
+      # So the step asserts what is actually true instead: nothing here is applicable, and
+      # therefore nothing may be failing. NON_COMPLIANT and BLOCKED_BY_INVARIANT still fail
+      # the build, and so does the appearance of an applicable rule — because that means ML
+      # work has arrived in this repository and the policy's not-applicable declarations
+      # need re-reading rather than silently passing.
       - name: Evaluate this repository
-        run: npm run evaluate
+        run: |
+          node scripts/standards.mjs evaluate . --json > verdict.json || true
+          node -e '
+            const v = JSON.parse(require("fs").readFileSync("verdict.json", "utf8"));
+            const { status, denominator } = v;
+            if (status === "NOT_EVALUATED" && denominator.applicable === 0) {
+              console.log("NOT_EVALUATED with 0 applicable rules — expected, and honest.");
+              process.exit(0);
+            }
+            console.error(`status=${status} applicable=${denominator.applicable} scored=${denominator.scored}`);
+            console.error("Expected NOT_EVALUATED with 0 applicable rules. Read project-policy.yml.");
+            process.exit(1);
+          '

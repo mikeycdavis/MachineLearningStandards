@@ -415,9 +415,34 @@ function summarise(results, policy, evidenceRequests) {
   const failures = results.filter((r) => r.status === RESULT.failed && r.disposition !== "excepted");
   const excepted = results.filter((r) => r.disposition === "excepted");
 
+  // Applicable rules that were actually examined and reached a result — the `automated` and
+  // `manualReview` buckets above, counted from the results rather than read back off the summary so
+  // the two cannot drift. A rule that was skipped establishes nothing; a rule whose evidence was
+  // absent establishes nothing either, and is deliberately excluded here for the same reason it has
+  // its own assurance bucket.
+  const established = results.filter(
+    (r) =>
+      r.disposition !== "not-applicable" &&
+      r.disposition !== "insufficient-evidence" &&
+      r.status !== RESULT.skipped,
+  );
+
   let status;
   if (blocked.length > 0) status = STATUS.BLOCKED_BY_INVARIANT;
   else if (!policy) status = STATUS.NOT_EVALUATED;
+  // Property 1 of this module — there is no default-pass path — held for individual rules and did
+  // not hold for the verdict built from them. A target with 46 applicable rules, every one skipped,
+  // reached the `else` below and reported COMPLIANT: nothing failed, so everything passed. That is
+  // the false green this module's own header says the system exists to stop, one level up from where
+  // it was being stopped, and catalog.mjs already names the confusion exactly — COMPLIANT reads as
+  // "everything was checked" when it means "everything checked passed". When nothing was checked,
+  // there is no positive verdict to reach, so the honest answer is the one this pack already has for
+  // "nothing is known".
+  //
+  // Placed here rather than lower because it is a precondition on knowing anything at all, alongside
+  // the missing policy. Order is not load-bearing against the branches below it: a failure or an
+  // exception is itself an examined rule, so neither can coexist with an empty `established`.
+  else if (established.length === 0) status = STATUS.NOT_EVALUATED;
   else if (failures.length > 0) status = STATUS.NON_COMPLIANT;
   else if (excepted.length > 0) status = STATUS.COMPLIANT_WITH_EXCEPTIONS;
   else status = STATUS.COMPLIANT;

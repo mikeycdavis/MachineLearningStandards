@@ -168,7 +168,12 @@ test("not-applicable is skipped and leaves the applicable denominator", () => {
   const r = only(v, "leakage.example");
   assert.equal(r.disposition, "not-applicable");
   assert.equal(v.denominator.applicable, 0);
-  assert.equal(v.status, STATUS.COMPLIANT);
+  // Was COMPLIANT until 1.4.2. A project that declares its only rule not-applicable has established
+  // nothing, and a verdict of COMPLIANT made "declare everything away" the cheapest route to a green
+  // — the same false green as the all-skipped case, reached by declaration instead of by silence.
+  // Whether this pack applies to the project at all is a question above this engine; what this
+  // engine can say honestly is that it evaluated nothing.
+  assert.equal(v.status, STATUS.NOT_EVALUATED);
   assert.equal(v.score, null, "nothing scored means no score, not a perfect one");
 });
 

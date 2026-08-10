@@ -38,6 +38,99 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 1.5.0 — 2026-08-10
+
+**Normative evaluator correction. A verdict that rested on nothing is no longer a pass.**
+
+This release changes conclusions. It is not interoperability metadata and must not be read as such.
+
+`scripts/compliance.mjs` opens by claiming four load-bearing properties, the first being that there
+is **no default-pass path**. That property held for individual rules and did not hold for the verdict
+assembled from them. The status ladder ended in a bare `else`, so an evaluation in which every
+applicable rule was skipped fell past `blocked`, `no policy`, `failures` and `excepted` and arrived at
+`COMPLIANT` — nothing failed, therefore everything passed.
+
+```text
+applicable:    46
+scored:         0
+notEvaluated:  46
+status:         COMPLIANT
+exit:           0
+```
+
+`catalog.mjs` had already named the confusion this exploits: `COMPLIANT` reads as *everything was
+checked* when it means *everything checked passed*. When nothing was checked, neither reading
+supports a pass.
+
+A positive verdict now requires that at least one applicable rule was **established** — examined and
+given a result. Rules that were skipped establish nothing; rules whose evidence was sought and absent
+establish nothing either, which is why `insufficient-evidence` is excluded on the same grounds that
+give it its own assurance bucket. Where nothing was established the status is `NOT_EVALUATED`, this
+pack's existing answer for *nothing is known*, which already exits `2`.
+
+### Two conclusions move
+
+- **All applicable rules skipped** — was `COMPLIANT`, now `NOT_EVALUATED`.
+- **Every rule declared not-applicable** — was `COMPLIANT`, now `NOT_EVALUATED`. Declaring a project
+  out of every rule established nothing about it, and a pass made *declare everything away* the
+  cheapest route to green. Whether this pack applies to a project at all is a question above this
+  engine; what the engine can say honestly is that it evaluated nothing.
+
+### This repository's own evaluation was one of them
+
+Every domain rule in `project-policy.yml` is declared not-applicable — correctly, since there is no ML
+work in a standards repository. So `npm run evaluate` reported `COMPLIANT` on this repository, having
+established nothing, and the CI gate passed on that. `project-policy.yml` had already said what
+self-evaluation here actually exercises: the invariants and the test suite.
+
+The gate now asserts what is true instead — `NOT_EVALUATED` with zero applicable rules — and fails if
+an applicable rule appears, because that means ML work has arrived and the not-applicable declarations
+need re-reading. `test/self-evaluation.test.mjs` pins it.
+
+### Why MINOR and not PATCH
+
+PATCH here means *corrections that change no conclusion*, and this changes conclusions. Nothing on the
+frozen surface moved: the status and disposition vocabularies are unchanged, `NOT_EVALUATED` already
+existed, the exit-code meanings are unchanged, and the output envelope, score, assurance and coverage
+semantics are untouched. No rule was added, removed, reclassified or relevelled.
+
+The precedent is `1.1.0` in this changelog, where corpus scores fell — `yolov5` 80% → 50%, `Numerai`
+67% → 0% — and the entry recorded that *every point removed was a pass the framework was not entitled
+to*. That release was MINOR on the same grounds. This is the same class of change and takes the same
+increment.
+
+Projects currently reporting `COMPLIANT` on a real evaluation are unaffected. Projects reporting
+`COMPLIANT` on nothing will now report `NOT_EVALUATED`, and their CI will go red. That is the release
+working.
+
+### How it was found
+
+From outside, by StandardsEnforcer invoking this pack through its own published contract against a
+directory it had no business approving. The enforcer's acceptance chain held at every link — the
+adapter was valid, the evaluator ran, the status was declared, and the status was in this pack's
+declared passing set — and the false green came through it intact. Locating the defect in the
+authority rather than in the transport is what kept the fix here instead of adding pack-specific
+interpretation to the consumer.
+
+### Guarded, and proven to be guarded
+
+`test/no-verdict-without-evidence.test.mjs` approaches the boundary from both sides: zero established
+rules cannot be `COMPLIANT`; one established rule must not collapse to `NOT_EVALUATED`; all rules
+passing is still `COMPLIANT`; a real violation is still `NON_COMPLIANT`; an invariant violation still
+outranks the guard; an exception still yields `COMPLIANT_WITH_EXCEPTIONS`.
+
+The last test deletes the guard from a copy of the source and requires the false green to return. A
+test named for an invariant establishes nothing unless it bites, and this one is shown to.
+
+219 tests pass, up from 207.
+
+### Unchanged
+
+`standards-adapter.json` and the invocation it declares. The contract published at `1.4.1` describes
+`1.5.0` exactly as it described `1.4.1`: same entrypoint, same arguments, same five statuses, same
+passing set. What changed is which of those statuses this evaluator reaches, which the contract has
+never claimed to constrain.
+
 ## 1.4.1 — 2026-08-09
 
 **Interoperability metadata. No normative or evaluator semantic change.**
