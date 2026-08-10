@@ -82,6 +82,14 @@ that evaluation did not test. A model that wins on held-out data using a feature
 hours late, or that takes four times the inference time, or that was validated on a period whose
 input distribution has since moved, has not improved anything that will happen.
 
+**A note on where this taxonomy comes from.** The distinction between statistical and practical
+significance is long settled in the statistical literature. The three-way scheme above, with its
+third category, is not drawn from an external methodology standard — it is this corpus's synthesis
+of the source brief's three terms. It is recorded here because a reader meeting it beside
+[Standard 5](05-train-validation-test-separation.md) and [Standard 8](08-leakage.md) will reasonably
+assume it carries the same weight of external agreement, and it does not. The obligation stands; its
+provenance is narrower than its neighbours'.
+
 Presenting one kind as another is the violation. "Statistically significant" reported as "better"
 implies meaningfulness; a meaningful offline gain reported as "improves the service" implies
 production relevance. Where a kind has not been assessed, that is stated rather than assumed.

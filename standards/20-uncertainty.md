@@ -51,6 +51,15 @@ depends on which examples landed in the test set. A bootstrap over the test set 
 opposite and says nothing about seed sensitivity. Fold variance conflates both and, on a small
 dataset, is dominated by fold size.
 
+There is a property here that is easy to miss and that no choice of test repairs: **an interval
+computed from resamples whose training sets overlap understates the true variance, and the amount of
+the understatement is not estimable in general.** Every fold of a k-fold shares most of its training
+data with every other fold, so the fold results are positively correlated and treating them as
+independent observations produces an interval narrower than the truth — Bengio and Grandvalet (2004)
+show that no universal unbiased estimator of that variance exists. This is stated as a property
+rather than as a list of prohibited procedures, because a project can apply a property to whatever
+it actually did, and a list only catches the procedures on it.
+
 Where two models are evaluated on the same examples, a paired analysis is markedly stronger than
 comparing two independent intervals, because it removes the example-difficulty variation common to
 both arms. Overlapping intervals on paired data routinely conceal a difference that a paired test

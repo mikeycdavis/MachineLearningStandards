@@ -132,6 +132,32 @@
       "removedIn": null
     },
     {
+      "id": "evaluation.resampling-not-by-default",
+      "kind": "recommendation",
+      "title": "Resampling is not the default response to imbalance",
+      "standard": 11,
+      "requirement": "R6",
+      "category": "evaluation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.4.0",
+      "description": "Where a proper scoring rule and a strong learner are in use, resampling is not applied merely because the classes are imbalanced, and where it is applied its necessity is recorded. The recommendation does not reach weak learners, loss reweighting in deep learning, or extreme rare-event regimes.",
+      "rationale": "Class-imbalance correction degrades calibration and produces worse Brier scores while leaving rank-based performance essentially unchanged (van den Goorbergh et al., JAMIA 2022), and with strong classifiers and a proper metric it is not beneficial at all (Elor and Averbuch-Elor, 2022). The corpus previously treated resampling as a neutral technique carrying disclosure obligations, which a reader takes as permission.",
+      "remediation": "Evaluate without resampling first. Where resampling is retained, record why it was necessary for this learner and this metric, and disclose its effect under R4.",
+      "evidenceExpected": "Either a recorded determination that no resampling was applied, or a recorded justification for the resampling used, naming the learner and the metric it was judged against.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a learner is strong, whether the metric is proper, and whether resampling was necessary are all judgements about work the auditor cannot see.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
       "id": "evaluation.metric-selection-justified",
       "kind": "requirement",
       "title": "The metric follows from the problem and is fixed before the results",

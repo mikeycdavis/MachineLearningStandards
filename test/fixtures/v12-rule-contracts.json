@@ -1,0 +1,752 @@
+{
+  "data.provenance-documented": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "document",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": false,
+    "standard": 3,
+    "requirement": "R1",
+    "triggers": [
+      "data-artifacts",
+      "training-code"
+    ],
+    "evidenceExpected": "A provenance document carrying origin, collection, population, and exclusions sections, plus an attestation that the exclusions listed are all of them."
+  },
+  "data.no-silent-exclusions": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 3,
+    "requirement": "P2",
+    "triggers": [
+      "data-artifacts",
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that each exclusion was rule-driven and pre-specified rather than selected after a disappointing evaluation, with the provenance document's exclusions section as supporting evidence."
+  },
+  "data.version-pinned": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "configuration",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": false,
+    "standard": 4,
+    "requirement": "R1",
+    "triggers": [
+      "data-artifacts"
+    ],
+    "evidenceExpected": "A version manifest, lockfile, or checksum set covering the datasets in use, and experiment records naming the version each result came from."
+  },
+  "data.feature-lineage-documented": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 17,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A lineage record sufficient to answer, for each feature, whether it derives from information unavailable at prediction time and whether it derives from the target."
+  },
+  "deployment.model-card": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "document",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": false,
+    "standard": 25,
+    "requirement": "R1",
+    "triggers": [
+      "deployment-surface",
+      "training-code"
+    ],
+    "evidenceExpected": "A model card carrying at minimum an intended-use section, an evaluation section, and a limitations section."
+  },
+  "deployment.inference-contract": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 23,
+    "requirement": "R1",
+    "triggers": [
+      "deployment-surface"
+    ],
+    "evidenceExpected": "An inference specification covering inputs, transformations, outputs, thresholds, latency, and failure behaviour, plus an attestation that serving applies the training transformations."
+  },
+  "evaluation.baseline-exists": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "document",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": false,
+    "standard": 2,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A baseline section or a baseline row in the results table of the evaluation document, showing the same metric on the same split."
+  },
+  "evaluation.no-baseline-free-claims": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 2,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that the baseline used for each improvement claim was the strongest reasonable simple alternative, not one selected for being beatable."
+  },
+  "evaluation.no-training-metrics-as-production": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 5,
+    "requirement": "P2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that each reported performance figure is labelled with the partition it was computed on."
+  },
+  "evaluation.no-cherry-picked-periods": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 6,
+    "requirement": "P2",
+    "triggers": [
+      "temporal-signals"
+    ],
+    "evidenceExpected": "An attestation naming when the evaluation period was fixed relative to the results, and stating what other windows, if any, were examined."
+  },
+  "evaluation.class-imbalance-addressed": {
+    "kind": "recommendation",
+    "level": "recommended",
+    "severity": "warning",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 11,
+    "requirement": "R2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "The measured class distribution recorded with the evaluation, and a disclosure of any resampling or weighting applied."
+  },
+  "evaluation.metric-selection-justified": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 12,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A recorded metric choice with its justification, dated before the reported results, plus the set of metrics reported together where more than one is relevant."
+  },
+  "evaluation.no-result-driven-metrics": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 12,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that the reported metrics are the ones fixed in advance, and that no computed metric was dropped for being unflattering."
+  },
+  "evaluation.no-accuracy-by-default": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 12,
+    "requirement": "P2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A recorded justification that the reported metric suits the base rate and the cost of each error type."
+  },
+  "evaluation.calibration-evidence": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 13,
+    "requirement": "R2",
+    "triggers": [
+      "deployment-surface",
+      "training-code"
+    ],
+    "evidenceExpected": "A calibration measurement on held-out data, reported with the model, or a recorded determination that the output is not consumed as a probability."
+  },
+  "evaluation.no-uncalibrated-confidence-claims": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 13,
+    "requirement": "P1",
+    "triggers": [
+      "deployment-surface",
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that every place the output is described as a probability is backed by a calibration measurement."
+  },
+  "evaluation.ablation-performed": {
+    "kind": "recommendation",
+    "level": "recommended",
+    "severity": "warning",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 18,
+    "requirement": "R2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "Ablation results covering each separable component, reported with the same metric and split as the headline comparison."
+  },
+  "evaluation.no-incompatible-comparisons": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 19,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A recorded comparison protocol naming the shared dataset version, split, metric, and preprocessing, plus an attestation that every compared result used it."
+  },
+  "evaluation.improvement-classification": {
+    "kind": "recommendation",
+    "level": "recommended",
+    "severity": "warning",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 19,
+    "requirement": "R3",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "Comparison write-ups that classify each claimed improvement across the three kinds, with the evidence for each classification."
+  },
+  "evaluation.no-complexity-by-default": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 19,
+    "requirement": "P2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An uncertainty estimate around the difference and a recorded justification for the added complexity."
+  },
+  "evaluation.uncertainty-reported": {
+    "kind": "recommendation",
+    "level": "recommended",
+    "severity": "warning",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 20,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An uncertainty estimate reported with each comparison, and the method used to produce it."
+  },
+  "evaluation.segment-performance-reported": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 25,
+    "requirement": "R2",
+    "triggers": [
+      "deployment-surface",
+      "training-code"
+    ],
+    "evidenceExpected": "A segment-level results table in the evaluation document or model card, covering the segments identified as consequential."
+  },
+  "evaluation.no-hidden-segments": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 25,
+    "requirement": "P1",
+    "triggers": [
+      "deployment-surface",
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that the reported segments are all the consequential ones, naming any withheld and the reason."
+  },
+  "framing.problem-documented": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 1,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A problem-definition document, or a model card whose intended-use and target sections carry that content, together with an attestation stating when it was written relative to the first model."
+  },
+  "integrity.no-fabricated-datasets": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 3,
+    "requirement": "P1",
+    "triggers": [
+      "data-artifacts",
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation from someone who traced the dataset to its collection mechanism, naming what they checked and confirming that every record described as observed was obtained rather than generated."
+  },
+  "integrity.no-fabricated-training-results": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 15,
+    "requirement": "P2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that reported training figures were traced to the runs that produced them, naming the run records or experiment-tracking entries examined."
+  },
+  "integrity.no-fabricated-evaluation-metrics": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 19,
+    "requirement": "P3",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that reported metrics were traced to the evaluation runs and splits they claim, naming the records examined."
+  },
+  "leakage.no-preprocessing-leakage": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "code-analysis",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 8,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "Pipeline-scoped preprocessing, or an attestation that every fitted transformation was checked to be fitted on training data only."
+  },
+  "leakage.no-future-information": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 6,
+    "requirement": "P1",
+    "triggers": [
+      "temporal-signals",
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation from a reviewer who traced each feature's population time against the prediction moment, naming the lineage record and pipeline code examined."
+  },
+  "leakage.no-target-in-features": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 9,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation from someone who understands the data, confirming per feature that it is not derived from the target or from the process that generates it, and naming the lineage record consulted."
+  },
+  "leakage.feature-availability-verified": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 7,
+    "requirement": "R2",
+    "triggers": [
+      "deployment-surface",
+      "training-code"
+    ],
+    "evidenceExpected": "A per-feature availability determination, and an attestation that the inference path was checked against it."
+  },
+  "leakage.no-unavailable-features-at-inference": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 7,
+    "requirement": "P1",
+    "triggers": [
+      "deployment-surface"
+    ],
+    "evidenceExpected": "An attestation that every required feature was confirmed reachable at inference, listing the features and how each was confirmed."
+  },
+  "monitoring.drift-response-defined": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 21,
+    "requirement": "R3",
+    "triggers": [
+      "deployment-surface"
+    ],
+    "evidenceExpected": "A drift-monitoring specification listing metrics, thresholds, responses, and owners, plus an attestation that it is the one in force."
+  },
+  "monitoring.no-ignored-shift": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 21,
+    "requirement": "P1",
+    "triggers": [
+      "deployment-surface"
+    ],
+    "evidenceExpected": "A record of shift findings and their dispositions, and an attestation that no finding was left undispositioned."
+  },
+  "monitoring.retraining-policy": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 22,
+    "requirement": "R1",
+    "triggers": [
+      "deployment-surface"
+    ],
+    "evidenceExpected": "A retraining policy document naming trigger, window, gate, and rollback, and an attestation that the pipeline enforces the gate."
+  },
+  "monitoring.production-monitoring-defined": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 24,
+    "requirement": "R1",
+    "triggers": [
+      "deployment-surface"
+    ],
+    "evidenceExpected": "A monitoring specification covering the signals and their segmentation, and an attestation that it is deployed and firing."
+  },
+  "reproducibility.experiment-config-recorded": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "configuration",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": false,
+    "standard": 15,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A configuration artifact per experiment — params.yaml, a conf directory, or tracked runs — carrying code version, data version, hyperparameters, environment, and seeds."
+  },
+  "reproducibility.dependencies-pinned": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "configuration",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": false,
+    "standard": 15,
+    "requirement": "R2",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A requirements file with exact pins, or a manifest accompanied by a committed lockfile."
+  },
+  "reproducibility.no-unsubstantiated-claims": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 15,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that someone reran an experiment from its recorded configuration and obtained the reported result, or an explicit statement that the work is not reproducible."
+  },
+  "reproducibility.seeds-recorded": {
+    "kind": "recommendation",
+    "level": "recommended",
+    "severity": "warning",
+    "verification": "code-analysis",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 16,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "Explicit seed values in the experiment configuration, and a determinism check showing two runs agree."
+  },
+  "reproducibility.notebook-hygiene": {
+    "kind": "recommendation",
+    "level": "recommended",
+    "severity": "warning",
+    "verification": "code-analysis",
+    "assurance": "partial",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 15,
+    "requirement": "R3",
+    "triggers": [
+      "notebooks-present"
+    ],
+    "evidenceExpected": "Notebooks whose execution counts ascend without gaps, or a scripted pipeline that produces the reported results outside a notebook."
+  },
+  "split.holdout-designated": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 5,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "Split code or configuration showing three distinct partitions and the key they are split on, with an attestation that no observation's group spans a boundary."
+  },
+  "split.no-test-set-tuning": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "code-analysis",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": true,
+    "standard": 14,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A search procedure scored against validation data, plus an attestation recording how many times the test set was examined and whether any choice followed from it."
+  },
+  "split.cv-scheme-justified": {
+    "kind": "requirement",
+    "level": "required",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 10,
+    "requirement": "R1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "A recorded determination of the data's dependence structure and the splitter chosen to match it."
+  },
+  "split.no-inappropriate-cv-scheme": {
+    "kind": "prohibition",
+    "level": "forbidden",
+    "severity": "error",
+    "verification": "manual-review",
+    "assurance": "none",
+    "nonExemptible": false,
+    "attestable": true,
+    "standard": 10,
+    "requirement": "P1",
+    "triggers": [
+      "training-code"
+    ],
+    "evidenceExpected": "An attestation that the fold scheme was checked against the data's dependence structure, naming the code reviewed."
+  },
+  "invariant.standards-integrity": {
+    "kind": "invariant",
+    "level": "required",
+    "severity": "error",
+    "verification": "structural",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": false,
+    "standard": null,
+    "requirement": null,
+    "triggers": [],
+    "evidenceExpected": "A catalog that matches its reviewed baseline, and a policy that raises no obligation below its catalog level, addresses no invariant, and dismisses no prohibition without a substantive reason."
+  },
+  "invariant.no-silent-pass": {
+    "kind": "invariant",
+    "level": "required",
+    "severity": "error",
+    "verification": "structural",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": false,
+    "standard": null,
+    "requirement": null,
+    "triggers": [],
+    "evidenceExpected": "The evaluator's EVALUATED_RULES set agrees with its detector bindings, and every passing result carries either an examination or an attestation."
+  },
+  "invariant.coverage-outside-verdict": {
+    "kind": "invariant",
+    "level": "required",
+    "severity": "error",
+    "verification": "structural",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": false,
+    "standard": null,
+    "requirement": null,
+    "triggers": [],
+    "evidenceExpected": "The envelope carries frameworkCoverage as a sibling of status and score, and a test confirms that changing coverage leaves both unchanged."
+  },
+  "invariant.honest-evidence-labels": {
+    "kind": "invariant",
+    "level": "required",
+    "severity": "error",
+    "verification": "structural",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": false,
+    "standard": null,
+    "requirement": null,
+    "triggers": [],
+    "evidenceExpected": "Every finding carries a label from OBSERVED, INFERRED, CONFIRMED_BY_OWNER, UNKNOWN, and heuristic detectors emit only INFERRED."
+  },
+  "invariant.no-self-satisfying-scaffolding": {
+    "kind": "invariant",
+    "level": "required",
+    "severity": "error",
+    "verification": "structural",
+    "assurance": "partial",
+    "nonExemptible": true,
+    "attestable": false,
+    "standard": null,
+    "requirement": null,
+    "triggers": [],
+    "evidenceExpected": "Documents that carry no scaffold marker and whose relevant sections contain substantive content rather than placeholders."
+  }
+}

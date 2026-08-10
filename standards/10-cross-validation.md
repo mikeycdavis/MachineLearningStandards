@@ -59,6 +59,19 @@ The label-maturation gap required by [Standard 6](06-temporal-splitting.md) appl
 fold, not only at the outer boundary, and the number of folds is bounded by how many usable
 windows the history contains rather than by convention.
 
+**One documented exception exists, and it is narrower than it will be read.** Bergmeir, Hyndman and
+Koo (2018) show that for *purely autoregressive* models, standard k-fold cross-validation is valid
+**provided the models under consideration have uncorrelated errors** — which holds, for instance,
+where the models nest a more appropriate one. Both conditions are load-bearing. A model carrying any
+exogenous feature is not purely autoregressive, and the error condition is a property to be
+demonstrated on the data rather than assumed from the model class.
+
+This requirement does not become conditional on that result. A project relying on it is claiming an
+exception to an applicable rule, which is what the exception mechanism is for: it needs an approver,
+a date, and the demonstration of uncorrelated errors recorded as its evidence. The reason for
+holding the line is that both conditions are unverifiable by inspection, and a rule that can be
+escaped by asserting an unverifiable antecedent is not a rule.
+
 ### R4 — Every fitted transformation is fitted inside each fold
 
 **Preprocessing whose parameters are learned from data MUST be fitted separately within each fold's

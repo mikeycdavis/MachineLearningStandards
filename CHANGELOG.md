@@ -38,6 +38,70 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 1.4.0 — 2026-08-09 — **candidate, not released**
+
+The first release to touch the normative corpus. Every change is traceable to a supported
+disposition in `artifacts/review/2026-08-09-candidate-disposition.md` (`80a5a82`); implementation
+convenience, adoption results, and a wish for the release to feel substantial are not independent
+reasons, and none was used as one.
+
+**Twelve supported dispositions entered normative replay and seven survived it.** MINOR: one
+recommendation added, one requirement's accepted evidence widened, five prose clarifications that
+change no rule's contract.
+
+### Changed
+
+- **Standard 15 R2** — *Dependencies are pinned to exact versions* becomes *The resolved environment
+  is recorded, by pins or by a lock artifact*. Exact pins in a manifest that declares what a project
+  is compatible with produce unresolvable environments for its consumers; the distinction that
+  survives is abstract manifest versus lock artifact, which is a fact about the repository rather
+  than a self-declared property of the project. Ranges alone remain insufficient. **Verified against
+  the target that provoked the finding: `ultralytics/yolov5` still fails, because it commits
+  neither.** (N10)
+
+### Added
+
+- `evaluation.resampling-not-by-default` (**recommendation**, Standard 11 R6) — where a proper
+  scoring rule and a strong learner are in use, resampling is not applied merely because the classes
+  are imbalanced. The standard names where the evidence does not reach — weak learners, loss
+  reweighting in deep learning, extreme rare-event regimes — because a prohibition would be wrong in
+  those cases. (N16)
+
+### Clarified — no rule's contract changed, asserted by test
+
+- **Standard 11 R1** obtains the test partition's base rate without breaking Standard 5's embargo,
+  by derivation from the split specification or by measurement after the configuration is final. The
+  two standards previously required and forbade the same act. (N1)
+- **Standard 10 R3** records that a documented exception exists for purely autoregressive models
+  with uncorrelated errors, and that invoking it is an exception with an approver rather than a hole
+  in the rule. (N2)
+- **Standard 20 R2** states the property that overlapping training sets understate variance, rather
+  than naming a prohibited test — a named ban would create a whitelist illusion. (N7)
+- **Standard 13 R2**'s normative sentence carries the condition its own heading declares. (N9)
+- **Standard 19 R3** records that its three-way improvement taxonomy is this corpus's synthesis and
+  not an external methodology standard. (N12)
+
+### Withdrawn during replay
+
+- **N6** — extending Standard 20 R3 to differences inside their measured uncertainty adds an
+  obligation, so it is a normative change and not a clarification. Re-enters disposition under the
+  correct class; not in this candidate.
+- **N17** — Standard 1 R4 already says "at least qualitatively" and gives a worked example of an
+  acceptable minimal form. The finding came from reading the normative sentence without the
+  paragraph beneath it. Rejected.
+
+### Held back deliberately
+
+**N3, N5 and N8 are supported additions and are not here.** Adding a requirement is MAJOR under the
+policy at the top of this file, and a MINOR release cannot carry one. A test asserts that the only
+catalog addition in this release is a recommendation.
+
+### Completeness
+
+Unchanged and still unmeasured. The six gaps in the review were found by one non-independent review
+and are not a denominator. Adding N16 — and, later, N3, N5 and N8 — would not make the corpus
+complete, and no claim to the contrary is made here.
+
 ## 1.3.0 — 2026-08-09
 
 Framework only. **No standard was changed and no project-facing rule was added, reclassified,

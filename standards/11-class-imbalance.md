@@ -27,7 +27,15 @@ region — belongs to [Standard 12](12-metric-selection.md).
 ### R1 — The class distribution is measured and stated
 
 **The base rate of every class MUST be measured on the training, validation, and test partitions
-separately, and MUST be recorded in the model card or evaluation document.** Per-partition, because
+separately, and MUST be recorded in the model card or evaluation document.**
+
+The test partition's base rate is subject to [Standard 5](05-train-validation-test-separation.md)'s
+embargo and MUST be obtained without breaking it: either derived from the split specification, which
+a stratified or otherwise determined split fixes by construction, or measured after the model
+configuration is final. It is not an exception to the embargo. A team that learns the test partition
+sits an order of magnitude below the training partition will reasonably revisit its prior
+correction, its threshold, or its calibration — and every one of those is a modelling decision
+driven by the test set, which is the thing the embargo exists to prevent. Per-partition, because
 a split that leaves the rare class distributed unevenly produces evaluation figures whose variance
 has nothing to do with the model.
 
@@ -96,6 +104,32 @@ segment.** A metric that looks stable across segments while the base rate varies
 magnitude between them is describing the base rate, not the model. This connects to
 [Standard 25](25-model-limitations.md), where the segments with too few positive cases to support
 any claim must be named as such rather than reported with a number that implies precision.
+
+### R6 — Resampling is not the default response to imbalance
+
+**Where a proper scoring rule and a strong learner are in use, resampling SHOULD NOT be applied
+merely because the classes are imbalanced, and where it is applied its necessity SHOULD be
+recorded.** Imbalance is a property of the problem before it is a defect of the data, and the
+reflex to correct it is stronger than the evidence for correcting it.
+
+The evidence is specific about where it applies. Van den Goorbergh and colleagues (2022) found that
+random undersampling, random oversampling and SMOTE all produced worse Brier scores and marked
+calibration distortion in clinical risk models, while leaving rank-based performance essentially
+unchanged — the correction moved the probabilities and bought nothing. Elor and Averbuch-Elor (2022)
+found across seventy-three datasets that with gradient-boosted forests and a proper metric,
+balancing is not beneficial; it helped mainly with weaker learners, or where unusually good
+oversampler hyperparameters were known in advance.
+
+**The boundary matters as much as the finding.** This is a recommendation and not a prohibition
+because the evidence does not reach everywhere. Balancing does help weak learners. Loss reweighting
+in deep learning is routine and uncontroversial. Extreme rare-event regimes, where a minority class
+may not appear in a batch at all, are a different problem from a ten-percent base rate. A
+prohibition would be wrong in named, common cases, and a standard that is wrong in named cases
+teaches a reader to discount the ones it gets right.
+
+Where resampling is applied under this recommendation, R4's disclosure obligation is what makes the
+choice inspectable, and [Standard 13](13-calibration.md) is where its consequence for the output
+scale is resolved.
 
 ## Evidence and verification
 

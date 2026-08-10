@@ -38,8 +38,16 @@ much a consumer as the code is.
 
 ### R2 — Where the output is used as a probability, calibration is measured and reported
 
-**Calibration MUST be measured on held-out data and reported wherever the model's performance is
-reported.** A reliability curve with its binning stated, together with a summary such as expected
+**Where R1's record says the output is consumed as a probability, calibration MUST be measured on
+held-out data and reported wherever the model's performance is reported.** The condition is the
+heading's and is repeated here because this sentence is the one that gets quoted: a ranking or
+retrieval system whose output is an ordering, and is described as one, is not obliged to produce
+calibration evidence for a probability it never claimed. R4 is what makes that honest rather than
+convenient — an output without calibration evidence is called a score in the model card, the API
+contract, the field names, and the interface, so taking this route costs a rename everywhere rather
+than nothing.
+
+A reliability curve with its binning stated, together with a summary such as expected
 calibration error or a Brier score decomposition, is sufficient; a summary statistic alone is not,
 because it conceals the shape of the error and a model can be badly miscalibrated in the region
 where decisions are made while scoring well overall.

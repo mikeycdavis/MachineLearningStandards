@@ -32,15 +32,26 @@ The record's home may be a tracking system, a committed configuration file, or a
 written by the training script. What it may not be is the training script itself with values edited
 in place, because that file describes the last run rather than the one being reported.
 
-### R2 — Dependencies are pinned to exact versions
+### R2 — The resolved environment is recorded, by pins or by a lock artifact
 
-**Dependency manifests MUST pin exact versions** — `==` in a requirements file, a committed lockfile
-beside a `pyproject.toml`, `=` on `environment.yml` dependencies. An unpinned manifest describes a
-family of environments, and the members of that family disagree: a minor release changes a default
-`solver`, a `random_state` semantic, or a floating-point reduction order, and the result moves for
-reasons no one recorded.
+**A project MUST record the resolved environment its results came from** — either exact pins in the
+manifest (`==` in a requirements file, `=` on `environment.yml` dependencies) or a committed lock
+artifact beside a manifest that declares ranges. A manifest of ranges alone describes a family of
+environments, and the members of that family disagree: a minor release changes a default `solver`, a
+`random_state` semantic, or a floating-point reduction order, and the result moves for reasons no
+one recorded.
 
-Pinning the direct dependencies is the requirement. It is not sufficient for determinism, and R4
+The distinction is between an **abstract manifest**, which declares what a project is compatible
+with, and a **lock artifact**, which records one environment that actually resolved. A project
+distributed as a dependency is right to declare ranges — exact pins in an abstract specification
+produce unresolvable environments for its consumers — and is still obliged to record the environment
+its own results came from. What is never sufficient is ranges and nothing else.
+
+The line is drawn between artifacts rather than between kinds of project. "This is a library" is
+self-declared and would be claimed by anything; "there is a lockfile in the repository" is a fact
+about the repository.
+
+Recording the direct dependencies is the requirement. It is not sufficient for determinism, and R4
 exists because it is not.
 
 ### R3 — Notebooks used to produce results carry no stale state

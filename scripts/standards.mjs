@@ -550,13 +550,26 @@ export function detect(repo) {
     }
   }
 
-  // A4 — declared dependencies that name no exact version.
+  // A4 — no record of the resolved environment a result came from.
+  //
+  // The obligation is a recorded resolved environment, and there are two ways to have one: exact
+  // pins in the manifest, or a committed lock artifact beside a ranged manifest. The first version
+  // demanded pins everywhere, which is wrong for a project distributed as a dependency — exact pins
+  // in an abstract specification produce unresolvable environments for its consumers. The
+  // distinction that survives is not "library versus application", which is self-declared and
+  // therefore worthless, but "abstract manifest versus lock artifact", which is a property of the
+  // files. Recorded as N10 in artifacts/review/2026-08-09-candidate-disposition.md.
   const unpinned = [];
   if (files.some((f) => /requirements[^/]*\.txt$|(^|\/)pyproject\.toml$|environment\.ya?ml$/.test(f.path))) {
     examine("reproducibility.dependencies-pinned");
   }
+  const LOCKFILES = ["poetry.lock", "uv.lock", "pdm.lock", "requirements.lock", "Pipfile.lock", "conda-lock.yml"];
+  const hasLock = LOCKFILES.some(has);
   for (const f of files) {
     if (!f.text) continue;
+    // A bounded range in a manifest is the correct thing to write when a lock artifact records the
+    // environment that actually ran. Without one, the range is all there is, and it is not enough.
+    if (hasLock) continue;
     if (/^requirements[^/]*\.txt$/.test(f.path) || /\/requirements[^/]*\.txt$/.test(f.path)) {
       for (const raw of f.text.split("\n")) {
         const line = raw.split("#")[0].trim();
@@ -573,14 +586,14 @@ export function detect(repo) {
       }
     }
   }
-  const hasPyproject = has("pyproject.toml");
-  const hasPyLock = ["poetry.lock", "uv.lock", "pdm.lock", "requirements.lock"].some(has);
-  if (hasPyproject && !hasPyLock) unpinned.push("pyproject.toml: no lockfile committed");
+  if (has("pyproject.toml") && !hasLock) unpinned.push("pyproject.toml: no lockfile committed");
   if (unpinned.length > 0) {
     add("unpinned-dependencies", {
       rule: "reproducibility.dependencies-pinned",
       severity: "error",
-      message: `${unpinned.length} declared dependency entr${unpinned.length === 1 ? "y names" : "ies name"} no exact version.`,
+      message:
+        `${unpinned.length} declared dependency entr${unpinned.length === 1 ? "y names" : "ies name"} no exact version, ` +
+        "and no lock artifact records the environment that ran.",
       evidence: unpinned,
     });
   }

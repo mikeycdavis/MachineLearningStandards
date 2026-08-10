@@ -30,7 +30,7 @@
     {
       "id": "reproducibility.dependencies-pinned",
       "kind": "requirement",
-      "title": "Dependencies are pinned to exact versions",
+      "title": "The resolved environment is recorded, by pins or by a lock artifact",
       "standard": 15,
       "requirement": "R2",
       "category": "reproducibility",
@@ -44,9 +44,9 @@
         "training-code"
       ],
       "introducedIn": "1.0.0",
-      "description": "Declared dependencies name exact versions, and a lockfile captures the resolved set where the ecosystem provides one.",
+      "description": "The environment a result came from is recorded, either by exact pins in the manifest or by a committed lock artifact beside a manifest that declares ranges. Ranges alone are not a record.",
       "rationale": "An unpinned dependency means the environment that produced a result cannot be rebuilt, and in this domain a minor version change in a numerical library moves results rather than breaking builds — so the failure is a quiet difference in the numbers rather than an error.",
-      "remediation": "Pin each declared dependency to an exact version and commit the lockfile the ecosystem produces.",
+      "remediation": "Either pin each declared dependency to an exact version, or commit the lock artifact your ecosystem produces beside the ranged manifest. A project consumed as a dependency should do the second.",
       "evidenceExpected": "A requirements file with exact pins, or a manifest accompanied by a committed lockfile.",
       "$assuranceNote": "The check reads what the manifest declares and reports the unpinned entries exactly. Pins in a manifest are not the environment the results came from: transitive versions, accelerator and BLAS builds, and operating-system differences are all outside what a manifest can fix.",
       "deprecatedIn": null,
