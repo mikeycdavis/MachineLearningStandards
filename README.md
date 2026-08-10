@@ -196,6 +196,10 @@ measurable.
   findings put through evidence, a candidate remedy, and a counterexample to that remedy. **One
   finding of eighteen supports changing an existing claim.** Dispositions only; nothing scheduled
 
+- [Review method](artifacts/review/review-method.md) — standing rules for future normative audits,
+  written after the first one produced two false findings by reading normative sentences without
+  their qualifications
+
 The adoptions establish that the evaluation mechanism generalises; the review is the separate and
 harder question of whether the standards themselves are correct and complete.
 
