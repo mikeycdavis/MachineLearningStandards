@@ -32,7 +32,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { evaluate, STATUS } from "../scripts/compliance.mjs";
 
 const TODAY = "2026-08-09";
@@ -177,7 +177,12 @@ test("MUTATION: removing the guard restores the false green", async () => {
 
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ml-mutation-"));
   // The copy sits beside the original so its relative import of catalog.mjs still resolves.
-  const mutated = path.join(path.dirname(new URL(COMPLIANCE).pathname.replace(/^\//, "")), "compliance.mutated.mjs");
+  //
+  // fileURLToPath rather than trimming the leading slash off `.pathname`: the trim happens to
+  // produce a valid absolute path on Windows (`/F:/…` → `F:/…`) and a broken relative one
+  // everywhere else (`/work/…` → `work/…`). The test was therefore Windows-only, and this
+  // repository's CI runs on Linux. Found by running the suite inside the local CI container.
+  const mutated = path.join(path.dirname(fileURLToPath(COMPLIANCE)), "compliance.mutated.mjs");
   try {
     fs.writeFileSync(mutated, source.replace(GUARD, ""));
     const { evaluate: mutatedEvaluate, STATUS: MUTATED_STATUS } = await import(pathToFileURL(mutated).href);
