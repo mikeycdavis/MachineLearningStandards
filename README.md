@@ -133,7 +133,9 @@ test/          the suites, and fixture repositories with deliberate violations
 artifacts/     the source prompt, the derived specification, the locked
                enumeration and baseline, decision records, and the plan
 design/        the architecture record and the detector design
-docs/          generated architecture documentation
+docs/          generated architecture documentation, and the local CI guide
+compose.ci.yml the ephemeral CI environment
+ci.Dockerfile  the isolation boundary local CI runs inside
 ```
 
 ## Commands
@@ -141,7 +143,35 @@ docs/          generated architecture documentation
 `npm test` · `npm run scan` · `npm run evaluate` · `npm run policy` · `npm run integrity` ·
 `npm run acceptance` · `npm run inventory` · `npm run fidelity` · `npm run diagrams`
 
-CI runs all nine, and gates on `evaluate`.
+CI runs every one of them, and gates on `evaluate`.
+
+## Local CI, and how a pull request is authorised
+
+The complete pipeline runs in Docker on the developer's machine, before the push:
+
+```
+.\scripts\ci.ps1          # Windows
+./scripts/ci.sh           # Linux, macOS
+```
+
+and a pull request is opened only through:
+
+```
+.\scripts\submit-pr.ps1
+```
+
+which enforces one invariant: **the commit pushed for a pull request is exactly the commit that
+passed the complete local Docker CI pipeline.** It resolves HEAD before the run, tells the
+container which commit it should be looking at, resolves HEAD again afterwards, and refuses to
+push if anything moved.
+
+GitHub remains the source-control, pull-request, and review system. Passing GitHub-hosted Actions
+is not what authorises a branch here; the workflow in `.github/workflows/ci.yml` still runs, but it
+invokes the same pipeline rather than keeping its own list of checks, and it is a second opinion
+rather than the gate.
+
+Prerequisites, the full stage list, the isolation model, and how to debug a failed container are in
+[docs/local-ci.md](docs/local-ci.md).
 
 ## Conventions
 

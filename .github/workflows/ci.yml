@@ -5,76 +5,68 @@ on:
     branches: [main]
   pull_request:
 
+# This workflow no longer holds a list of checks.
+#
+# It used to enumerate the nine gates as nine steps, each with the reasoning for why it exists.
+# That reasoning has moved to scripts/ci-pipeline.mjs, next to the stage it justifies, and this
+# file now invokes that pipeline. The point is not brevity — it is that a developer running local
+# CI and this workflow cannot be running different pipelines. Before, they could: the local
+# pipeline is new, and the only way to keep two hand-maintained lists in agreement is to not have
+# two of them.
+#
+# Relationship to local CI:
+#
+#     scripts/ci-pipeline.mjs        <- the authoritative stage list
+#            |                 \
+#     scripts/ci.{ps1,sh}       this workflow
+#     (Docker, developer)       (hosted runner, native)
+#
+# The hosted runner invokes the pipeline natively rather than through Docker. It is already a
+# clean, disposable Linux environment with a pinned Node, which is what the container provides
+# locally; adding Docker here would buy isolation the runner already has. A self-hosted runner
+# would be the opposite case, and should call scripts/ci.sh so that it gets the same container a
+# developer gets. That substitution needs no change to this pipeline, which is the reason the
+# entry points are separated from the stage list at all.
+#
+# There is no install step, and that is a decision rather than an omission. This repository has
+# zero third-party dependencies (design/architecture.md §12). Because CI cannot install anything,
+# adding a dependency breaks the build — which is the only form of that rule that survives contact
+# with a deadline. The pipeline's dependency-freedom stage now says so explicitly rather than
+# leaving it to be discovered. If an `npm ci` ever appears here, the decision changed and the ADR
+# should say so.
+#
+# Note that GitHub-hosted Actions passing is not what authorises a pull request in this
+# repository. The gate is local: see docs/local-ci.md and the exact-commit invariant enforced by
+# scripts/submit-pr.mjs. This job is a second opinion from a different machine, which is worth
+# having and is not the same thing as being the gate.
+
 jobs:
-  test:
+  pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The pipeline reports the commit it verified, and reads git history to determine which
+          # files the project owns. A shallow clone of depth 1 is enough for both and is the
+          # default; it is stated here because the checks depend on git being present and usable.
+          fetch-depth: 1
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      # There is no install step, and that is a decision rather than an omission.
-      # This repository has zero third-party dependencies (design/architecture.md §12).
-      # Because CI cannot install anything, adding a dependency breaks the build — which
-      # is the only form of that rule that survives contact with a deadline. If an
-      # `npm ci` ever appears here, the decision changed and the ADR should say so.
+      - name: Local CI pipeline (native)
+        env:
+          LOCAL_CI_ENVIRONMENT: github-hosted-runner
+          LOCAL_CI_REPOSITORY: ${{ github.event.repository.name }}
+          # github.sha is what actions/checkout actually checked out in both event types — the
+          # pushed commit, or the merge commit for a pull request. Not the PR head SHA: on a
+          # pull_request event the runner is deliberately looking at the merge result, and
+          # claiming otherwise would make the provenance stage fail for being told the truth
+          # about the wrong commit.
+          LOCAL_CI_EXPECTED_COMMIT: ${{ github.sha }}
+        run: node scripts/ci-pipeline.mjs --out "$RUNNER_TEMP/local-ci"
 
-      - name: Source inventory
-        run: npm run inventory
-
-      - name: Source fidelity
-        run: npm run fidelity
-
-      - name: Project policy
-        run: npm run policy
-
-      - name: Catalog integrity
-        run: npm run integrity
-
-      # The catalog check locks what each rule IS. This one locks what each rule ACCEPTS,
-      # which is the part that moved unnoticed when Standard 15 R2 was widened. Exits 3.
-      - name: Acceptance lock
-        run: npm run acceptance
-
-      - name: Diagram freshness
-        run: npm run diagrams
-
-      - name: Test
-        run: npm test
-
-      # Deliberately not `--strict`. That flag fails the build on warnings too, and a
-      # build that breaks on heuristics is a build someone eventually disables. The
-      # error-level gate is the assertion inside the test suite that this repository
-      # produces no error-severity findings.
-      - name: Scan this repository
-        run: npm run scan
-
-      # The gate. Exits 1 on a required-rule failure, 2 on NOT_EVALUATED, 3 if an
-      # invariant was violated.
-      #
-      # This step used to be a bare `npm run evaluate`, and it was green for the wrong
-      # reason. Every domain rule in project-policy.yml is declared not-applicable —
-      # correctly, since there is no ML work in a standards repository — so from 1.4.2
-      # this evaluation honestly reports NOT_EVALUATED and exits 2. Before 1.4.2 it
-      # reported COMPLIANT on having established nothing, and this step passed on that.
-      #
-      # So the step asserts what is actually true instead: nothing here is applicable, and
-      # therefore nothing may be failing. NON_COMPLIANT and BLOCKED_BY_INVARIANT still fail
-      # the build, and so does the appearance of an applicable rule — because that means ML
-      # work has arrived in this repository and the policy's not-applicable declarations
-      # need re-reading rather than silently passing.
-      - name: Evaluate this repository
-        run: |
-          node scripts/standards.mjs evaluate . --json > verdict.json || true
-          node -e '
-            const v = JSON.parse(require("fs").readFileSync("verdict.json", "utf8"));
-            const { status, denominator } = v;
-            if (status === "NOT_EVALUATED" && denominator.applicable === 0) {
-              console.log("NOT_EVALUATED with 0 applicable rules — expected, and honest.");
-              process.exit(0);
-            }
-            console.error(`status=${status} applicable=${denominator.applicable} scored=${denominator.scored}`);
-            console.error("Expected NOT_EVALUATED with 0 applicable rules. Read project-policy.yml.");
-            process.exit(1);
-          '
+      - name: Verification evidence
+        if: always()
+        run: cat "$RUNNER_TEMP/local-ci/latest.json" || echo "the pipeline produced no evidence file"
