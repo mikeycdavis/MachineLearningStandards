@@ -1,0 +1,61 @@
+# Ephemeral CI environment. Invoked by scripts/ci.ps1 and scripts/ci.sh, never directly.
+#
+# Those scripts always pass `-p <unique project name>`, so containers and any future networks are
+# namespaced per run. That is what keeps two concurrent runs — or another repository using this
+# same pattern — from colliding, and it is why cleanup can be a blanket `down` on one project
+# without touching anything else the developer has running.
+#
+# There is no database service here, and that is a fact about this repository rather than an
+# omission: it has no database, no server, no frontend, and no third-party dependency of any kind.
+# See docs/local-ci.md for what that means for the parts of a conventional CI pipeline that are
+# absent. If a dependency service is ever added, it belongs here with a real `healthcheck` and a
+# `depends_on: condition: service_healthy`, never a sleep.
+
+name: mls-local-ci
+
+services:
+  ci:
+    build:
+      context: .
+      dockerfile: ci.Dockerfile
+    image: mls-local-ci:node20
+
+    # `init` gives the container a real PID 1 so a hung check can be signalled and reaped rather
+    # than surviving the run.
+    init: true
+
+    environment:
+      CI: "true"
+      HOME: /tmp
+      LOCAL_CI_ENVIRONMENT: ${LOCAL_CI_ENVIRONMENT:-docker}
+      LOCAL_CI_REPOSITORY: ${LOCAL_CI_REPOSITORY:-}
+      # Set by scripts/submit-pr.mjs to the commit it intends to push. The pipeline's
+      # commit-provenance stage fails if the container is looking at anything else.
+      LOCAL_CI_EXPECTED_COMMIT: ${LOCAL_CI_EXPECTED_COMMIT:-}
+
+    volumes:
+      # The working tree, read-only. This is the only host path the container can see, and it
+      # cannot be written to, so a check cannot "fix" the repository into passing.
+      - type: bind
+        source: .
+        target: /repo
+        read_only: true
+      # The single writable host path: the verification evidence. Created by the calling script
+      # before the run so Docker does not create it as root.
+      - type: bind
+        source: ./artifacts/local-ci
+        target: /out
+
+    # The workspace is a copy of the read-only mount and dies with the container, which is what
+    # makes repeated runs start from identical state.
+    tmpfs:
+      - /work:size=256m,mode=1777
+      - /tmp:size=64m,mode=1777
+
+    read_only: true
+    # CI has nothing to fetch. Zero dependencies means no install step, which means the pipeline
+    # can run with no network at all — so a check that quietly reached the internet would fail
+    # here instead of passing for a reason nobody recorded.
+    network_mode: none
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]

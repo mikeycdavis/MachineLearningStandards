@@ -1,0 +1,6 @@
+# The build context exists only to COPY scripts/ci-entrypoint.sh into the image. The repository
+# source is not built into the image at all — it is mounted read-only at run time (see
+# ci.Dockerfile) — so everything else is excluded to keep the context small and to make it
+# structurally impossible for a stale copy of the source to end up baked into a layer.
+*
+!scripts/ci-entrypoint.sh

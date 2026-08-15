@@ -1,0 +1,16 @@
+# Local CI verification evidence.
+#
+# Transient by design. artifacts/local-ci/latest.json describes one run on one machine; committing
+# it would put a claim about a past verification into the repository, where a later reader could
+# mistake it for a statement about the current commit. The durable record of a verified commit is
+# the evidence block scripts/submit-pr.mjs writes into the pull request, which is attached to the
+# SHA it actually names.
+#
+# This is also what keeps CI from dirtying the working tree: scripts/submit-pr.mjs refuses to run
+# against a dirty tree, and the pipeline writes here.
+artifacts/local-ci/
+
+# This repository has no dependencies and no install step. node_modules should never exist; the
+# dependency-freedom stage in scripts/ci-pipeline.mjs fails if it does. Ignored so that an
+# accidental `npm install` during debugging cannot be committed on top of that failure.
+node_modules/
