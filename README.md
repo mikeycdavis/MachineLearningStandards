@@ -179,6 +179,24 @@ Standards are named `NN-<kebab-title>.md`, zero-padded so a directory listing so
 Rule ids are `category.kebab-case-name`, canonical only — there is no alias mechanism, because
 aliases exist to reconcile a vocabulary that was allowed to fork.
 
+## Releases and publication
+
+A release is a **published annotated tag**. Publishing one authorises external consumers to pin it
+and to treat its **peeled commit** — `<tag>^{commit}` — as the released implementation of that
+version. The tag object records who tagged it and what the release claims; it is provenance for the
+annotation, not the executable identity.
+
+The rules an integrator needs, in full in
+[ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md):
+
+- A **local** tag is not a published authority. The published refs are the only evidence of
+  publication, and a `CHANGELOG.md` section is not one.
+- Published tags are **immutable**. Corrections get a new version; a tag is never moved.
+- Publishing a tag does not advance `main` or make `main` authoritative.
+- Depend only on what is **actually in the tagged tree**. A later release does not retroactively add
+  capabilities to an earlier one — `v1.4.0` does not acquire `standards-adapter.json` because
+  `v1.4.1` introduced it.
+
 ## Decisions
 
 - [0001](artifacts/adr/0001-standalone-domain-first-design.md) — standalone, domain-first design
@@ -190,6 +208,8 @@ aliases exist to reconcile a vocabulary that was allowed to fork.
 - [0006](artifacts/adr/0006-scaffolding-and-scope.md) — scaffolding is not evidence, and scope is ownership
 - [0007](artifacts/adr/0007-evidence-must-establish-its-subject.md) — evidence must establish its subject, and silence must be earned
 - [0008](artifacts/adr/0008-acceptance-lock.md) — lock what a rule accepts, not only how it is classified
+- [0009](artifacts/adr/0009-fairness-is-conditionally-in-scope.md) — fairness and protected-group performance are conditionally in scope
+- [0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — published release tags are immutable public authorities
 
 Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md) ·
 [negative-evidence audit](design/negative-evidence-audit.md)
