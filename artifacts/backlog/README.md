@@ -5,19 +5,19 @@
 Work on this project classified with the Extended Agile Hierarchy. Every item is a file in
 [`items/`](./items/); its YAML frontmatter is the source of truth and this page is derived from it.
 
-**26 of 30 leaf items complete — 87%**
+**27 of 30 leaf items complete — 90%**
 
 ```
-███████████████████████████████████░░░░░  87%
+████████████████████████████████████░░░░  90%
 ```
 
 ## Status
 
 | Status | Items |
 | --- | ---: |
-| ○ Not started | 5 |
+| ○ Not started | 4 |
 | ◑ In progress | 2 |
-| ● Complete | 43 |
+| ● Complete | 44 |
 | **Total** | **50** |
 
 ## The hierarchy
@@ -35,7 +35,7 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 
 | Theme | Progress | Done | Remaining |
 | --- | --- | ---: | ---: |
-| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `████████████░░` 87% | 26 | 4 |
+| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 90% | 27 | 3 |
 
 ## In flight
 
@@ -48,7 +48,7 @@ _Nothing marked ready._
 
 ## Everything
 
-- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(26/30)_
+- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(27/30)_
   - ● **[IN-01](./items/IN-01.md)** A normative corpus with mechanical provenance _(4/4)_
     - ● **[EP-01](./items/EP-01.md)** Architecture and decision records _(1/1)_
       - ● **[FE-01](./items/FE-01.md)** Architecture record and decision records 0001-0005
@@ -81,17 +81,17 @@ _Nothing marked ready._
       - ● **[FE-18](./items/FE-18.md)** Negative-evidence audit of all ten detectors
       - ● **[FE-19](./items/FE-19.md)** Owned is not committed, subject fidelity, and probative silence
       - ● **[FE-20](./items/FE-20.md)** The frozen four-target corpus across 1.0.0, 1.1.0 and 1.2.0
-  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(3/7)_
+  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(4/7)_
     - ● **[EP-10](./items/EP-10.md)** 1.3.0 - the acceptance lock _(2/2)_
       - ● **[FE-21](./items/FE-21.md)** Normative standards review and candidate disposition
       - ● **[FE-22](./items/FE-22.md)** invariant.acceptance-locked and the acceptance baseline
     - ● **[EP-11](./items/EP-11.md)** 1.4.0 - the first normative corpus change _(1/1)_
       - ● **[FE-23](./items/FE-23.md)** Replay twelve supported dispositions; seven survive
-    - ○ **[EP-12](./items/EP-12.md)** Normative work supported but not yet released _(0/4)_
+    - ○ **[EP-12](./items/EP-12.md)** Normative work supported but not yet released _(1/4)_
       - ○ **[FE-24](./items/FE-24.md)** N3, N5 and N8 - three requirement additions awaiting a MAJOR release
       - ○ **[FE-25](./items/FE-25.md)** N6 - Standard 20 R3 re-enters disposition under the correct class
       - ○ **[FE-26](./items/FE-26.md)** Corpus completeness is unmeasured
-      - ○ **[FE-30](./items/FE-30.md)** N4 - decide whether fairness and protected-group performance are within normative scope
+      - ● **[FE-30](./items/FE-30.md)** N4 - decide whether fairness and protected-group performance are within normative scope
   - ● **[IN-05](./items/IN-05.md)** Be safely consumable by an external enforcer _(3/3)_
     - ● **[EP-13](./items/EP-13.md)** 1.4.1 - the invocation contract _(2/2)_
       - ● **[FE-27](./items/FE-27.md)** standards-adapter.json, proven by test
