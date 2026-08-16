@@ -96,11 +96,26 @@ special-cased out of evaluation.
 
 ## Current state
 
-- **Current status:** COMPLETE — the initial release is implemented and all gates pass
-- **Current release target:** `1.0.0`
+- **Current status:** IN_PROGRESS — the corpus and gates are complete through `1.5.0`; external
+  publication of those releases is not
+- **Current locally established release:** `1.5.0` (`VERSION`, `package.json`, and the newest
+  `CHANGELOG.md` entry agree)
+- **Remote published lineage:** through `1.1.0`. `origin/main` is
+  `06feba7d10c96fc363f8c3004c595c72276682d7`, which is exactly the peeled commit of `v1.1.0`, and the
+  remote carries **no tags at all**. Every release from `1.2.0` onward exists only on a workstation.
+- **Release lineage location:** `v1.0.0`–`v1.2.0` are reachable from local `main`; `v1.3.0`, `v1.4.0`,
+  `v1.4.1` and `v1.5.0` are reachable only from `v1.4-candidate`, which contains local `main` entirely
+  and is 18 commits ahead of it.
 - **Known risks:** most rules rest on attestation, because most machine-learning failures leave no
   trace in a repository. A project that attests carelessly will report compliant; the digest
   mechanism limits the blast radius rather than removing it.
-- **Known blockers:** none
-- **Next recommended work:** widen language coverage in the leakage and seed detectors beyond
-  Python, which is the one gap where a mechanism plausibly exists and is not yet built
+- **Known blockers:** external consumer availability is incomplete. Publication and integration
+  reconciliation is **open**: [ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md)
+  now states what publishing a release tag means, but no tag has been published and no publication set
+  has been authorised. Until then a consumer that pins a release by tag cannot resolve it from the
+  remote, and nothing in this repository establishes otherwise.
+- **Next recommended work:** authorise a publication set as exact refs to exact object ids under
+  ADR 0010, and decide whether released commits are additionally required to be reachable from remote
+  `main` — a question ADR 0010 deliberately left open. Independently: widen language coverage in the
+  leakage and seed detectors beyond Python, the one gap where a mechanism plausibly exists and is not
+  yet built.
