@@ -145,6 +145,23 @@ Two things genuinely cannot be reproduced locally, and neither is a check:
 - **Every run gets a unique Compose project name** (`mls-ci-<random>`), so two concurrent runs, or
   another repository using this pattern, cannot collide.
 
+### What the image pin does and does not guarantee
+
+`ci.Dockerfile` names `node:20-alpine` — a tag, not a digest. That is reproducible by version
+family and mutable in fact: the tag is republished, so two runs a month apart can resolve to
+different images while reporting the same Node minor.
+
+This is recorded rather than fixed, deliberately. The invariant this workflow enforces is about
+**which source commit passed**, and a moving base image does not weaken it: the pipeline verifies
+the commit it names, and `commit-provenance` fails if it is looking at anything else. Digest
+pinning answers a different question — whether the *environment* that produced a past result can
+be reconstructed — and that is a supply-chain strengthening decision with its own cost, chiefly
+that a pinned digest must then be deliberately advanced or it silently stops receiving security
+updates to the base image.
+
+Folding it in here would have improved an adjective without changing what is proven. It is a
+separate decision, and it has not been made.
+
 ## Cleanup, and what is never cleaned up
 
 Teardown runs whether the pipeline passed, failed, or was interrupted — a `finally` block in
