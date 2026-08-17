@@ -97,25 +97,42 @@ special-cased out of evaluation.
 ## Current state
 
 - **Current status:** IN_PROGRESS — the corpus and gates are complete through `1.5.0`; external
-  publication of those releases is not
+  publication of those releases is partial
 - **Current locally established release:** `1.5.0` (`VERSION`, `package.json`, and the newest
   `CHANGELOG.md` entry agree)
-- **Remote published lineage:** through `1.1.0`. `origin/main` is
-  `06feba7d10c96fc363f8c3004c595c72276682d7`, which is exactly the peeled commit of `v1.1.0`, and the
-  remote carries **no tags at all**. Every release from `1.2.0` onward exists only on a workstation.
+- **Remote published releases:** `v1.4.0` and `v1.5.0`, published on 2026-08-16 under ADR 0010 as
+  exact refs to exact object ids. Measured on the remote:
+
+  ```text
+  refs/tags/v1.4.0   4860e34c03370297b97c8c9733869c862f455614
+  refs/tags/v1.4.0^{} 6bfd0789e50196da3ff666594ff5b981b8ae5763
+  refs/tags/v1.5.0   57bd1a47bbec8b7bff08897333dea24801ffafc8
+  refs/tags/v1.5.0^{} d9cffa11df68f15da9aadc6032ca49748cad5946
+  ```
+
+  The peeled commit is the implementation identity in each case. `v1.0.0`, `v1.1.0`, `v1.2.0`,
+  `v1.3.0` and `v1.4.1` are tagged locally and have not been published.
+- **Remote branch lineage:** through `1.1.0`, unchanged. `origin/main` is
+  `06feba7d10c96fc363f8c3004c595c72276682d7`, which is exactly the peeled commit of `v1.1.0`.
+  Publishing the two tags did not move it, and under ADR 0010 was never going to.
 - **Release lineage location:** `v1.0.0`–`v1.2.0` are reachable from local `main`; `v1.3.0`, `v1.4.0`,
   `v1.4.1` and `v1.5.0` are reachable only from `v1.4-candidate`, which contains local `main` entirely
   and is 18 commits ahead of it.
 - **Known risks:** most rules rest on attestation, because most machine-learning failures leave no
   trace in a repository. A project that attests carelessly will report compliant; the digest
   mechanism limits the blast radius rather than removing it.
-- **Known blockers:** external consumer availability is incomplete. Publication and integration
-  reconciliation is **open**: [ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md)
-  now states what publishing a release tag means, but no tag has been published and no publication set
-  has been authorised. Until then a consumer that pins a release by tag cannot resolve it from the
-  remote, and nothing in this repository establishes otherwise.
-- **Next recommended work:** authorise a publication set as exact refs to exact object ids under
-  ADR 0010, and decide whether released commits are additionally required to be reachable from remote
-  `main` — a question ADR 0010 deliberately left open. Independently: widen language coverage in the
-  leakage and seed detectors beyond Python, the one gap where a mechanism plausibly exists and is not
-  yet built.
+- **Known blockers:** external consumer availability is partial. A consumer pinning `v1.4.0` or
+  `v1.5.0` can now resolve it from the remote; one pinning any other release cannot, and nothing in
+  this repository establishes otherwise. Separately,
+  [ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — the record that
+  states what publishing a release tag means — is itself not publicly reachable. It is absent at
+  `v1.5.0` and reachable only from `v1.4-candidate`. An external consumer citing it is citing
+  provenance that cannot presently be resolved.
+- **Next recommended work:** carry ADR 0010 into the next release whose lineage legitimately contains
+  it. No patch release is to be cut solely to publish it: that would make documentation
+  discoverability a release vehicle without a substantive release reason. Remote `main` stays at
+  `06feba7d…` — advancing it would implicitly settle what post-release administrative lineage belongs
+  there, whether the `v1.1.0` remote tip was deliberately frozen, and how the candidate lineage
+  relates to `main`, none of which an external citation has the authority to decide. Independently:
+  widen language coverage in the leakage and seed detectors beyond Python, the one gap where a
+  mechanism plausibly exists and is not yet built.
