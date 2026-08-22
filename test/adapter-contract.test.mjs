@@ -88,7 +88,12 @@ function stable(report) {
   return rest;
 }
 
-const viaContract = (target) => run(contract.evaluation.arguments.map((a) => a.replaceAll("{target}", target)));
+// Every placeholder the contract admits must be bound, exactly as the enforcer binds them. Leaving
+// one unbound would pass the literal "{policy}" to the CLI, and the failure would look like a CLI
+// bug rather than an unbound placeholder.
+const bind = (target, policy) =>
+  contract.evaluation.arguments.map((a) => a.replaceAll("{target}", target).replaceAll("{policy}", policy));
+const viaContract = (target) => run(bind(target, path.join(target, "project-policy.yml")));
 const viaDocumented = (target) => run([documentedSubcommand(), target, "--json"]);
 
 // ---- The contract describes this pack. ----
@@ -112,6 +117,18 @@ test("the contract substitutes a target, and passing is a subset of the declared
 
 test("the declared verdict command is the one the README documents as the gate", () => {
   assert.equal(contract.evaluation.arguments[0], documentedSubcommand());
+});
+
+test("the contract declares 1.1.0 and binds a policy, so a consumer's policy is not silently dropped", () => {
+  // The two move together or not at all. An argument carrying {policy} under a 1.0.0 declaration
+  // would never be substituted by the enforcer -- it admits placeholders by version -- and a 1.1.0
+  // declaration without the argument would accept a policy it then ignores. Either way the enforcer
+  // reports a path this pack never read.
+  assert.equal(contract.schemaVersion, "1.1.0");
+  assert.ok(
+    contract.evaluation.arguments.some((a) => a.includes("{policy}")),
+    "schemaVersion 1.1.0 admits {policy}, but no argument carries it",
+  );
 });
 
 // ---- Fidelity, across a checkout boundary. ----

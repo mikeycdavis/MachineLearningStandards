@@ -1,6 +1,6 @@
 {
   "$schema": "https://standards-enforcer/schemas/standards-adapter.schema.json",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "standard": {
     "id": "machine-learning"
   },
@@ -9,6 +9,7 @@
     "arguments": [
       "evaluate",
       "--dir={target}",
+      "--policy={policy}",
       "--json"
     ]
   },

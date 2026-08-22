@@ -822,20 +822,29 @@ async function attestationDigests(root, policy) {
 // Loading.
 // ---------------------------------------------------------------------------
 
-async function loadPolicy(root) {
-  const file = path.join(root, "project-policy.yml");
-  if (!existsSync(file)) return { policy: null, error: `no project-policy.yml in ${root}` };
+async function loadPolicy(root, policyFile = null) {
+  // Two resolutions, deliberately kept apart. Without --policy the policy is a property of the
+  // target: the governed repository's own project-policy.yml. With --policy it is a property of the
+  // invocation, already resolved against the working directory by parseArgs -- never against the
+  // target, or an operator's relative path would silently become target-relative.
+  const file = policyFile ?? path.join(root, "project-policy.yml");
+  // An explicit path that does not exist is an invocation error, never a reason to fall back. A
+  // fallback here would evaluate one policy while the caller believes another was applied, which is
+  // the exact silent divergence the flag exists to remove.
+  if (!existsSync(file)) {
+    return { policy: null, error: policyFile ? `no policy file at ${file}` : `no project-policy.yml in ${root}` };
+  }
   let parsed;
   try {
     parsed = parseYaml(await readFile(file, "utf8"));
   } catch (err) {
-    return { policy: null, error: `project-policy.yml could not be parsed — ${err.message}` };
+    return { policy: null, error: `${path.basename(file)} could not be parsed — ${err.message}` };
   }
   const schema = JSON.parse(await readFile(path.join(HERE, "schemas/project-policy.schema.json"), "utf8"));
   assertSchemaSupported(schema);
   const errors = validate(parsed, schema);
   if (errors.length > 0) {
-    return { policy: null, error: `project-policy.yml does not satisfy the schema: ${errors.map((e) => `${e.path || "(root)"} ${e.message}`).join("; ")}` };
+    return { policy: null, error: `${path.basename(file)} does not satisfy the schema: ${errors.map((e) => `${e.path || "(root)"} ${e.message}`).join("; ")}` };
   }
   return { policy: parsed, error: null };
 }
@@ -858,7 +867,7 @@ async function integrityFindings() {
 // ---------------------------------------------------------------------------
 
 function parseArgs(argv) {
-  const args = { command: null, target: null, json: false, strict: false, dryRun: false, overwrite: [], subject: null, includeUnowned: false };
+  const args = { command: null, target: null, policy: null, json: false, strict: false, dryRun: false, overwrite: [], subject: null, includeUnowned: false };
   for (const arg of argv) {
     if (COMMANDS.has(arg) && !args.command) args.command = arg;
     else if (arg === "--json") args.json = true;
@@ -868,12 +877,22 @@ function parseArgs(argv) {
     else if (arg === "--all") args.subject = "--all";
     else if (arg.startsWith("--force-overwrite=")) args.overwrite.push(arg.slice("--force-overwrite=".length));
     else if (arg.startsWith("--dir=")) args.target = path.resolve(arg.slice("--dir=".length));
+    // Resolved against the working directory, exactly as --dir= is. A repository governed by more
+    // than one standards pack cannot express its policies in a single root-level file, so the
+    // caller names the one to apply.
+    else if (arg.startsWith("--policy=")) args.policy = arg.slice("--policy=".length);
     else if (!arg.startsWith("--")) {
       if (args.command === "explain" && !args.subject) args.subject = arg;
       else if (!args.target) args.target = path.resolve(arg);
     }
   }
   args.target ??= process.cwd();
+  // Resolve after the loop so an empty --policy= is caught as the invocation error it is, rather
+  // than resolving to the working directory and reporting a confusing "is a directory" failure.
+  if (args.policy !== null) {
+    if (args.policy.trim() === "") return { ...args, policyError: "--policy= requires a path" };
+    args.policy = path.resolve(args.policy);
+  }
   return args;
 }
 
@@ -894,6 +913,9 @@ const USAGE = `Usage: standards <init|scan|evaluate|explain|status> [path] [flag
   --force-overwrite=<path>   init only: approve replacing one existing file.
   --json                     emit the structured report instead of the readable one.
   --dir=<path>               target a directory other than the one given positionally.
+  --policy=<path>            evaluate against this policy file instead of the target's own
+                             project-policy.yml. Resolved against the working directory. A path
+                             that does not exist is an error; there is no fallback.
   --strict                   scan only: exit 1 when any finding needs attention.
   --include-unowned          evaluate dependency, environment and generated trees too. Off by
                              default: a project is judged on the code it owns, and reading a
@@ -950,7 +972,7 @@ async function buildVerdict(args) {
   const catalog = await loadCatalog();
   assertBindings(catalog, EVALUATED_RULES);
 
-  const { policy, error } = await loadPolicy(args.target);
+  const { policy, error } = await loadPolicy(args.target, args.policy);
   if (error) return { error };
 
   const repo = await readRepo(args.target, { includeUnowned: args.includeUnowned });
@@ -1146,7 +1168,7 @@ async function cmdExplain(args) {
     rules = [rule];
   }
 
-  const { policy } = await loadPolicy(args.target);
+  const { policy } = await loadPolicy(args.target, args.policy);
   const repo = existsSync(args.target) ? await readRepo(args.target, { includeUnowned: args.includeUnowned }) : null;
   const triggers = repo ? detect(repo).triggers : {};
   const locate = await standardLocator();
@@ -1301,6 +1323,13 @@ async function cmdInit(args) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  // A malformed flag is an invocation error and must be reported as one. Evaluating anything at all
+  // after a flag the caller got wrong would produce a verdict they did not ask for.
+  if (args.policyError) {
+    process.stderr.write(`${args.policyError}
+`);
+    return EXIT_INVOCATION;
+  }
   if (!args.command) {
     process.stdout.write(USAGE + "\n");
     return EXIT_INVOCATION;

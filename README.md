@@ -81,6 +81,17 @@ node <this-repo>/scripts/standards.mjs scan .        # what does it have?
 node <this-repo>/scripts/standards.mjs evaluate .    # does it comply?
 ```
 
+A repository governed by more than one standards pack cannot keep every policy in one root-level
+file. Name the one to apply:
+
+```bash
+node <this-repo>/scripts/standards.mjs evaluate . --policy=policies/machine-learning.yml
+```
+
+The path is resolved against the working directory, never against the target. Without the flag the
+target's own `project-policy.yml` is used; with it, a path that does not exist is an error rather
+than a fall back to the default.
+
 **Do not copy the standards documents into your repository.** Reference the version in your
 `project-policy.yml`.
 

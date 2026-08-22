@@ -38,6 +38,55 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 1.6.0 — 2026-08-22
+
+**An invocation may name the policy to apply. MINOR: an optional field, widening what is accepted.**
+
+No rule is added, removed, or relevelled; no conclusion changes for any project that does not pass
+the new flag; the frozen surface is untouched. Under the policy at the top of this file that is a
+MINOR increment, and stating it here is what keeps it from being argued into a patch.
+
+### What it is for
+
+A policy was a property of the target: `evaluate` read `project-policy.yml` from the directory under
+evaluation, and there was exactly one place it could be. That is correct for a repository governed by
+this pack alone, and it cannot express a repository governed by several. Two packs cannot both own
+the root-level filename, so the invocation must be able to name the file.
+
+```bash
+standards evaluate . --policy=policies/machine-learning.yml
+```
+
+Absent the flag, nothing moves: the target's own `project-policy.yml` is read exactly as before.
+
+### Three semantics, decided rather than inherited
+
+- **Resolved against the working directory**, never against `--dir`. This is the same resolution
+  `--dir=` already performs. Resolving against the target instead would silently turn an operator's
+  relative path into a target-relative one, which is the failure most likely to go unnoticed because
+  it usually still finds *a* file.
+- **An explicit path that does not exist is an error.** There is no fall back to the default. A
+  fallback would evaluate one policy while the caller believed another had been applied — a verdict
+  about the wrong material, reported as if it were about the right one. The flag exists to remove
+  that divergence and must not reintroduce it.
+- **Attestation digests stay target-relative.** `reviewedAgainst.paths` continue to resolve against
+  the target root, not against the policy file's directory. Those paths name reviewed material in the
+  governed repository, and were the base to follow the policy file, relocating a policy would move
+  every digest and expire every attestation without a single reviewed file having changed.
+
+`evaluate`, `status`, and `explain` all honour the flag. A flag honoured by some of them would let
+`status` report freshness for a policy that was never the one evaluated.
+
+### The adapter contract moves to 1.1.0
+
+`standards-adapter.json` declares `schemaVersion` `1.1.0` and adds `--policy={policy}` to the
+invocation. `1.1.0` is the contract version that admits the `{policy}` placeholder; at `1.0.0` a
+consumer binding a policy would have had it silently dropped, evaluating the target's default while
+reporting the path it supplied.
+
+Per ADR 0010, this capability exists in this release and in no earlier one. `1.5.0` does not acquire
+it, and a consumer that needs it must pin `1.6.0` or later.
+
 ## 1.5.0 — 2026-08-10
 
 **Normative evaluator correction. A verdict that rested on nothing is no longer a pass.**
