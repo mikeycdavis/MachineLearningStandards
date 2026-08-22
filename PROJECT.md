@@ -112,9 +112,11 @@ special-cased out of evaluation.
 
   The peeled commit is the implementation identity in each case. `v1.0.0`, `v1.1.0`, `v1.2.0`,
   `v1.3.0` and `v1.4.1` are tagged locally and have not been published.
-- **Remote branch lineage:** through `1.1.0`, unchanged. `origin/main` is
-  `06feba7d10c96fc363f8c3004c595c72276682d7`, which is exactly the peeled commit of `v1.1.0`.
-  Publishing the two tags did not move it, and under ADR 0010 was never going to.
+- **Remote branch lineage:** `origin/main` is unchanged at
+  `06feba7d10c96fc363f8c3004c595c72276682d7`, exactly the peeled commit of `v1.1.0`. Neither
+  publishing the two tags nor pushing the branch below moved it, and under ADR 0010 neither was
+  going to. A second remote branch now exists — `unreleased/publication-state-correction`, carrying
+  the publication-state records. It is not a release authority, and `main` remains the default.
 - **Release lineage location:** `v1.0.0`–`v1.2.0` are reachable from local `main`. `v1.3.0`, `v1.4.0`,
   `v1.4.1` and `v1.5.0` are not: they are reachable from `v1.4-candidate`, which is 19 commits ahead
   of local `main` and contains it entirely, and from `design/publication-state-correction`, which is
@@ -130,16 +132,18 @@ special-cased out of evaluation.
   quietly dropped. Within that ceiling, a collaborator pinning `v1.4.0` or `v1.5.0` can resolve it;
   one pinning any other release cannot. Separately,
   [ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — the record that
-  states what publishing a release tag means — resolves from no pushed ref at all. It is absent from
-  **every** tag, published or not, and exists only on local branches, so a citation of it cannot
-  presently be followed by anyone, collaborators included.
-- **Next recommended work:** publish ADR 0010 through a non-authoritative branch ref,
-  `unreleased/publication-state-correction`. Under ADR 0010's first boundary a branch confers no
-  release authority, so this makes the record resolvable without releasing anything. Resolution stays
-  collaborator-scoped; genuine public resolution is a separate decision about visibility across the
-  whole portfolio and is not taken here. No patch release is to be cut solely to publish it: that
-  would make documentation discoverability a release vehicle without a substantive release reason.
-  Remote `main` stays at
+  states what publishing a release tag means — is now reachable from the remote, at
+  `refs/heads/unreleased/publication-state-correction`. It remains absent from **every** tag,
+  published or not, so no release carries it and no pin resolves it; that branch is the only ref
+  that does. The branch is movable by design, so its tip is deliberately not recorded here as an
+  identity — a citation that must not drift should name the commit instead,
+  `e30a84c6ffd74b9401d9e3ec0ffe08fb8cfa703d`.
+- **Next recommended work:** decide whether ADR 0010 should eventually be carried by a release. It
+  is resolvable now, so nothing is blocked on it, and no patch is to be cut solely to publish it —
+  that would make documentation discoverability a release vehicle without a substantive release
+  reason. None is available in any case: the normative surface has not moved since `1.5.0`. Genuine
+  public resolution remains a separate decision about visibility across the whole portfolio, and is
+  not taken here. Remote `main` stays at
   `06feba7d…` — advancing it would implicitly settle what post-release administrative lineage belongs
   there, whether the `v1.1.0` remote tip was deliberately frozen, and how the candidate lineage
   relates to `main`, none of which an external citation has the authority to decide. Independently:
