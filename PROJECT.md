@@ -96,8 +96,8 @@ special-cased out of evaluation.
 
 ## Current state
 
-- **Current status:** IN_PROGRESS — the corpus and gates are complete through `1.5.0`; external
-  publication of those releases is partial
+- **Current status:** IN_PROGRESS — the corpus and gates are complete through `1.5.0`; publication
+  of those releases is partial, and all of it is collaborator-scoped: the repository is private
 - **Current locally established release:** `1.5.0` (`VERSION`, `package.json`, and the newest
   `CHANGELOG.md` entry agree)
 - **Remote published releases:** `v1.4.0` and `v1.5.0`, published on 2026-08-16 under ADR 0010 as
@@ -115,22 +115,31 @@ special-cased out of evaluation.
 - **Remote branch lineage:** through `1.1.0`, unchanged. `origin/main` is
   `06feba7d10c96fc363f8c3004c595c72276682d7`, which is exactly the peeled commit of `v1.1.0`.
   Publishing the two tags did not move it, and under ADR 0010 was never going to.
-- **Release lineage location:** `v1.0.0`–`v1.2.0` are reachable from local `main`; `v1.3.0`, `v1.4.0`,
-  `v1.4.1` and `v1.5.0` are reachable only from `v1.4-candidate`, which contains local `main` entirely
-  and is 18 commits ahead of it.
+- **Release lineage location:** `v1.0.0`–`v1.2.0` are reachable from local `main`. `v1.3.0`, `v1.4.0`,
+  `v1.4.1` and `v1.5.0` are not: they are reachable from `v1.4-candidate`, which is 19 commits ahead
+  of local `main` and contains it entirely, and from `design/publication-state-correction`, which is
+  21 ahead of local `main` and 2 ahead of `v1.4-candidate`. Local `main` is itself 5 commits ahead of
+  `origin/main`.
 - **Known risks:** most rules rest on attestation, because most machine-learning failures leave no
   trace in a repository. A project that attests carelessly will report compliant; the digest
   mechanism limits the blast radius rather than removing it.
-- **Known blockers:** external consumer availability is partial. A consumer pinning `v1.4.0` or
-  `v1.5.0` can now resolve it from the remote; one pinning any other release cannot, and nothing in
-  this repository establishes otherwise. Separately,
+- **Known blockers:** consumer availability is partial, and its ceiling is lower than this document
+  previously implied. **The repository is private**, so no ref resolves for anyone outside the
+  account and its collaborators — including the published `v1.4.0` and `v1.5.0` tags. Earlier
+  wording here claimed public reachability the remote has never had; it is corrected rather than
+  quietly dropped. Within that ceiling, a collaborator pinning `v1.4.0` or `v1.5.0` can resolve it;
+  one pinning any other release cannot. Separately,
   [ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — the record that
-  states what publishing a release tag means — is itself not publicly reachable. It is absent at
-  `v1.5.0` and reachable only from `v1.4-candidate`. An external consumer citing it is citing
-  provenance that cannot presently be resolved.
-- **Next recommended work:** carry ADR 0010 into the next release whose lineage legitimately contains
-  it. No patch release is to be cut solely to publish it: that would make documentation
-  discoverability a release vehicle without a substantive release reason. Remote `main` stays at
+  states what publishing a release tag means — resolves from no pushed ref at all. It is absent from
+  **every** tag, published or not, and exists only on local branches, so a citation of it cannot
+  presently be followed by anyone, collaborators included.
+- **Next recommended work:** publish ADR 0010 through a non-authoritative branch ref,
+  `unreleased/publication-state-correction`. Under ADR 0010's first boundary a branch confers no
+  release authority, so this makes the record resolvable without releasing anything. Resolution stays
+  collaborator-scoped; genuine public resolution is a separate decision about visibility across the
+  whole portfolio and is not taken here. No patch release is to be cut solely to publish it: that
+  would make documentation discoverability a release vehicle without a substantive release reason.
+  Remote `main` stays at
   `06feba7d…` — advancing it would implicitly settle what post-release administrative lineage belongs
   there, whether the `v1.1.0` remote tip was deliberately frozen, and how the candidate lineage
   relates to `main`, none of which an external citation has the authority to decide. Independently:
