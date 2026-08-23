@@ -90,6 +90,7 @@ special-cased out of evaluation.
 | Locked enumeration | `artifacts/standards-source-inventory.json` |
 | Locked catalog | `artifacts/catalog-baseline.json` |
 | Plan | `artifacts/project-plan-breakdown/` |
+| Backlog | `artifacts/backlog/` — scope and exclusions in [`scope.md`](artifacts/backlog/scope.md) |
 | Decision records | `artifacts/adr/` |
 | Design records | `design/` |
 | Documentation | `docs/` |
