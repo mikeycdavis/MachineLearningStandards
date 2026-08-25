@@ -133,12 +133,14 @@ special-cased out of evaluation.
   quietly dropped. Within that ceiling, a collaborator pinning `v1.4.0` or `v1.5.0` can resolve it;
   one pinning any other release cannot. Separately,
   [ADR 0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — the record that
-  states what publishing a release tag means — is now reachable from the remote, at
-  `refs/heads/unreleased/publication-state-correction`. It remains absent from **every** tag,
-  published or not, so no release carries it and no pin resolves it; that branch is the only ref
-  that does. The branch is movable by design, so its tip is deliberately not recorded here as an
-  identity — a citation that must not drift should name the commit instead,
-  `e30a84c6ffd74b9401d9e3ec0ffe08fb8cfa703d`.
+  states what publishing a release tag means — was first made resolvable through
+  `refs/heads/unreleased/publication-state-correction`, which is the operation that branch was
+  pushed to perform. At that point it was absent from every tag and that branch was the only ref
+  that resolved it. It is now also carried by `v1.6.0`, a published and immutable release tag, so a
+  release carries it and a pin resolves it; the branch is no longer the only ref that does. That
+  branch is the record of the 2026-08-22 operation, not a standing carrier, and it is movable by
+  design — so its tip is deliberately not recorded here as an identity. A citation that must not
+  drift should name the commit instead, `e30a84c6ffd74b9401d9e3ec0ffe08fb8cfa703d`, or the tag.
 - **Next recommended work:** decide whether ADR 0010 should eventually be carried by a release. It
   is resolvable now, so nothing is blocked on it, and no patch is to be cut solely to publish it —
   that would make documentation discoverability a release vehicle without a substantive release
