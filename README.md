@@ -262,6 +262,9 @@ measurable.
 - [Review method](artifacts/review/review-method.md) — standing rules for future normative audits,
   written after the first one produced two false findings by reading normative sentences without
   their qualifications
+- [N6 re-disposition](artifacts/review/2026-08-26-n6-redisposition.md) — the one finding withdrawn
+  mid-replay, re-dispositioned as a change rather than a clarification. Its **release** class is
+  left open, because Standard 20's prose and its catalog entry disagree about what level R3 has
 
 The adoptions establish that the evaluation mechanism generalises; the review is the separate and
 harder question of whether the standards themselves are correct and complete.
