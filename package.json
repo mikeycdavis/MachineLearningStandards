@@ -17,6 +17,7 @@
     "acceptance": "node scripts/acceptance.mjs",
     "inventory": "node scripts/inventory.mjs",
     "fidelity": "node scripts/fidelity.mjs",
+    "levels": "node scripts/levels.mjs",
     "diagrams": "node scripts/diagrams.mjs",
     "ci": "node scripts/ci-pipeline.mjs",
     "submit-pr": "node scripts/submit-pr.mjs"

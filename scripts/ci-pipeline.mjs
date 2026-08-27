@@ -65,6 +65,13 @@ export const STAGES = [
     why: "The committed enumeration of the 25 source items is the spine everything else binds to." },
   { id: "fidelity",   title: "Source fidelity",      script: "fidelity",
     why: "Every 'reproduced verbatim' claim in standards/ must still match the source spec." },
+  { id: "levels",     title: "Level agreement",      script: "levels",
+    why: "The third provenance link, and the one that had no guard. inventory locks the spec's "
+       + "enumeration and fidelity holds prose to the spec; integrity holds the catalog to its "
+       + "baseline. Nothing compared a standard's own normative sentence to its catalog entry's "
+       + "kind, which is how five rules said MUST in prose while the framework only warned, from "
+       + "1.0.0 until they were repaired, with every run green. Reports the disagreement only: "
+       + "which side is wrong is ADR 0011's and ADR 0012's decision, not a gate's." },
   { id: "policy",     title: "Project policy",       script: "policy",
     why: "This repository's own policy must satisfy the schema, and must not weaken a standard." },
   { id: "integrity",  title: "Catalog integrity",    script: "integrity",

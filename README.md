@@ -152,7 +152,8 @@ ci.Dockerfile  the isolation boundary local CI runs inside
 ## Commands
 
 `npm test` · `npm run scan` · `npm run evaluate` · `npm run policy` · `npm run integrity` ·
-`npm run acceptance` · `npm run inventory` · `npm run fidelity` · `npm run diagrams`
+`npm run acceptance` · `npm run inventory` · `npm run fidelity` · `npm run levels` ·
+`npm run diagrams`
 
 CI runs every one of them, and gates on `evaluate`.
 
@@ -223,6 +224,7 @@ The rules an integrator needs, in full in
 - [0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — published release tags are immutable public authorities
 - [0011](artifacts/adr/0011-the-catalog-states-a-rules-level.md) — the catalog states a rule's level; prose states the rule
 - [0012](artifacts/adr/0012-three-prose-modals-are-wrong-and-two-catalog-levels-are.md) — three prose modals are wrong, and two catalog levels are
+- [0013](artifacts/adr/0013-the-prose-to-catalog-link-gets-a-guard.md) — the prose-to-catalog link gets a guard, and it reports rather than adjudicates
 
 Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md) ·
 [negative-evidence audit](design/negative-evidence-audit.md)
