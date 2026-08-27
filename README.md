@@ -221,6 +221,7 @@ The rules an integrator needs, in full in
 - [0008](artifacts/adr/0008-acceptance-lock.md) — lock what a rule accepts, not only how it is classified
 - [0009](artifacts/adr/0009-fairness-is-conditionally-in-scope.md) — fairness and protected-group performance are conditionally in scope
 - [0010](artifacts/adr/0010-published-release-tags-are-public-authorities.md) — published release tags are immutable public authorities
+- [0011](artifacts/adr/0011-the-catalog-states-a-rules-level.md) — the catalog states a rule's level; prose states the rule
 
 Design records: [architecture](design/architecture.md) · [detectors](design/ml-audit-detectors.md) ·
 [negative-evidence audit](design/negative-evidence-audit.md)

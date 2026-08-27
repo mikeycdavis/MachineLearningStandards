@@ -5,19 +5,19 @@
 Work on this project classified with the Extended Agile Hierarchy. Every item is a file in
 [`items/`](./items/); its YAML frontmatter is the source of truth and this page is derived from it.
 
-**28 of 31 leaf items complete — 90%**
+**29 of 31 leaf items complete — 94%**
 
 ```
-████████████████████████████████████░░░░  90%
+██████████████████████████████████████░░  94%
 ```
 
 ## Status
 
 | Status | Items |
 | --- | ---: |
-| ○ Not started | 4 |
-| ◑ In progress | 3 |
-| ● Complete | 45 |
+| ○ Not started | 2 |
+| ◑ In progress | 4 |
+| ● Complete | 46 |
 | **Total** | **52** |
 
 ## The hierarchy
@@ -35,11 +35,12 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 
 | Theme | Progress | Done | Remaining |
 | --- | --- | ---: | ---: |
-| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 90% | 28 | 3 |
+| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 94% | 29 | 2 |
 
 ## In flight
 
 - ◑ [EP-12](./items/EP-12.md) — Normative work supported but not yet released
+- ◑ [EP-15](./items/EP-15.md) — The corpus and the catalog agree about what each rule is
 - ◑ [IN-04](./items/IN-04.md) — Protect what a rule accepts, not only how it is classified
 - ◑ [TH-01](./items/TH-01.md) — An auditable machine-learning standards system
 
@@ -49,7 +50,7 @@ _Nothing marked ready._
 
 ## Everything
 
-- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(28/31)_
+- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(29/31)_
   - ● **[IN-01](./items/IN-01.md)** A normative corpus with mechanical provenance _(4/4)_
     - ● **[EP-01](./items/EP-01.md)** Architecture and decision records _(1/1)_
       - ● **[FE-01](./items/FE-01.md)** Architecture record and decision records 0001-0005
@@ -82,7 +83,7 @@ _Nothing marked ready._
       - ● **[FE-18](./items/FE-18.md)** Negative-evidence audit of all ten detectors
       - ● **[FE-19](./items/FE-19.md)** Owned is not committed, subject fidelity, and probative silence
       - ● **[FE-20](./items/FE-20.md)** The frozen four-target corpus across 1.0.0, 1.1.0 and 1.2.0
-  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(5/8)_
+  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(6/8)_
     - ● **[EP-10](./items/EP-10.md)** 1.3.0 - the acceptance lock _(2/2)_
       - ● **[FE-21](./items/FE-21.md)** Normative standards review and candidate disposition
       - ● **[FE-22](./items/FE-22.md)** invariant.acceptance-locked and the acceptance baseline
@@ -93,8 +94,8 @@ _Nothing marked ready._
       - ● **[FE-25](./items/FE-25.md)** N6 - Standard 20 R3 re-enters disposition under the correct class
       - ○ **[FE-26](./items/FE-26.md)** Corpus completeness is unmeasured
       - ● **[FE-30](./items/FE-30.md)** N4 - decide whether fairness and protected-group performance are within normative scope
-    - ○ **[EP-15](./items/EP-15.md)** The corpus and the catalog agree about what each rule is _(0/1)_
-      - ○ **[FE-31](./items/FE-31.md)** Decide which representation is authoritative for a rule's normative level
+    - ◑ **[EP-15](./items/EP-15.md)** The corpus and the catalog agree about what each rule is _(1/1)_
+      - ● **[FE-31](./items/FE-31.md)** Decide which representation is authoritative for a rule's normative level
   - ● **[IN-05](./items/IN-05.md)** Be safely consumable by an external enforcer _(3/3)_
     - ● **[EP-13](./items/EP-13.md)** 1.4.1 - the invocation contract _(2/2)_
       - ● **[FE-27](./items/FE-27.md)** standards-adapter.json, proven by test
