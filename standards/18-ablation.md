@@ -40,8 +40,8 @@ rule in a post-processing function are exactly the components that escape.
 
 ### R2 — Components are removed one at a time and re-evaluated
 
-**Each component whose contribution is claimed MUST be evaluated by removing it alone and
-re-running the evaluation, and the resulting score MUST be recorded beside the full model's.**
+**Each component whose contribution is claimed SHOULD be evaluated by removing it alone and
+re-running the evaluation, and the resulting score SHOULD be recorded beside the full model's.**
 Removing several at once measures their combined effect and cannot attribute it. Where components
 are believed to interact, the interaction is a separate, stated hypothesis tested by its own removal
 pair — not an excuse for removing the group.

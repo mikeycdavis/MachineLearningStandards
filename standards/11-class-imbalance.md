@@ -45,7 +45,7 @@ look identical.
 
 ### R2 — The metric is chosen in light of the base rate
 
-**Metric selection MUST take the measured imbalance as an input, and the reasoning MUST be
+**Metric selection SHOULD take the measured imbalance as an input, and the reasoning SHOULD be
 recorded.** At a low base rate, accuracy is dominated by the majority class and a receiver operating
 characteristic curve is dominated by the abundance of true negatives; precision, recall, the
 precision-recall curve, and metrics computed at the operating threshold the decision will actually

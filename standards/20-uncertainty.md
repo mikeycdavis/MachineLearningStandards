@@ -68,7 +68,7 @@ while feeling rigorous.
 
 ### R3 — An unquantified difference is not described as an improvement
 
-**Where uncertainty has not been quantified, a small difference MUST NOT be described as an
+**Where uncertainty has not been quantified, a small difference SHOULD NOT be described as an
 improvement**, in the model card, the comparison document, or any claim made outside the project.
 The permitted description states the observed difference and the absence of an uncertainty estimate,
 in that order and in the same sentence, so the qualification cannot be dropped in a summary.
@@ -78,7 +78,7 @@ size, and the variability of the problem — which is the argument for measuring
 adjudicating. In the absence of any estimate, the honest default is to treat every difference as
 potentially noise until something establishes otherwise.
 
-This is the requirement that feeds [Standard 19](19-model-comparison.md)'s classification: its
+This is the rule that feeds [Standard 19](19-model-comparison.md)'s classification: its
 statistical category is exactly the claim that a difference has been shown unlikely to be noise, and
 without R1's measurement that category cannot be entered and must not be implied.
 

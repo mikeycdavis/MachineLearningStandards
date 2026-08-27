@@ -37,6 +37,20 @@ const AUTHORISED_BEHAVIOUR_CHANGE = "reproducibility.dependencies-pinned";
 /** The single rule this candidate is authorised to add. */
 const AUTHORISED_ADDITION = "evaluation.resampling-not-by-default";
 
+/**
+ * Contract changes made AFTER this candidate, by a later authorised disposition — FE-34,
+ * implementing ADR 0012. They are named here rather than folded into the fixture because
+ * `v13-rule-contracts.json` is the frozen 1.3.0 snapshot: rewriting it would destroy the
+ * evidence these tests exist to replay. Listing the target values keeps the assertions sharp —
+ * any other drift, or drift to a different value, still fails.
+ */
+const LATER_RECLASSIFIED = new Map([
+  ["evaluation.improvement-classification", { kind: "requirement", level: "required", severity: "error" }],
+  ["evaluation.uncertainty-reported", { kind: "requirement", level: "required", severity: "error" }],
+]);
+/** Entries added after this candidate, by that same disposition. */
+const LATER_ADDITIONS = ["evaluation.unquantified-difference-not-claimed"];
+
 async function scratch(fn) {
   const dir = await mkdtemp(path.join(tmpdir(), "mls-v13-"));
   try {
@@ -151,8 +165,12 @@ test("clarification delta — no rule that predates the normative work changed i
       standard: now.standard ?? null, requirement: now.requirement ?? null,
       triggers: (now.triggers ?? []).slice().sort(), evidenceExpected: now.evidenceExpected ?? null,
     };
+    const authorised = LATER_RECLASSIFIED.get(id);
     for (const key of Object.keys(was)) {
-      if (JSON.stringify(was[key]) !== JSON.stringify(nowContract[key])) drifted.push(`${id}.${key}`);
+      if (JSON.stringify(was[key]) === JSON.stringify(nowContract[key])) continue;
+      // A later disposition may have moved this field, but only to the value it authorised.
+      if (authorised && key in authorised && nowContract[key] === authorised[key]) continue;
+      drifted.push(`${id}.${key}`);
     }
   }
 
@@ -241,6 +259,9 @@ test("held back — no new requirement or prohibition entered the catalog", asyn
   const catalog = await loadCatalog();
   const added = [...catalog.rules.values(), ...catalog.invariants.values()]
     .filter((r) => !(r.id in before));
-  assert.deepEqual(added.map((r) => r.id), [AUTHORISED_ADDITION]);
-  assert.deepEqual(added.map((r) => r.kind), ["recommendation"]);
+  const expected = [AUTHORISED_ADDITION, ...LATER_ADDITIONS].sort();
+  assert.deepEqual(added.map((r) => r.id).sort(), expected);
+  // The claim this test makes is unchanged and still holds: every addition is a recommendation,
+  // so no requirement or prohibition has entered the catalog under a MINOR release.
+  assert.deepEqual(added.map((r) => r.kind), added.map(() => "recommendation"));
 });

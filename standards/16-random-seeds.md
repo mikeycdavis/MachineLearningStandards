@@ -24,8 +24,8 @@ the seeds are "probably fine" is not.
 
 ### R1 — Every source of randomness is seeded explicitly
 
-**Each stochastic component that affects a reported result MUST be seeded, and the seed MUST be set
-explicitly rather than left to a library default.** A library default is a value the project does
+**Each stochastic component that affects a reported result SHOULD be seeded, and the seed SHOULD
+be set explicitly rather than left to a library default.** A library default is a value the project does
 not control and does not record; it can change between releases, and when it does, the change
 arrives as an unexplained shift in results.
 

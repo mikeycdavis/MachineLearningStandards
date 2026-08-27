@@ -146,6 +146,12 @@ applicability:
     reviewedAt: "2026-08-09"
     revisitWhen: "Any model evaluation or comparison is performed in this repository."
 
+  evaluation.unquantified-difference-not-claimed:
+    status: not-applicable
+    reason: "No model is evaluated or compared here, so this repository makes no claim about a difference between models that an uncertainty estimate could qualify."
+    reviewedAt: "2026-08-26"
+    revisitWhen: "Any model evaluation or comparison is performed in this repository."
+
   # ---- framing ----
   framing.problem-documented:
     status: not-applicable
