@@ -29,3 +29,29 @@ What a successful run establishes here is therefore narrower than a reader might
 overall command succeeding: parent-state coherence, and that cited evidence resolves. Agreement
 between this backlog and all historical work remains undetermined. A green reconciliation is not
 evidence of completeness, and repetition does not make it one.
+
+## The versioning policy's MINOR clause is imprecise, and is not filed
+
+`CHANGELOG.md` states the increments *"so a release cannot be argued into being smaller than it
+is"*: MAJOR enumerates four cases, MINOR enumerates *"adding a recommendation; adding an optional
+field; widening what is accepted"*, and PATCH is *"corrections that change no conclusion."*
+**Narrowing what an existing rule accepts is named nowhere.** N6 is exactly that shape — it widens
+the antecedent of a claim the catalog carries as a recommendation, which narrows what satisfies it
+— and [ADR 0011](../adr/0011-the-catalog-states-a-rules-level.md) classified it MINOR by testing
+the four MAJOR clauses and finding all four fail.
+
+This was examined on 2026-08-26 and left unfiled, on two grounds.
+
+**It leaves no release class undetermined.** The three buckets are exhaustive by construction, and
+a narrowing change resolves by elimination rather than by default: PATCH excludes itself on its own
+terms, because a narrowing change does alter conclusions; MAJOR excludes itself because its four
+cases are a closed list; MINOR is what remains. The elimination terminates every time, so the
+imprecision costs an argument, not an answer. What it does cost is real and is recorded here rather
+than dismissed: a document written to preempt that argument under pressure does not preempt this
+one.
+
+**It is release governance, not corpus/catalog agreement.** No epic owns it. Publication and
+release governance are already outside this backlog by the first exclusion above, and inventing an
+epic to hold a two-word documentation correction would be filing scope to give a finding somewhere
+to live. Its trigger, should it need one: a release whose class is genuinely argued rather than
+read off — at which point the clause has cost an answer and not merely an argument.
