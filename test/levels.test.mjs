@@ -238,3 +238,78 @@ test("two entries disagreeing the same way are both reported", () => {
     corpus("### R1 — Fixture\n\n**A thing MUST happen.**"));
   assert.deepEqual(findings.map((f) => f.id), ["a.one", "a.two"]);
 });
+
+// ---- 8. The ambiguity the first-match rule used to resolve silently. ----
+//
+// Measured against the checker as FE-33 shipped it: a section whose bold lead carries a modal is
+// read as the rule's level even when the real normative sentence beneath states a different one.
+// The gate then reported agreement for a rule whose prose and catalog genuinely disagree — the
+// exact defect it was built to catch. Both shapes below passed; both must now be findings.
+
+test("a requirement whose bold lead says MUST over a real sentence saying SHOULD is a finding", () => {
+  const { findings } = checkLevels([rule({ kind: "requirement" })], corpus(
+    "### R1 — Fixture\n\n**Every project MUST take this seriously.**\n\n"
+    + "That framing sets up the rule, which is stated next.\n\n"
+    + "**The thing SHOULD be recorded.**\n"));
+  assert.equal(findings.length, 1, "the section must not resolve to whichever span came first");
+  assert.equal(findings[0].reason, "ambiguous-normative-sentence");
+});
+
+test("a recommendation whose bold lead says SHOULD over a real sentence saying MUST is a finding", () => {
+  const { findings } = checkLevels([rule({ kind: "recommendation" })], corpus(
+    "### R1 — Fixture\n\n**Teams SHOULD understand what follows.**\n\n"
+    + "That framing sets up the rule, which is stated next.\n\n"
+    + "**The thing MUST be recorded.**\n"));
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].reason, "ambiguous-normative-sentence");
+});
+
+test("the ambiguity finding reports the competing spans without choosing between them", () => {
+  const { findings } = checkLevels([rule({ kind: "requirement" })], corpus(
+    "### R1 — Fixture\n\n**Every project MUST take this seriously.**\n\n"
+    + "**The thing SHOULD be recorded.**\n"));
+  const detail = findings[0].detail;
+  assert.match(detail, /MUST take this seriously/, "the reader is shown what competed");
+  assert.match(detail, /SHOULD be recorded/);
+  // Judge the checker's own words, not the prose it quotes back — the quoted spans are the
+  // standard's sentences and may say anything. Same stripping discipline as the no-allowlist test.
+  const said = detail.replace(/"[^"]*"/g, "");
+  assert.doesNotMatch(said, /correct|wrong|intended|instead|the real|use the/i,
+    "naming a winner would be the adjudication ADR 0013 decision 5 refuses");
+});
+
+test("bold spans that carry no modal are not competitors", () => {
+  // Standards 15 R2, 19 R3 and 11 R6 all bold a defined term or an aside heading beside their
+  // normative sentence. Counting every bold span rather than the modal-bearing ones would reject
+  // legitimate prose across the live corpus, which was measured before this rule was written.
+  const { findings } = checkLevels([rule({ kind: "requirement" })], corpus(
+    "### R1 — Fixture\n\n**The thing MUST be recorded.**\n\n"
+    + "The distinction between an **abstract manifest** and a **lock artifact** is what matters.\n\n"
+    + "**A note on where this comes from.**\n"));
+  assert.deepEqual(findings, [], "term emphasis and aside headings state no obligation");
+});
+
+test("a modal-bearing bold span inside a quotation or a fence is not a competitor", () => {
+  const { findings } = checkLevels([rule({ kind: "recommendation" })], corpus(
+    "### R1 — Fixture\n\n> **The source says this MUST always be done.**\n\n"
+    + "```text\n**and this MUST NOT be read as the rule**\n```\n\n"
+    + "**The thing SHOULD be recorded.**\n"));
+  assert.deepEqual(findings, [],
+    "the exclusions that keep somebody else's sentence out also keep it out of the count");
+});
+
+test("ambiguity is a finding, not a silent skip: the entry is never counted as checked", () => {
+  const { checked, findings } = checkLevels([rule({ kind: "requirement" })], corpus(
+    "### R1 — Fixture\n\n**Every project MUST take this seriously.**\n\n"
+    + "**The thing SHOULD be recorded.**\n"));
+  assert.deepEqual(checked, []);
+  assert.equal(findings.length, 1);
+});
+
+test("the real corpus has no ambiguous section", async () => {
+  const catalog = await loadCatalog();
+  const standards = await loadStandards(path.join(ROOT, "standards"));
+  const { findings } = checkLevels([...catalog.rules.values()], standards);
+  assert.deepEqual(findings.filter((f) => f.reason === "ambiguous-normative-sentence"), [],
+    "every standard states its obligation once; the convention is met, not merely documented");
+});

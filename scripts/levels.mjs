@@ -39,11 +39,25 @@
  *     disagreement is ADR 0012's. A checker that picked a side would be making a normative
  *     decision inside a gate.
  *
- * THE CONVENTION IT BINDS TO. A requirement or recommendation section opens with its normative
- * sentence in bold. That sentence, and nothing else in the section, states the obligation's
- * strength. Binding to it is what keeps quotations, contrasting examples, worked illustrations and
- * cross-references from being read as level evidence — scanning whole sections instead produced
- * false positives when this was first measured by hand.
+ * THE CONVENTION IT BINDS TO, stated for authors in `design/architecture.md` §13. A requirement or
+ * recommendation section opens with its normative sentence in bold. That sentence, and nothing else
+ * in the section, states the obligation's strength. Binding to it is what keeps quotations,
+ * contrasting examples, worked illustrations and cross-references from being read as level
+ * evidence — scanning whole sections instead produced false positives when this was first measured
+ * by hand.
+ *
+ * AMBIGUITY IS A FINDING, NOT A TIE BROKEN SILENTLY. Taking the first bold span was sound only
+ * while every section stated one obligation. It is not sound in general: a section whose bold lead
+ * happens to carry a modal was read as the rule's level even when the real sentence beneath stated
+ * a different one, so the gate reported agreement for a rule whose prose and catalog genuinely
+ * disagreed — the exact defect it exists to catch, passing under the check built to catch it. Both
+ * shapes were measured against this file before the rule below was added. A section with more than
+ * one modal-bearing bold span is therefore reported rather than resolved.
+ *
+ * Only modal-bearing spans compete. Standards 15 R2, 19 R3 and 11 R6 bold a defined term or an
+ * aside heading beside their normative sentence; counting every bold span instead would reject
+ * legitimate prose across the live corpus. That was measured too, and a mutation asserts it: drop
+ * the qualifier and the real corpus goes red.
  *
  * NO ALLOWLIST. The expected steady state is zero disagreements. A rule permitted to disagree
  * would be a rule whose level depends on which file you opened, which is the condition this
@@ -89,11 +103,11 @@ export function sectionsOf(text) {
 }
 
 /**
- * The section's normative sentence: the first bold span that is neither inside a fenced block nor
- * inside a blockquote. Quoted source text is excluded precisely because it is somebody else's
+ * Every bold span in the section that could state its obligation: those outside fenced blocks and
+ * outside blockquotes. Quoted source text is excluded precisely because it is somebody else's
  * sentence — the standard's own claim is what carries its level.
  */
-export function normativeSentence(bodyLines) {
+export function boldSpans(bodyLines) {
   const kept = [];
   let fenced = false;
   for (const line of bodyLines) {
@@ -102,8 +116,14 @@ export function normativeSentence(bodyLines) {
     if (/^\s*>/.test(line)) continue;
     kept.push(line);
   }
-  const m = /\*\*([\s\S]+?)\*\*/.exec(kept.join("\n"));
-  return m ? m[1].replace(/\s+/g, " ").trim() : null;
+  return [...kept.join("\n").matchAll(/\*\*([\s\S]+?)\*\*/g)]
+    .map((m) => m[1].replace(/\s+/g, " ").trim());
+}
+
+/** The section's normative sentence: the first eligible bold span, or null when there is none. */
+export function normativeSentence(bodyLines) {
+  const spans = boldSpans(bodyLines);
+  return spans.length > 0 ? spans[0] : null;
 }
 
 /** The strength a normative sentence states, or null when it states none. */
@@ -143,6 +163,14 @@ export function checkLevels(rules, standards) {
     if (body === undefined) {
       findings.push({ id: rule.id, reason: "unresolved-section", where,
         detail: `standard ${rule.standard} has no section ${rule.requirement}` });
+      continue;
+    }
+    const competing = boldSpans(body).filter((span) => modalOf(span) !== null);
+    if (competing.length > 1) {
+      findings.push({ id: rule.id, reason: "ambiguous-normative-sentence", where,
+        detail: `the section states ${competing.length} bold obligations, so which one carries `
+              + `its level is not determined: `
+              + competing.map((c) => `"${c.slice(0, 70)}"`).join(" / ") });
       continue;
     }
     const sentence = normativeSentence(body);

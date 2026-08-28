@@ -381,3 +381,56 @@ The repository is validated against its own standards in CI. Its ML-subject rule
 `not-applicable` — it trains no models — with a written reason and a `revisitWhen` naming the event
 that would change that. Declaring them rather than letting them fall silently into `not-evaluated`
 is the point: an unstated exclusion is indistinguishable from an oversight.
+
+---
+
+## 13. How a standard states its rule
+
+Section 11 records that every catalog entry carries a `requirement` anchor naming the `### R<n>` or
+`### P<n>` heading it formalises. That resolves *which* section states a rule. This section states
+what the machinery then reads inside it, because `scripts/levels.mjs` compares a section's stated
+strength against its entry's `kind` and a convention a gate depends on is a contract, not a habit.
+
+**The rule applies to `### R<n>` sections that a requirement or recommendation entry names.** It is
+not a rule about the corpus at large. Most `### R<n>` sections have no catalog entry — the catalog
+has never been a projection of the prose, and `frameworkCoverage` reports that shortfall beside the
+verdict — and nothing here obliges them to acquire one. `## Prohibitions` sections are outside it
+for a different reason: they quote their must-never bullet verbatim rather than stating a modal of
+their own, so no level convention exists for them and none is invented here.
+
+Within that scope:
+
+1. **The normative sentence is the first modal-bearing bold span in the section**, and it must also
+   be the section's first bold span. It carries `MUST`, `MUST NOT`, `SHOULD` or `SHOULD NOT`.
+2. **Quoted and fenced material is not normative-sentence evidence.** Text inside a blockquote is
+   somebody else's sentence — usually the source spec's, reproduced verbatim — and text inside a
+   fenced block is an example. Neither can set the rule's strength, and both are skipped before the
+   spans are read.
+3. **The modal is load-bearing.** `levels` maps `requirement` → `MUST` and `recommendation` →
+   `SHOULD` and reports any disagreement. Changing a modal without changing the catalog entry, or
+   the reverse, is a finding on the next run; which side is then wrong is a normative decision
+   ([ADR 0011](../artifacts/adr/0011-the-catalog-states-a-rules-level.md) for the general rule,
+   [ADR 0012](../artifacts/adr/0012-three-prose-modals-are-wrong-and-two-catalog-levels-are.md) for
+   the individual cases), never a gate's to take.
+4. **A section may state one obligation, not two.** More than one modal-bearing bold span makes the
+   section ambiguous, and an ambiguous section is invalid rather than resolved in favour of
+   whichever came first. `levels` reports `ambiguous-normative-sentence` and names the competing
+   spans without choosing between them.
+
+Rule 4 exists because first-match behaviour is silent when it is wrong. A section whose bold lead
+happened to carry a modal was read as the rule's level even where the real sentence beneath stated
+a different one, so the gate reported agreement for prose and catalog that genuinely disagreed.
+Both shapes were measured against the live checker before this was written.
+
+**Bold text that states no obligation is unaffected.** A defined term (`**lock artifact**`), an
+aside heading (`**A note on where this taxonomy comes from.**`) and a contrasting label are all
+ordinary prose and carry no modal, so they do not compete. Only modal-bearing spans do — Standards
+11 R6, 15 R2 and 19 R3 each bold something beside their normative sentence today, and counting every
+bold span instead would reject all three. A mutation test asserts that: remove the modal-bearing
+qualifier and the real corpus goes red.
+
+**How to satisfy it when a section genuinely needs to discuss a stronger neighbour.** Say it without
+bolding it. A cross-reference, a contrast, a worked failure and an explanatory aside are all normal
+prose; bold is reserved for the one sentence that states this rule. If a section really does carry
+two obligations, it is two rules and wants two `### R<n>` headings — which is also what the catalog,
+holding one entry per anchor, already assumes.

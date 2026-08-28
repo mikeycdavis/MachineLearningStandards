@@ -107,10 +107,24 @@ disagreement is an attempt to weaken a standard would be the adjudication decisi
 **The link that let the last defect through is now watched.** It cannot catch the five it was built
 because of — they were repaired first — but a sixth cannot appear silently.
 
-**A convention became load-bearing.** "The normative sentence is the first bold span in the
-section" was a writing habit; it is now something a gate depends on. A standard that states its
-obligation some other way will be reported rather than misread, which is the right failure, but it
-is a constraint on how standards may be written and is recorded here as one.
+**A convention became load-bearing, and is now stated and enforced as one.** "The normative
+sentence is the first bold span in the section" was a writing habit before this gate depended on
+it. It is written down for authors in `design/architecture.md` §13, which states the scope, the
+quoted/fenced exclusions, and that the modal is what `levels` compares against the catalog.
+
+The claim made here — that a standard stating its obligation some other way "will be reported
+rather than misread" — held for two of the four departure shapes and not for the other two. A
+section whose bold lead happened to carry a modal resolved to the wrong sentence and reported
+agreement, which is a false pass on exactly the defect this exists to catch. That was measured
+against this checker and closed by backlog item FE-35: more than one modal-bearing bold span is now
+`ambiguous-normative-sentence`, reported with the competing spans and no choice made between them.
+Only modal-bearing spans compete, because three live sections bold a defined term or an aside
+heading beside their normative sentence; a mutation asserts that counting every bold span instead
+turns the real corpus red.
+
+None of the five decisions above changes. The walk direction, the exclusions, the prohibition
+boundary and the refusal to adjudicate are as recorded; the check gained one finding reason for a
+shape it previously resolved wrongly.
 
 **Prohibitions remain unchecked for level**, and that is a stated limit rather than an oversight.
 If a prohibition's level ever drifts from its prose, nothing here would notice.
