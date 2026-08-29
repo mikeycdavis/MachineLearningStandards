@@ -434,3 +434,56 @@ bolding it. A cross-reference, a contrast, a worked failure and an explanatory a
 prose; bold is reserved for the one sentence that states this rule. If a section really does carry
 two obligations, it is two rules and wants two `### R<n>` headings — which is also what the catalog,
 holding one entry per anchor, already assumes.
+
+---
+
+## 14. How a standard quotes the source
+
+Section 13 states what the machinery reads inside a rule's section. This one states what it reads
+around a quotation, because `scripts/fidelity.mjs` holds every verbatim claim to the specification
+character for character, and — as with §13 — what it recognises was a habit before it was written
+down.
+
+It matters more than a formatting rule. The twenty-three must-never statements reach the standards
+by quotation; a prohibition that has been paraphrased no longer says what its author wrote.
+
+**A claim announces; it does not describe.** A line is read as a verbatim-source claim when it
+
+1. **ends in a colon**, and
+2. **asserts reproduction** — it contains `reproduced` or `verbatim` alongside `from the source` —
+   or is the bare announcement `From the source:`.
+
+Every claim in the corpus today is the same sentence, `Reproduced verbatim from the source:`, and
+that is the form to copy.
+
+**A claim must be followed immediately by one evidence block**, in one of three forms: a fenced
+block, a blockquote, or a bullet list. Blank lines between the claim and the block are fine;
+anything else is not. The pairing is positional — the block taken is the first one after the claim,
+never a later one — so a claim and its quotation belong together with nothing in between.
+
+**A claim with no such block is a finding.** This is the half that used to be silent: where the
+following material was ordinary prose, the claim resolved to nothing and was passed over — not
+counted, not reported — so a document could assert that a paragraph was source text, be wrong, and
+leave the run green. A sentence saying text is verbatim, with no block to test, is an assertion
+nothing can falsify, and this now says so rather than reporting success.
+
+**Only wrapping is normalized away.** Line breaks differ between a standard and the specification,
+so both sides collapse to single-spaced text before comparison. Backticks, punctuation, dashes and
+wording are all significant — those are precisely what the check exists to catch, and adding a
+backtick around an identifier inside a quotation is a real failure, not a formatting detail.
+
+**What is deliberately not recognised**, stated so an author can write the form that is:
+
+- **A derivation verb without a reproduction word.** `Quoted from the source:` announces, but does
+  not claim reproduction, and admitting it would mean admitting any `<verb> from the source:` —
+  including `This differs from the source:`, which introduces a list of differences rather than a
+  quotation.
+- **A claim ended with a full stop.** `The rule below is reproduced verbatim from the source.` reads
+  as a statement about the document rather than an announcement of what follows.
+- **Any sentence merely mentioning the source.** `This requirement differs from the source` and
+  `Nothing here is inherited from the source` assert the opposite of a verbatim claim and are
+  ordinary prose. An earlier form of the recognition matched both; that was harmless only while an
+  unresolvable claim was silently skipped, and could not survive the skip becoming a finding.
+
+Writing prose about the source needs no special care — end the sentence normally and it is prose.
+The colon is what invites the check.

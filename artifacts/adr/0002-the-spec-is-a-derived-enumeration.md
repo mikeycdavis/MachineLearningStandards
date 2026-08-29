@@ -34,7 +34,11 @@ prompt, and record the derivation so each link in the chain is verifiable by a d
    so a change to the extraction regex can disagree with the series but can never redefine it.
 3. **Spec to standards.** Each standard carries `Source: item N of ml-standards-spec.md`, and
    `scripts/fidelity.mjs` verifies that every block a standard claims is verbatim from the source
-   matches character for character.
+   matches character for character. What counts as such a claim, and what must follow it, is stated
+   for authors in `design/architecture.md` §14 rather than left to the checker: a claim announces
+   with a colon and must be followed immediately by a fenced block, blockquote or bullet list. A
+   claim with no such block is a finding — it was formerly passed over in silence, which let a
+   document assert that a paragraph was source text and still report success.
 
 The prompt is never edited. It is the source of truth and is preserved exactly as received.
 

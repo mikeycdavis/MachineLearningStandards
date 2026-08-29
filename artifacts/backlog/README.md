@@ -5,19 +5,19 @@
 Work on this project classified with the Extended Agile Hierarchy. Every item is a file in
 [`items/`](./items/); its YAML frontmatter is the source of truth and this page is derived from it.
 
-**33 of 36 leaf items complete — 92%**
+**34 of 36 leaf items complete — 94%**
 
 ```
-█████████████████████████████████████░░░  92%
+██████████████████████████████████████░░  94%
 ```
 
 ## Status
 
 | Status | Items |
 | --- | ---: |
-| ○ Not started | 3 |
-| ◑ In progress | 4 |
-| ● Complete | 51 |
+| ○ Not started | 2 |
+| ◑ In progress | 3 |
+| ● Complete | 53 |
 | **Total** | **58** |
 
 ## The hierarchy
@@ -35,12 +35,11 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 
 | Theme | Progress | Done | Remaining |
 | --- | --- | ---: | ---: |
-| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 92% | 33 | 3 |
+| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 94% | 34 | 2 |
 
 ## In flight
 
 - ◑ [EP-12](./items/EP-12.md) — Normative work supported but not yet released
-- ◑ [EP-16](./items/EP-16.md) — The authoring conventions the guards depend on are stated and enforced
 - ◑ [IN-04](./items/IN-04.md) — Protect what a rule accepts, not only how it is classified
 - ◑ [TH-01](./items/TH-01.md) — An auditable machine-learning standards system
 
@@ -50,7 +49,7 @@ _Nothing marked ready._
 
 ## Everything
 
-- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(33/36)_
+- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(34/36)_
   - ● **[IN-01](./items/IN-01.md)** A normative corpus with mechanical provenance _(4/4)_
     - ● **[EP-01](./items/EP-01.md)** Architecture and decision records _(1/1)_
       - ● **[FE-01](./items/FE-01.md)** Architecture record and decision records 0001-0005
@@ -83,7 +82,7 @@ _Nothing marked ready._
       - ● **[FE-18](./items/FE-18.md)** Negative-evidence audit of all ten detectors
       - ● **[FE-19](./items/FE-19.md)** Owned is not committed, subject fidelity, and probative silence
       - ● **[FE-20](./items/FE-20.md)** The frozen four-target corpus across 1.0.0, 1.1.0 and 1.2.0
-  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(10/13)_
+  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(11/13)_
     - ● **[EP-10](./items/EP-10.md)** 1.3.0 - the acceptance lock _(2/2)_
       - ● **[FE-21](./items/FE-21.md)** Normative standards review and candidate disposition
       - ● **[FE-22](./items/FE-22.md)** invariant.acceptance-locked and the acceptance baseline
@@ -99,9 +98,9 @@ _Nothing marked ready._
       - ● **[FE-32](./items/FE-32.md)** Decide the repair direction for the five prose/catalog level disagreements
       - ● **[FE-33](./items/FE-33.md)** A mechanical check that a catalog entry and its standard agree about level
       - ● **[FE-34](./items/FE-34.md)** Bring the five decided prose/catalog mismatches into agreement
-    - ◑ **[EP-16](./items/EP-16.md)** The authoring conventions the guards depend on are stated and enforced _(1/2)_
+    - ● **[EP-16](./items/EP-16.md)** The authoring conventions the guards depend on are stated and enforced _(2/2)_
       - ● **[FE-35](./items/FE-35.md)** State the normative-sentence convention, and make a departure from it fail loudly
-      - ○ **[FE-36](./items/FE-36.md)** State what must follow a verbatim-source claim, and stop a claim with nothing to check passing
+      - ● **[FE-36](./items/FE-36.md)** State what must follow a verbatim-source claim, and stop a claim with nothing to check passing
   - ● **[IN-05](./items/IN-05.md)** Be safely consumable by an external enforcer _(3/3)_
     - ● **[EP-13](./items/EP-13.md)** 1.4.1 - the invocation contract _(2/2)_
       - ● **[FE-27](./items/FE-27.md)** standards-adapter.json, proven by test
