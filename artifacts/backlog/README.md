@@ -5,10 +5,10 @@
 Work on this project classified with the Extended Agile Hierarchy. Every item is a file in
 [`items/`](./items/); its YAML frontmatter is the source of truth and this page is derived from it.
 
-**34 of 36 leaf items complete — 94%**
+**35 of 37 leaf items complete — 95%**
 
 ```
-██████████████████████████████████████░░  94%
+██████████████████████████████████████░░  95%
 ```
 
 ## Status
@@ -17,8 +17,8 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 | --- | ---: |
 | ○ Not started | 2 |
 | ◑ In progress | 3 |
-| ● Complete | 53 |
-| **Total** | **58** |
+| ● Complete | 55 |
+| **Total** | **60** |
 
 ## The hierarchy
 
@@ -26,8 +26,8 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 | --- | --- | ---: | --- |
 | Theme | `TH-` | 1 | Which enduring area of value is this? |
 | Initiative | `IN-` | 5 | What outcome are we pursuing there? |
-| Epic | `EP-` | 16 | What large body of work delivers it? |
-| Feature | `FE-` | 36 | What shippable slice of that epic? |
+| Epic | `EP-` | 17 | What large body of work delivers it? |
+| Feature | `FE-` | 37 | What shippable slice of that epic? |
 | Story | `ST-` | 0 | What user-visible change, roughly one PR? |
 | Task | `TA-` | 0 | What technical step inside a story? |
 
@@ -35,7 +35,7 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 
 | Theme | Progress | Done | Remaining |
 | --- | --- | ---: | ---: |
-| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 94% | 34 | 2 |
+| [TH-01 An auditable machine-learning standards system](./items/TH-01.md) | `█████████████░` 95% | 35 | 2 |
 
 ## In flight
 
@@ -49,7 +49,7 @@ _Nothing marked ready._
 
 ## Everything
 
-- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(34/36)_
+- ◑ **[TH-01](./items/TH-01.md)** An auditable machine-learning standards system _(35/37)_
   - ● **[IN-01](./items/IN-01.md)** A normative corpus with mechanical provenance _(4/4)_
     - ● **[EP-01](./items/EP-01.md)** Architecture and decision records _(1/1)_
       - ● **[FE-01](./items/FE-01.md)** Architecture record and decision records 0001-0005
@@ -82,7 +82,7 @@ _Nothing marked ready._
       - ● **[FE-18](./items/FE-18.md)** Negative-evidence audit of all ten detectors
       - ● **[FE-19](./items/FE-19.md)** Owned is not committed, subject fidelity, and probative silence
       - ● **[FE-20](./items/FE-20.md)** The frozen four-target corpus across 1.0.0, 1.1.0 and 1.2.0
-  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(11/13)_
+  - ◑ **[IN-04](./items/IN-04.md)** Protect what a rule accepts, not only how it is classified _(12/14)_
     - ● **[EP-10](./items/EP-10.md)** 1.3.0 - the acceptance lock _(2/2)_
       - ● **[FE-21](./items/FE-21.md)** Normative standards review and candidate disposition
       - ● **[FE-22](./items/FE-22.md)** invariant.acceptance-locked and the acceptance baseline
@@ -101,6 +101,8 @@ _Nothing marked ready._
     - ● **[EP-16](./items/EP-16.md)** The authoring conventions the guards depend on are stated and enforced _(2/2)_
       - ● **[FE-35](./items/FE-35.md)** State the normative-sentence convention, and make a departure from it fail loudly
       - ● **[FE-36](./items/FE-36.md)** State what must follow a verbatim-source claim, and stop a claim with nothing to check passing
+    - ● **[EP-17](./items/EP-17.md)** The version-bearing records agree with the catalog they describe _(1/1)_
+      - ● **[FE-37](./items/FE-37.md)** The catalog baseline records the framework version it was reviewed at
   - ● **[IN-05](./items/IN-05.md)** Be safely consumable by an external enforcer _(3/3)_
     - ● **[EP-13](./items/EP-13.md)** 1.4.1 - the invocation contract _(2/2)_
       - ● **[FE-27](./items/FE-27.md)** standards-adapter.json, proven by test
