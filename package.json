@@ -1,6 +1,6 @@
 {
   "name": "machine-learning-standards",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "Auditable machine-learning standards: requirements, prohibitions, invariants, and the commands that evaluate a project against them.",
   "type": "module",
   "bin": {

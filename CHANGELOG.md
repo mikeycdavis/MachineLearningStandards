@@ -38,6 +38,92 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 2.0.0 — 2026-09-04
+
+**Two rules rise from recommendation to requirement. MAJOR: raising a rule's level.**
+
+The repair [ADR 0012](artifacts/adr/0012-three-prose-modals-are-wrong-and-two-catalog-levels-are.md)
+decided landed on 2026-08-26 and has been carried by no release since. This is that release. It
+carries what was already committed; it adds no normative work of its own.
+
+Under the policy at the top of this file, raising a rule's level is MAJOR on its own, and two rules
+rise here. Nothing on the frozen surface moves: no command, schema, rule id, envelope, vocabulary,
+exit code, or scoring semantic changes.
+
+### The two levels that rise
+
+- **`evaluation.improvement-classification`** — recommendation → requirement, warning → error.
+- **`evaluation.uncertainty-reported`** — recommendation → requirement, warning → error.
+
+Both were `recommended` from `1.0.0` while the source brief's evaluation philosophy states each with
+*"Require"*, and while Standard 19 and Standard 20 stated them in prose as obligations. The catalog
+said one thing and the standard said another, from the first release until the repair. ADR 0011
+settles which side is authoritative — the catalog states a rule's normative level, the prose states
+the rule — and ADR 0012 finds that here it was the catalog that was wrong.
+
+**A project evaluated against `2.0.0` can become non-compliant without changing.** That is the
+substance of the increment: two findings that were warnings are now errors. A project that relied on
+either being advisory needs an applicability decision, an attestation, or an exception — recorded, as
+any of those must be.
+
+### One recommendation added
+
+- **`evaluation.unquantified-difference-not-claimed`** (Standard 20 R3), `introducedIn: "2.0.0"` —
+  where uncertainty has not been quantified, a small difference is not described as an improvement.
+
+It is carried as a separate entry rather than folded into `evaluation.uncertainty-reported`'s
+description precisely because it governs the case where that rule has *not* been satisfied. Folding
+it in would have relevelled Standard 20 R3 as a side effect of raising R1, which is the accident the
+split exists to prevent. Adding a recommendation is MINOR; it does not lower the increment this
+release already carries.
+
+### The baseline moves deliberately
+
+`artifacts/catalog-baseline.json` was updated on 2026-08-26, reviewed against ADR 0012, and its
+`$comment` records the reason — as `scripts/integrity.mjs` advises. Its note that no release carried
+it yet was true when written and is retired by this entry. The baseline's own review date is
+unchanged: this release publishes that review, it does not re-perform it.
+
+### Two guards that had no version to ship under
+
+Neither changes what any rule requires; both change what a run can silently pass.
+
+- **`levels`, a new pipeline stage** (`npm run levels`) — compares each catalog-backed section's
+  normative sentence with its catalog entry's kind. It is the third provenance link, and the one
+  that had no guard: `inventory` locks the spec's enumeration, `fidelity` holds prose to the spec,
+  `integrity` holds the catalog to its baseline, and nothing compared prose to catalog. That gap is
+  how the two levels above stayed wrong from `1.0.0` with every run green. The gate reports the
+  disagreement; which side is wrong stays ADR 0011's and ADR 0012's decision.
+- **A section whose obligation is ambiguous is now a finding.** `levels` binds to the first
+  modal-bearing bold span; a second one means the section states two obligations and which carries
+  its level is undetermined. Choosing one silently was a false pass, so it fails instead.
+- **A verbatim-source claim with nothing checkable after it is now a finding.** `fidelity` could
+  recognise a claim, fail to resolve a following fence, blockquote or list, skip it, and still report
+  success. Claim recognition was narrowed first, so that ordinary prose ending in *"from the
+  source"* cannot become a claim now that the failure path bites. The accepted forms are stated at
+  `design/architecture.md` §14; the authoring convention `levels` reads by is §13.
+
+Both conventions were load-bearing and undocumented before this release. Writing them down is what
+makes them a contract rather than a habit.
+
+### Prose corrections
+
+Four standards had their modals corrected to match the catalog: `11-class-imbalance.md`,
+`16-random-seeds.md`, `18-ablation.md`, `20-uncertainty.md`. All 26 catalog-backed sections now
+agree with their entries, measured rather than asserted.
+
+### What this release does not carry
+
+**The three requirement additions held back from `1.4.0` are not in it.** They remain unimplemented
+and unscheduled. This release resolves the arithmetic — a catalog entry stamped `2.0.0` while
+`VERSION` read `1.6.0` — and carries the work that was already committed. It is not the vehicle for
+new normative content, and a later MAJOR will be needed for that.
+
+**Corpus completeness remains unmeasured.** No mechanism establishes whether the 25 standards cover
+the domain, and none is invented here: an independent review is the only thing that would move it,
+and a metric authored alongside the corpus would manufacture the denominator this file's own release
+policy says does not exist.
+
 ## 1.6.0 — 2026-08-22
 
 **An invocation may name the policy to apply. MINOR: an optional field, widening what is accepted.**
