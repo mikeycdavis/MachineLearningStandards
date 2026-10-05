@@ -1,6 +1,6 @@
 {
-  "$comment": "REVIEWED BASELINE. A committed lock of what every rule is, reviewed by a human and compared against the live catalog on every run by scripts/integrity.mjs. It exists to close the most direct route past invariant.standards-integrity: a required rule fails, a deadline is close, and the cheapest path to green is to edit the rule rather than the work. The point is not that the catalog can never change — it must — but that it cannot change invisibly. A legitimate change updates this file deliberately and records the reason in CHANGELOG.md. Regenerating it from a failing run would destroy the guarantee it exists to provide.",
-  "reviewedOn": "2026-08-09",
+  "$comment": "REVIEWED BASELINE. A committed lock of what every rule is, reviewed by a human and compared against the live catalog on every run by scripts/integrity.mjs. It exists to close the most direct route past invariant.standards-integrity: a required rule fails, a deadline is close, and the cheapest path to green is to edit the rule rather than the work. The point is not that the catalog can never change — it must — but that it cannot change invisibly. A legitimate change updates this file deliberately and records the reason in CHANGELOG.md. Regenerating it from a failing run would destroy the guarantee it exists to provide. Updated 2026-10-03 for FE-24: three requirement additions (framing.proxy-label-relationship-recorded, evaluation.external-validation-stated, leakage.pretraining-contamination-stated) are locked. They carry introducedIn 2.0.0, an unreleased MAJOR; frameworkVersion stays at the VERSION this tree holds (1.1.0) because no release has been cut.",
+  "reviewedOn": "2026-10-03",
   "frameworkVersion": "1.1.0",
   "rules": [
     {
@@ -98,6 +98,16 @@
       "kind": "recommendation",
       "level": "recommended",
       "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "evaluation.external-validation-stated",
+      "kind": "requirement",
+      "level": "required",
+      "severity": "error",
       "verification": "manual-review",
       "assurance": "none",
       "nonExemptible": false,
@@ -244,6 +254,16 @@
       "attestable": true
     },
     {
+      "id": "framing.proxy-label-relationship-recorded",
+      "kind": "requirement",
+      "level": "required",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
       "id": "integrity.no-fabricated-datasets",
       "kind": "prohibition",
       "level": "forbidden",
@@ -367,6 +387,16 @@
       "id": "leakage.no-unavailable-features-at-inference",
       "kind": "prohibition",
       "level": "forbidden",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "leakage.pretraining-contamination-stated",
+      "kind": "requirement",
+      "level": "required",
       "severity": "error",
       "verification": "manual-review",
       "assurance": "none",

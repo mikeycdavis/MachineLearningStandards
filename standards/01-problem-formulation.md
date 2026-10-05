@@ -78,12 +78,50 @@ after the fact is indistinguishable in the finished repository from one written 
 therefore attestation territory, and the attestation should say when the record was written
 relative to the work.
 
+### R6 — A proxy label's relationship to the decided quantity is recorded
+
+**Where the predicted quantity is not the quantity the named decision depends on, the record MUST
+identify the proxy relationship and its known divergences.** R1 fixes what is predicted and R3 names
+the decision the prediction informs. This requirement is about the gap between those two answers,
+and it applies only where there is one.
+
+The gap is not a defect in itself — many useful models predict something observable in place of
+something that matters, and the substitution is often sound. What makes it dangerous is that it is
+invisible from inside the other requirements. A proxy satisfies R1 as completely as a direct
+measurement does, because R1 asks for precision and a proxy can be defined precisely. A model
+predicting next year's healthcare cost, deployed to decide who receives additional care, is exact
+about cost and silent about need; the two diverge wherever access to care diverges, so the model
+under-serves precisely the population whose need its label cannot see. Obermeyer et al. (2019)
+measured that divergence in a system already in production.
+
+Whether the gap exists is answered by reading R1's answer beside R3's:
+
+- A model predicting tomorrow's peak grid load, informing a decision that depends on tomorrow's peak
+  grid load, has no gap. Nothing is required here, and nothing should be written.
+- A model predicting whether an account closes within sixty days, informing which accounts receive a
+  retention offer, has one. The decision depends on whether an offer would change the outcome, and
+  closure does not measure that: an account certain to close regardless and an account that would
+  stay if asked carry the same label. R1's precision about the target does not close this gap, and
+  is not evidence about it.
+- A model predicting whether a chargeback is filed, informing whether to block a transaction, has
+  one. Chargebacks miss fraud nobody reports and include disputes that were not fraud.
+
+**What is asked, and what is not.** What is asked is the relationship: what the label measures, what
+the decision needs, and where the two are known to come apart, recorded so a reader can weigh it.
+What is not asked is evidence that the proxy is valid. No general method establishes that, and a
+requirement to produce one would be met by whatever document could be written rather than by the
+work it names. Divergences discovered later belong in
+[Standard 25](25-model-limitations.md); where a label came from belongs in
+[Standard 3](03-dataset-provenance.md), which records a dataset's origin without asking what its
+labels stand for.
+
 ## Evidence and verification
 
 | Rule | What demonstrates compliance | How it is verified | Assurance |
 |---|---|---|---|
 | R1–R4 | A problem-definition document, or a model card whose intended-use and target sections carry this content | Manual review | None |
 | R5 | Attestation stating when the formulation was written relative to the first model, with commit history as supporting evidence | Manual review | None |
+| R6 | Where R1 and R3 name different quantities, a recorded statement of what the label measures, what the decision needs, and the divergences known between them | Manual review | None |
 
 **Why nothing automated applies here.** A scanner can find a document with a heading. It cannot
 determine whether a target definition is precise enough to label an observation unambiguously,
@@ -110,6 +148,10 @@ because a model card's existence says nothing about whether the problem behind i
 - R4's acceptance of qualitative cost statements, and the position that silence about asymmetry is
   read downstream as a claim of symmetry. The source requires cost asymmetry to be recorded; both
   refinements are this standard's.
+- R6 in full. The source requires that the prediction target be recorded and that the decision be
+  named; it never asks whether the two describe the same quantity. The conditional obligation, its
+  applicability boundary drawn from R1 beside R3, and the position that a relationship is required
+  where a validity proof is not, are added here.
 - R5 in full. The source states that formulation should happen before modelling begins; the
   revisit obligation, and the observation that a retrospective formulation is indistinguishable in
   a finished repository, are added here.
