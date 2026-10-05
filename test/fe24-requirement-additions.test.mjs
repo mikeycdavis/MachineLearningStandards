@@ -13,6 +13,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalog } from "../scripts/catalog.mjs";
+import { parseYaml } from "../scripts/yaml.mjs";
 import { evaluate } from "../scripts/compliance.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -58,6 +59,16 @@ test("the reviewed baseline locks exactly those three, and still names the versi
     assert.ok(locked, `${id} is locked in the baseline`);
     assert.equal(locked.kind, "requirement");
     assert.equal(locked.nonExemptible, false);
+  }
+});
+
+test("this repository's policy declares each addition, with a reason and a revisit condition", async () => {
+  const policy = parseYaml(await readFile(path.join(ROOT, "project-policy.yml"), "utf8"));
+  for (const id of ADDITIONS.keys()) {
+    const entry = policy.applicability?.[id];
+    assert.ok(entry, `${id} is addressed in project-policy.yml, so it is not excluded by omission`);
+    assert.equal(entry.status, "not-applicable");
+    assert.ok(entry.reason && entry.revisitWhen, `${id} states why and when to revisit`);
   }
 });
 
