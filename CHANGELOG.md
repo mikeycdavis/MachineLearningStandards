@@ -38,6 +38,77 @@ Where a release cannot know something, the correct output is that it does not kn
 attached. See `artifacts/adr/0006-scaffolding-and-scope.md` for the case that established this: the
 ownership model is exact when git answers, an approximation when git declines, and it says which.
 
+## 3.0.0 — 2026-09-06
+
+**Three requirements enter the catalog. MAJOR: adding a requirement.**
+
+These are N3, N5 and N8 from the disposition register at
+`artifacts/review/2026-08-09-candidate-disposition.md`. All three were supported by that review,
+held back from `1.4.0` because a MINOR cannot carry a requirement, and named in `2.0.0` as work a
+later MAJOR would need to carry. This is that release. Nothing else changed.
+
+### What a project must now do that it did not before
+
+**A proxy label's relationship to the decided quantity is recorded** — Standard 1 R6,
+`framing.proxy-label-relationship-recorded`. Where the predicted quantity is not the quantity the
+named decision depends on, the record identifies the proxy relationship and its known divergences.
+The requirement is conditional and its condition is already answerable inside Standard 1: R1 states
+what is predicted, R3 names the decision, and this attaches where those two are different quantities.
+It asks for the relationship, not for a proof that the proxy is valid — no general method establishes
+that, and a requirement to produce one would be met by a document rather than by work.
+
+**Reported performance states whether it was externally validated** — Standard 5 R6,
+`evaluation.external-validation-stated`. Performance is reported alongside a statement of whether it
+was measured on data collected independently of the training data, and internal-holdout performance
+is not presented as if it established performance on a population the model was not evaluated on.
+This is not a requirement to obtain a second site: "not externally validated" is a complete and
+respectable answer, in the idiom Standard 13 R4 and Standard 15 R4 already use. What it removes is
+silence, which a reader fills in with the stronger claim.
+
+**Prior exposure of the evaluation data is stated** — Standard 8 R5,
+`leakage.pretraining-contamination-stated`. Where a pretrained artifact or a public benchmark takes
+part in evaluation, the record says which of three states holds — established overlap, an
+undetermined corpus, or exclusion supported by evidence — and withholds the unbiased-estimate claim
+except in the third. No project is asked to prove absence from an undisclosed corpus; for
+closed-weight artifacts "undetermined" is the honest answer and it is accepted as one.
+
+### The consequence, stated plainly
+
+**A project evaluated against 3.0.0 can become non-compliant without changing.** Three obligations
+exist that did not before, each at `level: required` and `severity: error`. All three are
+`verification: manual-review` with `assurance: none`, so a project that has not addressed them
+reports `not-evaluated` rather than failing — the safe default — but an evaluation that previously
+reported COMPLIANT may now report an outstanding evidence request in its place.
+
+### What travels with them
+
+- The catalog grows from 53 entries to 56. `artifacts/catalog-baseline.json` was relocked
+  deliberately after the divergence was reported by `scripts/integrity.mjs` and read by a human;
+  its `frameworkVersion` moves to `3.0.0`, the release carrying the rules it locks.
+- Baseline relock record: the three added entries are `framing.proxy-label-relationship-recorded`,
+  `evaluation.external-validation-stated` and `leakage.pretraining-contamination-stated`. The baseline
+  carries `reviewedOn: 2026-10-03`, the date of the owner's review of the divergence `integrity`
+  reported, and is committed together with the three rules because a baseline alone does not pass
+  `integrity`. `3.0.0` is local only: it has not been tagged, released or published.
+- `project-policy.yml` declares all three `not-applicable` with reasons, because this repository
+  trains no model and loads no pretrained artifact. `leakage.pretraining-contamination-stated`
+  carries a `revisitWhen` naming that condition, because no trigger detects it — the applicability
+  is declared rather than inferred, and Standard 8's scope note says why inventing a trigger for it
+  would have been worse than declaring.
+- The held-back assertion in `test/v13-replay.test.mjs` now names these three ids, pins their kind
+  and their carrying version, and continues to refuse any other addition that is not a
+  recommendation.
+
+### What this release does not carry
+
+**No detector.** All three are manual-review rules and `EVALUATED_RULES` is unchanged at ten. The
+automation coverage of the catalog falls, in the sense that three more rules sit outside it, and
+that is reported in `frameworkCoverage` beside the verdict rather than inside it.
+
+**Corpus completeness remains unmeasured.** Unchanged from 2.0.0: no mechanism establishes whether
+the 25 standards cover the domain, and none is invented here. FE-26 remains open and still requires
+an independent review.
+
 ## 2.0.0 — 2026-09-04
 
 **Two rules rise from recommendation to requirement. MAJOR: raising a rule's level.**

@@ -15,8 +15,9 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 
 | Status | Items |
 | --- | ---: |
-| ○ Not started | 2 |
+| ○ Not started | 1 |
 | ◑ In progress | 3 |
+| ◕ In review | 1 |
 | ● Complete | 55 |
 | **Total** | **60** |
 
@@ -40,6 +41,7 @@ Work on this project classified with the Extended Agile Hierarchy. Every item is
 ## In flight
 
 - ◑ [EP-12](./items/EP-12.md) — Normative work supported but not yet released
+- ◕ [FE-24](./items/FE-24.md) — N3, N5 and N8 - three requirement additions awaiting a MAJOR release
 - ◑ [IN-04](./items/IN-04.md) — Protect what a rule accepts, not only how it is classified
 - ◑ [TH-01](./items/TH-01.md) — An auditable machine-learning standards system
 
@@ -89,7 +91,7 @@ _Nothing marked ready._
     - ● **[EP-11](./items/EP-11.md)** 1.4.0 - the first normative corpus change _(1/1)_
       - ● **[FE-23](./items/FE-23.md)** Replay twelve supported dispositions; seven survive
     - ◑ **[EP-12](./items/EP-12.md)** Normative work supported but not yet released _(2/4)_
-      - ○ **[FE-24](./items/FE-24.md)** N3, N5 and N8 - three requirement additions awaiting a MAJOR release
+      - ◕ **[FE-24](./items/FE-24.md)** N3, N5 and N8 - three requirement additions awaiting a MAJOR release
       - ● **[FE-25](./items/FE-25.md)** N6 - Standard 20 R3 re-enters disposition under the correct class
       - ○ **[FE-26](./items/FE-26.md)** Corpus completeness is unmeasured
       - ● **[FE-30](./items/FE-30.md)** N4 - decide whether fairness and protected-group performance are within normative scope

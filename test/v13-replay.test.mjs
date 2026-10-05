@@ -50,6 +50,16 @@ const LATER_RECLASSIFIED = new Map([
 ]);
 /** Entries added after this candidate, by that same disposition. */
 const LATER_ADDITIONS = ["evaluation.unquantified-difference-not-claimed"];
+/**
+ * Requirement additions carried by FE-24 under 3.0.0, implementing N3, N5 and N8 from the same
+ * disposition register. Named individually, with kind and carrying version pinned, so the
+ * allowance made for these three cannot be borrowed by a fourth.
+ */
+const LATER_REQUIRED_ADDITIONS = new Map([
+  ["framing.proxy-label-relationship-recorded", { kind: "requirement", introducedIn: "3.0.0" }],
+  ["evaluation.external-validation-stated", { kind: "requirement", introducedIn: "3.0.0" }],
+  ["leakage.pretraining-contamination-stated", { kind: "requirement", introducedIn: "3.0.0" }],
+]);
 
 async function scratch(fn) {
   const dir = await mkdtemp(path.join(tmpdir(), "mls-v13-"));
@@ -251,17 +261,37 @@ test("N16 · the recommendation carries its own boundary, so it cannot be read a
 // Additions held back, recorded so their absence is deliberate
 // ===========================================================================
 
-test("held back — no new requirement or prohibition entered the catalog", async () => {
-  // N3, N5 and N8 are supported additions and are NOT in this candidate: adding a requirement is
-  // MAJOR under the versioning policy in CHANGELOG.md, and a 1.3.0 cannot carry one. Asserting it
-  // here means a later edit cannot slip one in under a MINOR release.
+test("held back — every addition since 1.3.0 is a recommendation, except the three N3/N5/N8 requirements", async () => {
+  // WHAT THIS STILL REFUSES. Adding a requirement or a prohibition is MAJOR under the versioning
+  // policy at the top of CHANGELOG.md, and a 1.3.0 cannot carry one. This test was built so a
+  // later edit could not slip one into the catalog under a MINOR release, and that is unchanged:
+  // any addition NOT named in LATER_REQUIRED_ADDITIONS must still be a recommendation, so a
+  // fourth requirement turns this red on the run that introduces it.
+  //
+  // WHAT CHANGED. N3, N5 and N8 were held back here from 1.4.0 onward. FE-24 carries them, under
+  // 3.0.0, which is a MAJOR — the release the policy requires. They are named individually rather
+  // than exempted as a class, and each one's kind and introducedIn are pinned, so a rename, a
+  // silent drop, a reclassification, or a restamp under a smaller version each fail this test
+  // rather than passing under the allowance made for the three.
   const before = JSON.parse(await readFile(path.join(ROOT, "test/fixtures/v13-rule-contracts.json"), "utf8"));
   const catalog = await loadCatalog();
   const added = [...catalog.rules.values(), ...catalog.invariants.values()]
     .filter((r) => !(r.id in before));
-  const expected = [AUTHORISED_ADDITION, ...LATER_ADDITIONS].sort();
+
+  const expected = [AUTHORISED_ADDITION, ...LATER_ADDITIONS, ...LATER_REQUIRED_ADDITIONS.keys()].sort();
   assert.deepEqual(added.map((r) => r.id).sort(), expected);
-  // The claim this test makes is unchanged and still holds: every addition is a recommendation,
-  // so no requirement or prohibition has entered the catalog under a MINOR release.
-  assert.deepEqual(added.map((r) => r.kind), added.map(() => "recommendation"));
+
+  for (const rule of added) {
+    const carried = LATER_REQUIRED_ADDITIONS.get(rule.id);
+    if (carried === undefined) {
+      assert.equal(rule.kind, "recommendation",
+        `${rule.id} is not one of the three requirement additions FE-24 carries, so it may not be `
+        + `a ${rule.kind}: that would be a MAJOR change entering the catalog unannounced`);
+      continue;
+    }
+    assert.equal(rule.kind, carried.kind, `${rule.id} must remain a ${carried.kind}`);
+    assert.equal(rule.introducedIn, carried.introducedIn,
+      `${rule.id} is carried by ${carried.introducedIn}; adding a requirement is MAJOR, and no `
+      + `smaller version may claim it`);
+  }
 });

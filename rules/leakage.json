@@ -122,6 +122,30 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "leakage.pretraining-contamination-stated",
+      "kind": "requirement",
+      "title": "Prior exposure of the evaluation data is stated",
+      "standard": 8,
+      "requirement": "R5",
+      "category": "leakage",
+      "level": "required",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": ["training-code"],
+      "introducedIn": "3.0.0",
+      "description": "Where a pretrained artifact or a public benchmark takes part in evaluation, the record states what is known about the evaluation data's prior exposure, and does not describe the result as an unbiased estimate of generalisation unless exclusion is supported by evidence.",
+      "rationale": "Standard 8's other requirements reach only leakage the project's own pipeline creates. For a project fine-tuning a released checkpoint or reporting a public-benchmark number, the dominant leakage route is invisible to every one of them, because no transformation in the project's pipeline touched it. Kapoor & Narayanan (2023) catalogue eight leakage types across 294 affected papers in 17 fields.",
+      "remediation": "State which of three states holds: established overlap, an undetermined corpus, or exclusion supported by evidence such as a documented decontamination step or an evaluation set built after the artifact's cut-off. Report the number in any state; withhold the unbiased-estimate claim in the first two. Proving absence from an undisclosed corpus is not required.",
+      "evidenceExpected": "A recorded statement of prior exposure naming which of the three states holds, with the supporting evidence where exclusion is claimed, and the benchmark's reuse history where a public benchmark selected among candidates.",
+      "$assuranceNote": "Nothing automated establishes this. The training corpus of a released artifact is not in the repository, and for closed-weight artifacts is not published at all; a scan can see that a checkpoint is loaded and nothing about what it was trained on. Applicability itself is declared rather than detected — see the scope note in standards/08-leakage.md.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
