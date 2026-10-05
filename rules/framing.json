@@ -1,5 +1,5 @@
 {
-  "$comment": "Rule catalog — framing. Standard 1. One requirement, covering the record that must exist before modelling begins. Not machine-checkable: whether a target definition is precise enough to label an observation unambiguously is a semantic question, and a check confirming a heading exists would be read as confirming the problem was well formulated.",
+  "$comment": "Rule catalog — framing. Standard 1. Two requirements: the record that must exist before modelling begins, and the relationship a proxy label bears to the quantity the named decision depends on. Not machine-checkable: whether a target definition is precise enough to label an observation unambiguously is a semantic question, and a check confirming a heading exists would be read as confirming the problem was well formulated.",
   "rules": [
     {
       "id": "framing.problem-documented",
@@ -21,6 +21,30 @@
       "remediation": "Write the formulation: target definition precise enough to label any observation, unit of prediction, deployment population, the decision consuming the output, and the relative cost of a false positive against a false negative. Qualitative cost is acceptable where quantitative is not available; silence is not, because it reads downstream as a claim of symmetry.",
       "evidenceExpected": "A problem-definition document, or a model card whose intended-use and target sections carry that content, together with an attestation stating when it was written relative to the first model.",
       "$assuranceNote": "Nothing automated establishes this. Presence of a document is visible; whether its target definition is unambiguous, whether the stated population matches the deployment population, and whether the record predates the modelling are all invisible to a repository scan.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "framing.proxy-label-relationship-recorded",
+      "kind": "requirement",
+      "title": "A proxy label's relationship to the decided quantity is recorded",
+      "standard": 1,
+      "requirement": "R6",
+      "category": "framing",
+      "level": "required",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": ["training-code"],
+      "introducedIn": "2.0.0",
+      "description": "Where the predicted quantity is not the quantity the named decision depends on, the record identifies the proxy relationship and the divergences known between the two.",
+      "rationale": "A proxy satisfies the precision required of a target definition as completely as a direct measurement does, so a model whose label measures the wrong thing can comply fully with every other requirement. Obermeyer et al. (2019) measured that in production: cost stood in for need, and the two diverge wherever access to care diverges.",
+      "remediation": "Read the stated target beside the named decision. Where they are the same quantity, nothing is required. Where they differ, record what the label measures, what the decision needs, and where the two are known to come apart. A validity proof is not required and is not what this asks for.",
+      "evidenceExpected": "Where the target and the decided quantity differ, a recorded statement of the proxy relationship and its known divergences, in the problem-definition record or the model card.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a stated target and a named decision describe the same quantity is a semantic judgement about two pieces of prose, and no scan of a repository can make it.",
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null

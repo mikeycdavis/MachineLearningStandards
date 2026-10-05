@@ -107,6 +107,37 @@ distinct and informationally overlapping, and the resulting estimate describes m
 [Standard 10](10-cross-validation.md) applies the same reasoning to folds and
 [Standard 8](08-leakage.md) treats duplicates spanning a split as the leakage path they are.
 
+### R6 — External validation is stated rather than implied
+
+**Where performance is reported, the record MUST state whether it was measured on data collected
+independently of the training data — a different site, population, or period, and not a partition of
+the same collection — and MUST NOT present internal-holdout performance as if it established
+performance on a population the model was not evaluated on.**
+
+The distinction is about where the data came from, not about how the split was drawn. A holdout is a
+partition of one collection: the same instruments, the same period, the same selection into the
+dataset, divided. That is what makes it a sound estimate of performance on that collection, and
+protecting the soundness of that estimate is what R1–R5 are for. What it cannot do on its own is
+carry to a population that was never in the collection, because nothing about the split varied the
+thing that would differ.
+
+**Internal evidence is still evidence.** This requirement does not say a holdout estimate is
+uninformative elsewhere. It usually is informative, and it is the reasonable starting point for an
+expectation. It says the estimate does not by itself establish the further claim, and that the
+difference must be visible to whoever reads the number. Recht et al. (2019) rebuilt an ImageNet test
+set by the original protocol and found accuracy fell substantially across every model examined, with
+task, protocol and population held as close as anyone could hold them.
+
+Two answers satisfy this. "Externally validated on <population>, <period>, collected independently
+of the development data" is one. "Not externally validated; the reported figures describe held-out
+data from the development collection" is the other, and it is entirely respectable — the same move
+[Standard 15](15-reproducibility.md) R4 makes about reproduction and
+[Standard 13](13-calibration.md) R4 makes about calibration. What is not available is silence, which
+a reader fills in with the stronger claim.
+
+A split drawn on an arbitrary column and described as an external population satisfies neither
+answer. It reports transportability with nothing behind it, which is worse than reporting none.
+
 ## Prohibitions
 
 ### P1 — The test set is spent by looking at it
@@ -152,6 +183,7 @@ figure travel into a slide, a README, or a model card where the qualifier has fa
 | R3 | Tuning and selection records showing a validation partition as the selection criterion, per [Standard 14](14-hyperparameter-tuning.md) | Manual review | None — `not-evaluated` |
 | R4 | A recorded count of test-set evaluations with the date and reason for each | Manual review | None — `not-evaluated` |
 | R5 | A grouping key named in the split record, with the split performed over it | Manual review | None — `not-evaluated` |
+| R6 | A statement beside the reported figures naming the collection they were measured on, and whether any evaluation population was collected independently of the development data | Manual review | None — `not-evaluated` |
 | P1 | Attestation that the test set was read once, supported by the R4 count | Detector A2: a `.fit(`-family call whose arguments contain conventionally test-named identifiers (`X_test`, `y_test`, `test_df`) | Partial — an error when it fires; absence proves nothing, so a clean run reports `insufficient-evidence` rather than passing |
 | P2 | Every reported figure carrying the partition it was computed on | Manual review | None — `not-evaluated` |
 
@@ -169,6 +201,10 @@ only. The check's contribution is to catch the blunt case, and its silence is no
   source states that value is consumed by use; it does not ask for a tally. The tally is this
   standard's addition, on the reasoning that an unrecorded count cannot be distinguished from a
   count of one, which is how a spent test set passes for a fresh one.
+- R6 in full. The source provides an internal holdout and item 6 requires a representative
+  evaluation period; neither is a transportability claim, and neither asks the project to say which
+  it has. The obligation to state validation provenance, and the refusal to turn that into a
+  requirement for a second site, are this standard's.
 - R2's extension of "use" to reading, summarising, plotting, and error analysis. The source speaks
   of decisions made in light of the test set; treating inspection itself as consumption is this
   standard's interpretation, made explicit because the informal look is the common route to P1.

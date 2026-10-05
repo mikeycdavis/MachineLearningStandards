@@ -446,6 +446,30 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "evaluation.external-validation-stated",
+      "kind": "requirement",
+      "title": "Reported performance states whether it was externally validated",
+      "standard": 5,
+      "requirement": "R6",
+      "category": "evaluation",
+      "level": "required",
+      "severity": "error",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": ["training-code"],
+      "introducedIn": "2.0.0",
+      "description": "Reported performance states whether it was measured on data collected independently of the training data, and internal-holdout performance is not presented as if it established performance on a population the model was not evaluated on.",
+      "rationale": "A holdout is a partition of one collection, so it estimates performance on that collection soundly and carries no further on its own. Read without the qualifier it is taken for a transportability claim. TRIPOD and TRIPOD+AI treat external validation as a distinct study; Recht et al. (2019) rebuilt an ImageNet test set by the original protocol and accuracy fell across every model examined.",
+      "remediation": "State beside the reported figures which collection they were measured on, and whether any evaluation population was collected independently of the development data — a different site, population, or period, not a partition of the same collection. 'Not externally validated' is a complete answer; a split drawn on an arbitrary column and called an external population is not.",
+      "evidenceExpected": "A statement accompanying the reported performance that names the collection it was measured on and says whether an independently collected evaluation population exists, with its provenance where one does.",
+      "$assuranceNote": "Nothing automated establishes this. Whether two datasets were collected independently is a fact about their origin, not about the repository, and no detector can see it. A scan cannot even establish which reported figure came from which partition.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

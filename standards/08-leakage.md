@@ -21,6 +21,16 @@ Applicability is proposed by the `training-code` and `ml-footprint` triggers. It
 the presence of a preprocessing import alone — a script that scales data for a visualisation is
 not training anything, and declaring the rule not-applicable with that reason is correct.
 
+R5 narrows further, to evaluation in which a pretrained artifact or a public benchmark takes part.
+No trigger detects that condition, and none is invented for it: `scripts/standards.mjs` builds a
+closed set of trigger signals, so a name outside that set would never fire, and a project using a
+released checkpoint would be told that none of the rule's triggers had fired. That is a false
+reassurance, which is the failure this repository exists to prevent. The condition is therefore
+declared rather than detected. A project states applicability for
+`leakage.pretraining-contamination-stated` in `project-policy.yml` with its reason, and carries the
+condition in `revisitWhen`, so that acquiring a pretrained artifact or adopting a public benchmark
+reopens the declaration instead of silently invalidating it.
+
 ## Requirements
 
 ### R1 — Transformations are fitted inside the training portion of each split
@@ -93,6 +103,39 @@ requirement; two implementations of the same preprocessing, in two languages or 
 is the shape that fails. [Standard 23](23-inference-behavior.md) specifies the serving contract
 this requirement must match.
 
+### R5 — Prior exposure of the evaluation data is stated
+
+**Where a pretrained artifact or a public benchmark takes part in evaluation, the record MUST state
+what is known about the evaluation data's prior exposure, and MUST NOT describe the result as an
+unbiased estimate of generalisation unless exclusion is supported by evidence.**
+
+R1–R4 govern leakage this project's pipeline creates. This requirement governs leakage the project
+inherits: evaluation data a model had already seen before the project acquired it, or a benchmark
+whose answers have been selected against enough times that a good score partly records that
+selection. Kapoor & Narayanan (2023) catalogue eight leakage types across 294 affected papers in 17
+fields; the ones reached here are the ones no transformation in the project's own pipeline touched.
+
+Three states are distinguishable, and the record says which holds:
+
+- **Established overlap.** The evaluation data is known to appear in the artifact's training corpus,
+  or the benchmark has been used repeatedly to choose among this project's candidates. The number
+  may still be reported, with the overlap beside it. It is not an unbiased estimate, and calling it
+  one is what this forbids.
+- **Undetermined.** The corpus is undisclosed, or disclosed and too large to search. For
+  closed-weight artifacts this is the normal case and it is an honest answer. It is not a licence
+  for the stronger claim: an unbiased estimate is not established by the absence of a way to check.
+- **Exclusion supported by evidence.** A documented decontamination step, an artifact whose corpus
+  is disclosed and searchable, or an evaluation set constructed after the artifact's cut-off. Here
+  the claim is available, and the evidence is what makes it available.
+
+**No project is asked to prove a negative.** Establishing that evaluation data is absent from an
+undisclosed web-scale corpus is a research problem, not a compliance task, and a requirement to do
+it would be waived on every project that met it honestly. What is asked is a sentence saying which
+of the three states holds, so the uncertainty sits where a reader can see it rather than inside a
+number. [Standard 4](04-dataset-versioning.md) supplies the identifiers that make an exclusion claim
+checkable later, and [Standard 25](25-model-limitations.md) is where an undetermined corpus reappears
+as a stated limitation.
+
 ## Prohibitions
 
 ### P1 — Preprocessing sees only what prediction-time code will
@@ -137,6 +180,7 @@ leaks nothing" is precisely the sentence a leaking pipeline is defended with.
 | R2 | The deduplication rule and its effect recorded with the dataset, per [Standard 3](03-dataset-provenance.md) | Manual review | None — reports `not-evaluated` |
 | R3 | A recorded examination of each identifier and index-like column with its conclusion | Manual review | None — `not-evaluated` |
 | R4 | One serialised fitted pipeline used in both paths, or a documented equivalence between two implementations | Manual review | None — `not-evaluated` |
+| R5 | A recorded statement of prior exposure naming which of the three states holds, and the evidence where exclusion is claimed | Manual review | None — `not-evaluated` |
 | P1, P2 | Attestation that no transformation was fitted over data the inference path could not see, supported by A1 finding nothing | Detector A1: per Python file, a preprocessing `.fit(` or `.fit_transform(` (StandardScaler, MinMaxScaler, OneHotEncoder, SimpleImputer, TfidfVectorizer, PCA) appearing before `train_test_split(`, `KFold(`, `TimeSeriesSplit(`, `GroupKFold(`, or `StratifiedKFold(` | Partial — warning when it fires; a clean run reports `insufficient-evidence`, never a pass |
 
 **What the automated check cannot establish.** Detector A1 reports a true fact — that within one
@@ -161,6 +205,10 @@ pattern is absent and nothing about whether the pipeline leaks, which is why the
 - R4, the training-inference mirror. The source requires preprocessing to be fitted with the same
   discipline that will apply at inference; extending that to a requirement that the same fitted
   object be used, and naming reimplementation as the usual cause of divergence, is authored here.
+- R5 in full. The source scopes leakage to what the project's own pipeline does; evaluation data
+  already seen by an artifact the project did not train is outside every claim it makes. The three
+  exposure states, and the decision to require a statement rather than an exclusion proof, are
+  added here.
 - The reading of P2's qualifier "when that leaks information" as a narrow, writable exemption
   covering externally specified parameters, together with the requirement that such a claim be
   recorded. The source supplies the qualifier and no guidance on it.

@@ -75,6 +75,11 @@ applicability:
     reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
     reviewedAt: "2026-08-09"
     revisitWhen: "Any model evaluation or comparison is performed in this repository."
+  evaluation.external-validation-stated:
+    status: not-applicable
+    reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over, so there is no reported performance whose validation provenance could be stated."
+    reviewedAt: "2026-10-03"
+    revisitWhen: "Any model performance is reported from this repository."
   evaluation.improvement-classification:
     status: not-applicable
     reason: "No model is evaluated or compared here. The repository reports on other projects; it produces no metrics of its own to select, calibrate, or claim improvement over."
@@ -148,6 +153,12 @@ applicability:
     reviewedAt: "2026-08-09"
     revisitWhen: "Any modelling work is added to this repository."
 
+  framing.proxy-label-relationship-recorded:
+    status: not-applicable
+    reason: "This repository formulates no prediction problem. It contains normative documents, a command-line tool, and its tests; with no predicted quantity and no decision consuming one, there is no pair of quantities that could differ."
+    reviewedAt: "2026-10-03"
+    revisitWhen: "Any modelling work is added to this repository."
+
   # ---- integrity ----
   integrity.no-fabricated-datasets:
     status: not-applicable
@@ -191,6 +202,12 @@ applicability:
     reason: "No model is trained here, so there is no path by which information could reach one. The repository has no features, no target, and no prediction moment."
     reviewedAt: "2026-08-09"
     revisitWhen: "Any training code or feature engineering is added to this repository."
+
+  leakage.pretraining-contamination-stated:
+    status: not-applicable
+    reason: "No model is trained or evaluated here, and no pretrained artifact or public benchmark takes part in anything: the repository loads no checkpoint and reports no benchmark number, so the evaluation data whose prior exposure this rule concerns does not exist."
+    reviewedAt: "2026-10-03"
+    revisitWhen: "A pretrained artifact is loaded, or a public benchmark is used to report or select, anywhere in this repository."
 
   # ---- monitoring ----
   monitoring.drift-response-defined:

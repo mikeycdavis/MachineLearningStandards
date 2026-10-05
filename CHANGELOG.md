@@ -12,6 +12,30 @@ Three versions travel independently: the **framework** version (`VERSION`, and a
 `standardVersion`), the **output schema** version (`schemaVersion` in every report), and the
 **package** version in `package.json`.
 
+## Unreleased — a MAJOR that is not cut
+
+**Nothing here is released.** `VERSION` and `package.json` stay at 1.1.0 and the baseline's
+`frameworkVersion` stays at 1.1.0, because no release has been made: no tag, no publication. The
+three rules below carry `introducedIn: "2.0.0"`, the MAJOR that adding a requirement requires under
+the policy above. That 2.0.0 is the next MAJOR **on this tree**. It is not the 2.0.0 described on
+the `design/publication-state-correction` branch, which is a different, uncut release that this
+tree does not contain. Tags `v1.4.0` to `v1.6.0` exist on the remote but are not reachable from
+this tree; they are recorded as unreconciled and are not reconciled here.
+
+### Added (requirements)
+
+- `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where
+  R1's predicted quantity and R3's decided quantity differ. Where they are the same quantity,
+  nothing is required and no evidence is requested.
+- `evaluation.external-validation-stated` (Standard 5 R6, N5). Reported performance states whether
+  it was externally validated.
+- `leakage.pretraining-contamination-stated` (Standard 8 R5, N8). Applicability is declared in the
+  project policy, not detected; no trigger signal was added.
+
+All three are manual-review, `nonExemptible: false`, attestable. `artifacts/catalog-baseline.json`
+locks them (`reviewedOn` 2026-10-03; the existing 50 entries are unchanged) and
+`project-policy.yml` declares each not-applicable for this repository.
+
 ## 1.1.0 — 2026-08-09
 
 Remediation of what three adoptions against real machine-learning repositories found. Every change
