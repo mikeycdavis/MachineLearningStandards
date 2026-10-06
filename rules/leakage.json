@@ -136,7 +136,7 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["training-code"],
+      "triggers": [],
       "introducedIn": "2.0.0",
       "description": "Where a pretrained artifact or a public benchmark takes part in evaluation, the record states what is known about the evaluation data's prior exposure, and does not describe the result as an unbiased estimate of generalisation unless exclusion is supported by evidence.",
       "rationale": "Standard 8's other requirements reach only leakage the project's own pipeline creates. For a project fine-tuning a released checkpoint or reporting a public-benchmark number, the dominant leakage route is invisible to every one of them, because no transformation in the project's pipeline touched it. Kapoor & Narayanan (2023) catalogue eight leakage types across 294 affected papers in 17 fields.",

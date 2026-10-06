@@ -17,7 +17,9 @@ or a claim of improvement. It applies to a single held-out split and to the oute
 surrounds a cross-validation procedure alike; [Standard 10](10-cross-validation.md) governs what
 happens inside that procedure.
 
-Applicability is proposed by the `training-code` and `ml-footprint` triggers. A project that fits a
+Applicability is proposed by the `training-code` and `ml-footprint` triggers, except for R6, which
+carries no trigger: it binds only where a performance figure is reported, which no scan can see, and
+a project that reports none declares it not-applicable. A project that fits a
 descriptive model over a fixed population and makes no claim about unseen data holds no test set in
 this sense, and declaring the rule not-applicable with that reason is the correct outcome.
 

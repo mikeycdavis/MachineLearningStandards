@@ -460,7 +460,7 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["training-code"],
+      "triggers": [],
       "introducedIn": "2.0.0",
       "description": "Reported performance states whether it was measured on data collected independently of the training data, and internal-holdout performance is not presented as if it established performance on a population the model was not evaluated on.",
       "rationale": "A holdout is a partition of one collection, so it estimates performance on that collection soundly and carries no further on its own. Read without the qualifier it is taken for a transportability claim. TRIPOD and TRIPOD+AI treat external validation as a distinct study; Recht et al. (2019) rebuilt an ImageNet test set by the original protocol and accuracy fell across every model examined.",

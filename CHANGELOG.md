@@ -32,6 +32,12 @@ this tree; they are recorded as unreconciled and are not reconciled here.
 - `leakage.pretraining-contamination-stated` (Standard 8 R5, N8). Applicability is declared in the
   project policy, not detected; no trigger signal was added.
 
+None of the three carries a scan trigger (`triggers: []`). Each binds only under a condition no scan
+can see, so a `training-code` trigger would fire on every machine-learning project and report a
+correct `not-applicable` declaration as `applicability-drift`. Absent a declaration the rule applies
+and evidence is requested; a project whose condition is absent declares it not-applicable with a
+reason and a `revisitWhen`.
+
 All three are manual-review, `nonExemptible: false`, attestable. `artifacts/catalog-baseline.json`
 locks them (`reviewedOn` 2026-10-03; the existing 50 entries are unchanged) and
 `project-policy.yml` declares each not-applicable for this repository.

@@ -27,13 +27,18 @@ is deliberate and does not mean the work was undiscovered or incomplete.
 
 ## Reconciliation cannot establish completeness here
 
-This repository's history contains no merged pull requests. Every release and every disposition
-landed as a direct commit on a branch. `backlog-reconcile` matches item evidence against merged
-pull requests, so two of its four checks have nothing to run against and report NOT RUN rather
-than passing.
+Three merge commits on `main` record merged pull requests: #1 (`13b7f6c`, publish the backlog), #62
+(`2e2ccf3`, migrate the backlog to GitHub Issues) and #64 (`5c07d73`, the FE-24 re-cut). Everything
+earlier in the history, every release and every disposition before the migration, landed as a direct
+commit on a branch, so no pull request carries evidence for it. The merged pull requests are
+therefore a narrow evidence set: of them only #64 is named by an item's evidence (FE-24, #42), and
+a `backlog-reconcile` run on 2026-10-05 reported exactly that one open item as naming a merged pull
+request. That check is not empty here; it is thin.
 
 What a successful run establishes here is therefore narrower than a reader might infer from the
-overall command succeeding: parent-state coherence, and that cited evidence resolves. Agreement
+overall command succeeding: parent-state coherence, and which cited evidence resolves. On
+2026-10-05 that run could not verify 31 cited paths, which belong to the branch this tree does not
+contain, so even the second claim is partial. Agreement
 between this backlog and all historical work remains undetermined. A green reconciliation is not
 evidence of completeness, and repetition does not make it one.
 
