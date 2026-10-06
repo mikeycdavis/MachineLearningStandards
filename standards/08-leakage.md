@@ -22,7 +22,9 @@ the presence of a preprocessing import alone — a script that scales data for a
 not training anything, and declaring the rule not-applicable with that reason is correct.
 
 R5 narrows further, to evaluation in which a pretrained artifact or a public benchmark takes part.
-No trigger detects that condition, and none is invented for it: `scripts/standards.mjs` builds a
+Its catalog entry therefore carries no trigger at all: `training-code` would fire on a project that
+trains from scratch on private data, and `status` would report its correct not-applicable
+declaration as drift. No trigger detects that condition, and none is invented for it: `scripts/standards.mjs` builds a
 closed set of trigger signals, so a name outside that set would never fire, and a project using a
 released checkpoint would be told that none of the rule's triggers had fired. That is a false
 reassurance, which is the failure this repository exists to prevent. The condition is therefore

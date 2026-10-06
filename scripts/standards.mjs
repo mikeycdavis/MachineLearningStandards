@@ -1112,7 +1112,7 @@ function explainOne(rule, policy, triggers, locate = () => null) {
     why = `The scan observed ${fired.join(", ")}, which is what this rule is about.`;
   } else if ((rule.triggers ?? []).length === 0) {
     verdict = "yes";
-    why = "This rule has no applicability trigger; it applies wherever the framework is adopted.";
+    why = "This rule has no applicability trigger, because the condition it depends on is not detectable. It applies unless the project declares it not-applicable in project-policy.yml with a reason.";
   } else {
     verdict = "undetermined";
     why = `None of this rule's triggers (${(rule.triggers ?? []).join(", ")}) fired. Declare applicability explicitly in project-policy.yml rather than leaving it to inference.`;

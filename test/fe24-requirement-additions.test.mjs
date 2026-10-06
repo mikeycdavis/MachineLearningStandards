@@ -9,7 +9,9 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile, mkdtemp, cp, rm } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalog } from "../scripts/catalog.mjs";
@@ -100,4 +102,89 @@ test("P1 · the evidence requested for N3 does not require a statement when the 
   assert.equal(rule.evidenceExpected, needs, "the request is the catalog text, so the catalog text is what is tested");
   assert.match(rule.remediation, /same quantity, nothing is required/i,
     "the remediation keeps the exclusion that the evidence request must agree with");
+});
+
+// ---- Codex P1 on #64: conditional applicability is declared, not inferred from training code. ----
+//
+// N3, N5 and N8 each bind only under a condition no scan can see (a proxy label; a reported
+// performance figure; a pretrained artifact or public benchmark in evaluation). A project that
+// contains training code but lacks the condition declares not-applicable, and that declaration
+// must not be reported back as contradicted because training code exists.
+
+const CLI = path.join(ROOT, "scripts/standards.mjs");
+
+test("P1 (Codex) · the three conditional additions carry no scan trigger, so training code cannot contradict a declaration", () => {
+  for (const id of ADDITIONS.keys()) {
+    assert.deepEqual(catalog.rules.get(id).triggers, [],
+      `${id} is conditional on something no trigger detects; a training-code trigger would fire on every ML project`);
+  }
+});
+
+async function inTrainingProject(fn) {
+  const dir = await mkdtemp(path.join(tmpdir(), "mls-fe24-"));
+  try {
+    await cp(path.join(ROOT, "test/fixtures/clean-repo"), dir, { recursive: true });
+    const blocks = [...ADDITIONS.keys()].map((id) =>
+      `  ${id}:
+    status: not-applicable
+    reason: "Trains from scratch on private data; the condition this rule is about is absent."
+` +
+      `    reviewedAt: "2026-10-05"
+    revisitWhen: "A pretrained artifact, public benchmark, proxy label or reported figure is introduced."
+`).join("");
+    await writeFile(path.join(dir, "project-policy.yml"),
+      `standardVersion: "1.0.0"
+project: "trains-from-scratch"
+applicability:
+${blocks}exceptions: []
+`);
+    return await fn(dir);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+test("P1 (Codex) · a training project that correctly declares the conditions absent is not told its declaration drifted", async () => {
+  await inTrainingProject((dir) => {
+    const r = spawnSync(process.execPath, [CLI, "status", `--dir=${dir}`, "--json"], { encoding: "utf8" });
+    const report = JSON.parse(r.stdout);
+    const drift = report.items.filter((i) => i.kind === "applicability-drift").map((i) => i.rule);
+    assert.deepEqual(drift, [], `declared-absent conditions were reported as drift: ${drift.join(", ")}`);
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+  });
+});
+
+test("P1 (Codex) · explain does not claim the scan observed the condition, and says applicability is declared", async () => {
+  await inTrainingProject((dir) => {
+    for (const id of ADDITIONS.keys()) {
+      const r = spawnSync(process.execPath, [CLI, "explain", id, dir, "--json"], { encoding: "utf8" });
+      const e = JSON.parse(r.stdout);
+      const a = (e.explanations?.[0] ?? e).applicability;
+      assert.deepEqual(a.triggersFired, [], id);
+      assert.doesNotMatch(a.why, /scan observed/i, id);
+    }
+  });
+});
+
+test("P1 (Codex) · an undeclared project is still asked for the statement, so removing the trigger does not excuse anyone", () => {
+  const verdict = evaluate({
+    catalog, policy: { rules: {} }, findings: [], evaluated: [], invariantFindings: [],
+    today: "2026-10-05", digests: new Map(),
+  });
+  for (const id of ADDITIONS.keys()) {
+    assert.ok(verdict.evidenceRequests.some((r) => r.rule === id), `${id} still requests evidence when not declared`);
+  }
+});
+
+// ---- Codex P2 on #64: the scope note's account of merged pull requests must match the history. ----
+
+test("P2 (Codex) · scope.md does not claim main has no merged pull requests, and names the three it records", async () => {
+  const scope = await readFile(path.join(ROOT, "artifacts/backlog/scope.md"), "utf8");
+  assert.doesNotMatch(scope, /contains no merged pull requests/i,
+    "main's history has merge commits for #1, #62 and #64");
+  assert.doesNotMatch(scope, /nothing to run against|report NOT RUN rather/i,
+    "the reconciliation check that matches evidence to merged pull requests is not empty here");
+  for (const n of ["#1", "#62", "#64"]) {
+    assert.ok(scope.includes(n), `scope.md names merged pull request ${n}`);
+  }
 });

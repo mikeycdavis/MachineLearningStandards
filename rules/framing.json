@@ -38,7 +38,7 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": ["training-code"],
+      "triggers": [],
       "introducedIn": "2.0.0",
       "description": "Where the predicted quantity is not the quantity the named decision depends on, the record identifies the proxy relationship and the divergences known between the two.",
       "rationale": "A proxy satisfies the precision required of a target definition as completely as a direct measurement does, so a model whose label measures the wrong thing can comply fully with every other requirement. Obermeyer et al. (2019) measured that in production: cost stood in for need, and the two diverge wherever access to care diverges.",

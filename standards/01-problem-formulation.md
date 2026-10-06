@@ -15,7 +15,9 @@ use changes. A model repurposed for a different decision is a new problem wearin
 weights: the target may still be predicted accurately while the costs, the population, and the
 acceptable error profile have all changed underneath it.
 
-Applicability is proposed by the `training-code` trigger. Exploratory analysis that will not
+Applicability is proposed by the `training-code` trigger, except for R6, which carries no trigger:
+it binds only where R1 and R3 name different quantities, which no scan can see, and a project where
+they are the same declares it not-applicable. Exploratory analysis that will not
 produce a deployed or reported model is out of scope, though the honest declaration of that is a
 scope decision worth recording rather than assuming.
 
