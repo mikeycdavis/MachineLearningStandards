@@ -27,8 +27,14 @@ The reasons are the facts in section 2, stated rather than argued:
    Issues, PR #64, PR #65). It is also the lineage with a green hosted CI run on its head
    (push run 37407527013 at `0a389fd`, conclusion success).
 2. The divergent line is not a candidate for a fast-forward or a clean merge: `main` and each tag
-   share only `06feba7` (v1.1.0), and both sides changed `VERSION`, `CHANGELOG.md`, the catalog
-   baseline and the backlog (the divergent side has item files, `main` has none).
+   share only `06feba7` (v1.1.0). Computed with `git diff --name-only 06feba7 <ref>` on each side,
+   both `main` and `v1.6.0` changed six files: `CHANGELOG.md`, `artifacts/catalog-baseline.json`,
+   `project-policy.yml`, `rules/evaluation.json`, `scripts/standards.mjs`, and
+   `artifacts/backlog/README.md` (added independently on both sides). `v1.4.0` and `v1.5.0` share the
+   first five; `af4120f` shares twelve (those six plus `artifacts/backlog/scope.md`,
+   `rules/framing.json`, `rules/leakage.json` and three `standards/` files). `VERSION` was changed
+   only on the divergent side: it is 1.1.0 on `main` and `git log 06feba7..0a389fd -- VERSION` is
+   empty. The divergent side also has backlog item files, and `main` has none.
 3. The tags are published. ADR 0010 (on the divergent line only) records that published tags are
    public authorities. Moving or deleting them would be a different and larger decision than
    leaving them.
