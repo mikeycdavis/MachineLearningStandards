@@ -64,6 +64,14 @@ Retention is a real cost and this requirement does not pretend otherwise. Where 
 deleted, the correct response is to record that the results citing them are no longer reproducible,
 not to leave the identifiers pointing at nothing and let readers assume otherwise.
 
+### R5 — Known defects and the update policy are recorded
+
+**The record of a dataset version SHOULD state whether it has an erratum and where it is, and whether the dataset will be updated, how often, by whom, and how updates are communicated.** This makes it possible to tell whether a reused version is still the one that was evaluated.
+
+### R6 — Earlier uses of the dataset are recorded
+
+**The record SHOULD state whether the dataset has already been used for any tasks and describe those uses.** Prior use is evidence of test-set reuse and leakage risk; see [Standard 5](05-train-validation-test-separation.md) for the separation it bears on.
+
 ## Evidence and verification
 
 | Rule | What demonstrates compliance | How it is verified | Assurance |
@@ -72,6 +80,7 @@ not to leave the identifiers pointing at nothing and let readers assume otherwis
 | R2 | Experiment records — config files, tracking-tool runs, result documents — naming a dataset version | Manual review | None |
 | R3 | The version stated alongside each comparison | Manual review | None |
 | R4 | The version resolves to retrievable contents | Manual review | None |
+| R5, R6 | The dataset record's erratum, update-policy and prior-use statements | Manual review | None — a recommendation; no detector |
 
 **What the automated check cannot establish.** A6 establishes one fact: that data exists in or near
 the repository and that no versioning mechanism was found beside it. Its absence of a finding
@@ -84,6 +93,7 @@ found: the remediation is to add one, which is work an agent can do.
 
 ## Additions this standard makes beyond the source
 
+- R5 and R6 are recommendations added by the C7 completeness work (issue #44, Story 3, #72): errata and update policy, and prior uses. They are SHOULD-level and carry no detector.
 - R1's explicit statement that a filename is not an identifier, and the preference for content
   hashing where manual incrementing is unenforced. The source requires that datasets be versioned;
   the reasoning about which mechanisms actually deliver the property is this standard's.

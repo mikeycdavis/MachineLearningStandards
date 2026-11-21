@@ -66,6 +66,16 @@ applicability:
     reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from, so there is no dataset record to extend."
     reviewedAt: "2026-11-21"
     revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
+  data.errata-and-update-policy-recorded:
+    status: not-applicable
+    reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from, so there is no dataset version whose history could be recorded."
+    reviewedAt: "2026-11-21"
+    revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
+  data.prior-uses-recorded:
+    status: not-applicable
+    reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from, so there is no dataset version whose history could be recorded."
+    reviewedAt: "2026-11-21"
+    revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
 
   # ---- deployment ----
   deployment.inference-contract:

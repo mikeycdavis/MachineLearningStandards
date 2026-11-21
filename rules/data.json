@@ -241,6 +241,58 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "data.errata-and-update-policy-recorded",
+      "kind": "recommendation",
+      "title": "Known defects and the update policy of a dataset version are recorded",
+      "standard": 4,
+      "requirement": "R5",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The record of a dataset version states whether it has an erratum and where it is, and whether the dataset will be updated (to correct labelling errors, add or delete instances), how often, by whom, and how updates are communicated.",
+      "rationale": "A reused version is only the version that was evaluated if its defects and its update policy are known. A corrected label or a deleted instance changes what a result means, and without an erratum or an update policy a later reader cannot tell which version a result applies to.",
+      "remediation": "Record a link or access point for the erratum (or state there is none) and describe the update policy and how updates are communicated beside the version identifier.",
+      "evidenceExpected": "A dataset record or manifest stating the erratum location or none, and the update frequency, owner and communication route.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement about a dataset's history is complete and true is a judgement about that history, which a scan does not read.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "data.prior-uses-recorded",
+      "kind": "recommendation",
+      "title": "Earlier uses of the dataset are recorded",
+      "standard": 4,
+      "requirement": "R6",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record states whether the dataset has already been used for any tasks and describes those uses, so that reuse of a held-out or test partition can be assessed.",
+      "rationale": "A dataset used for earlier tasks may already have been used to select, tune or evaluate models. Prior uses are evidence of test-set reuse and of leakage risk, and they are invisible unless someone wrote them down.",
+      "remediation": "Add a prior-uses section to the dataset record: tasks the dataset has been used for, by whom, and whether any partition was used for selection or tuning.",
+      "evidenceExpected": "A dataset record listing prior uses and any prior selection or tuning on its partitions, or stating that there are none.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement about a dataset's history is complete and true is a judgement about that history, which a scan does not read.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
