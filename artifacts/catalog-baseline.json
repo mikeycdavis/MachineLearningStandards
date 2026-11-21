@@ -572,6 +572,26 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true
+    },
+    {
+      "id": "data.distribution-and-licence-recorded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "data.sensitivity-status-recorded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
     }
   ]
 }
