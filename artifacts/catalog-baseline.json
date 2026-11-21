@@ -532,6 +532,46 @@
       "assurance": "partial",
       "nonExemptible": true,
       "attestable": true
+    },
+    {
+      "id": "data.purpose-and-composition-recorded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "data.quality-limitations-recorded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "data.permitted-use-recorded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "framing.population-and-ml-motivation-stated",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
     }
   ]
 }

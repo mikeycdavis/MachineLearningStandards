@@ -22,6 +22,16 @@ the `design/publication-state-correction` branch, which is a different, uncut re
 tree does not contain. Tags `v1.4.0` to `v1.6.0` exist on the remote but are not reachable from
 this tree; they are recorded as unreconciled and are not reconciled here.
 
+### Added (recommendations, MINOR class; Story 1 of issue #44)
+
+`introducedIn: "1.2.0"`. No requirement or prohibition is added and no scan trigger changes.
+
+- `data.purpose-and-composition-recorded` (Standard 3 R5), `data.quality-limitations-recorded` (R6),
+  `data.permitted-use-recorded` (R7), and `framing.population-and-ml-motivation-stated`
+  (Standard 1 R7). Manual-review, attestable, assurance none.
+- The reviewed baseline gained four entries, appended unchanged in kind. They need human review of
+  the baseline; its `reviewedOn` date is deliberately not advanced.
+
 ### Added (requirements)
 
 - `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where

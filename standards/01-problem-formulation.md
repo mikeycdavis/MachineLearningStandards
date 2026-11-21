@@ -117,6 +117,10 @@ work it names. Divergences discovered later belong in
 [Standard 3](03-dataset-provenance.md), which records a dataset's origin without asking what its
 labels stand for.
 
+### R7 — The motivation for the population and for using machine learning is stated
+
+**The problem-definition record SHOULD state why this population or distribution was chosen and why machine-learning methods are used for the problem at all.** This is a recommendation; it adds no requirement and is not machine-checked.
+
 ## Evidence and verification
 
 | Rule | What demonstrates compliance | How it is verified | Assurance |
