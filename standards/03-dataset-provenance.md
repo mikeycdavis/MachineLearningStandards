@@ -124,8 +124,8 @@ mentioned, is this prohibition.
 |---|---|---|---|
 | R1, R2 | A dataset card or provenance document naming origin, collection, population, and unit of observation | `scan` looks for `DATASET.md`, `DATA_CARD.md`, or a document carrying `## Provenance` / `## Collection` headings | Partial — presence of the document, never the truth of its contents |
 | R3 | An `## Exclusions` section listing each rule with counts and proportions | Same document scan | Partial — the heading's presence is structural; whether it lists *every* exclusion cannot be established from the repository |
-| R5, R6, R7 | The same document, covering purpose, owner, counts, sampling, missingness, known errors and out-of-scope uses | Manual review | None — a recommendation; no detector |
 | R4 | Input dataset versions named in the derived dataset's record | Manual review | None |
+| R5, R6, R7 | The same document, covering purpose, owner, counts, sampling, missingness, known errors and out-of-scope uses | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that the data is what its documentation says it is | Manual review only | None |
 | P2 | Attestation that exclusions were rule-driven and pre-specified, with the record from R3 as supporting evidence | Manual review only | None |
 

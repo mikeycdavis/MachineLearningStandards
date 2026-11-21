@@ -14,9 +14,7 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true,
-      "triggers": [
-        "training-code"
-      ],
+      "triggers": ["training-code"],
       "introducedIn": "1.0.0",
       "description": "A record states what is being predicted, at what unit and for which population, what decision the output feeds, and the relative cost of each kind of error — and it exists before the first model is trained.",
       "rationale": "Every later choice follows from these answers: the metric from the cost asymmetry, the split from the unit of prediction, the calibration requirement from the decision the output feeds. A project that skips the record does not avoid the decisions, it makes them implicitly and can never afterwards explain them.",
