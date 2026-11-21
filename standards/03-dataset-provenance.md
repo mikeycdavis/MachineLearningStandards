@@ -81,6 +81,14 @@ Purpose explains label and sampling choices; an owner is whom to ask; counts and
 
 **The record SHOULD name the tasks for which the dataset should not be used, and anything in its composition, collection, preprocessing, cleaning or labelling that might affect future uses.**
 
+### R8 — Distribution, licence and third-party restrictions are recorded
+
+**The dataset record SHOULD state whether the dataset is distributed to third parties outside the entity it was created for and on what permission basis, the licence or terms of use it is distributed under, and any intellectual-property or other restrictions third parties have imposed on it.** Where unknown, the record says so.
+
+### R9 — Confidentiality, identifiability and sensitive content are recorded, or recorded as unknown
+
+**The record SHOULD state whether the data may be confidential or legally privileged, whether individuals can be identified from it directly or indirectly and on what basis, and whether it holds sensitive content; this includes training, validation and vocabulary data.** An unassessed question is recorded as unknown, not left blank. **No protected or sensitive attribute needs to be collected to answer it.** Privacy and legal controls on the data are outside this standard's scope; they belong to a privacy and data-governance standard, and this recommendation only requires that the record states what is known.
+
 ## Prohibitions
 
 ### P1 — No fabricated datasets
@@ -126,6 +134,7 @@ mentioned, is this prohibition.
 | R3 | An `## Exclusions` section listing each rule with counts and proportions | Same document scan | Partial — the heading's presence is structural; whether it lists *every* exclusion cannot be established from the repository |
 | R4 | Input dataset versions named in the derived dataset's record | Manual review | None |
 | R5, R6, R7 | The same document, covering purpose, owner, counts, sampling, missingness, known errors and out-of-scope uses | Manual review | None — a recommendation; no detector |
+| R8, R9 | The dataset record's distribution, licence, restriction, confidentiality, identifiability and sensitivity statements | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that the data is what its documentation says it is | Manual review only | None |
 | P2 | Attestation that exclusions were rule-driven and pre-specified, with the record from R3 as supporting evidence | Manual review only | None |
 
@@ -149,6 +158,7 @@ visible.
 - R4's extension of provenance to derived datasets, and the treatment of synthetic data in P1.
   Both are this standard's reasoning about cases the source does not name.
 - R5 to R7 are recommendations added by the C7 completeness work (issue #44, Story 1). Each answers a documentation question from the Datasheets-for-datasets and REFORMS reference sets that this standard did not ask. They are SHOULD-level and carry no detector.
+- R8 and R9 are recommendations added by the C7 completeness work (issue #44, Story 2, #71). Privacy and legal controls are a recorded scope exclusion; R9 asks only that the record state the known status or unknown.
 - The observation that dropping rows with missing values removes a population rather than noise.
 
 ## Relationship to other standards

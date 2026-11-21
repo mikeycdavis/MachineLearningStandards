@@ -187,6 +187,60 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "data.distribution-and-licence-recorded",
+      "kind": "recommendation",
+      "title": "Distribution, licence and third-party restrictions are recorded",
+      "standard": 3,
+      "requirement": "R8",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record states whether the dataset is distributed to third parties outside the entity it was created for and on what permission basis, the copyright or other licence and terms of use it is distributed under, and any intellectual-property or other restrictions third parties have imposed on the data.",
+      "rationale": "Distribution, licence and third-party restrictions govern what a dataset may lawfully be used for, and a model trained on data used outside its terms inherits the breach. Recording them where the dataset is described makes the question answerable by someone who was not there.",
+      "remediation": "Add distribution, licence or terms of use, and third-party restrictions to the dataset record, or state that they are unknown.",
+      "evidenceExpected": "A dataset record stating whether the data is distributed externally and on what basis, the licence or terms, and any third-party restrictions, or an explicit unknown.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement about licence, permission or sensitivity is true is a judgement about the data and its history, and a scan does not read either.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "data.sensitivity-status-recorded",
+      "kind": "recommendation",
+      "title": "Whether the data is confidential, identifies individuals or is sensitive is recorded, or recorded as unknown",
+      "standard": 3,
+      "requirement": "R9",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record states whether the data may be confidential or legally privileged, whether individuals can be identified from it directly or indirectly and on what basis, and whether it holds sensitive content, including personal data in training, validation and vocabulary files. Where this has not been assessed the record says unknown.",
+      "rationale": "A model trained on data whose sensitivity nobody assessed carries that sensitivity silently. Recording the status, or recording that it is unknown, separates not looked at from looked at and absent. No protected attribute needs to be collected to answer it.",
+      "remediation": "Add a sensitivity statement to the dataset record: confidential or privileged content, whether individuals are identifiable and how that was assessed, and sensitive content, each as yes, no with basis, or unknown.",
+      "evidenceExpected": "A dataset record with a confidentiality, identifiability and sensitive-content statement for each dataset, each answered yes, no with basis, or unknown.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement about licence, permission or sensitivity is true is a judgement about the data and its history, and a scan does not read either.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
