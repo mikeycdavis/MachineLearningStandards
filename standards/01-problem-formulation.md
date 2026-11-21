@@ -128,6 +128,7 @@ labels stand for.
 | R1–R4 | A problem-definition document, or a model card whose intended-use and target sections carry this content | Manual review | None |
 | R5 | Attestation stating when the formulation was written relative to the first model, with commit history as supporting evidence | Manual review | None |
 | R6 | Where R1 and R3 name different quantities, a recorded statement of what the label measures, what the decision needs, and the divergences known between them | Manual review | None |
+| R7 | The problem-definition record, stating the motivation for the population and for using machine learning | Manual review | None — a recommendation; no detector |
 
 **Why nothing automated applies here.** A scanner can find a document with a heading. It cannot
 determine whether a target definition is precise enough to label an observation unambiguously,
@@ -144,6 +145,7 @@ because a model card's existence says nothing about whether the problem behind i
 
 ## Additions this standard makes beyond the source
 
+- R7 is a recommendation added by the C7 completeness work (issue #44, Story 1): the motivation for the population and for using machine learning. It is SHOULD-level and carries no detector.
 - The worked contrast in R1 between "churn" and a fully specified target definition. The source
   requires that the prediction target be recorded; the illustration of what precision means is this
   standard's.

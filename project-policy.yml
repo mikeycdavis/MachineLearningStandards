@@ -44,17 +44,17 @@ applicability:
   data.purpose-and-composition-recorded:
     status: not-applicable
     reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from, so there is no dataset record to extend."
-    reviewedAt: "2026-11-21"
+    reviewedAt: "2026-11-20"
     revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
   data.quality-limitations-recorded:
     status: not-applicable
     reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from, so there is no dataset record to extend."
-    reviewedAt: "2026-11-21"
+    reviewedAt: "2026-11-20"
     revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
   data.permitted-use-recorded:
     status: not-applicable
     reason: "No dataset exists here. The only tabular files are test fixtures, which exist to exercise detectors and are never trained on, evaluated against, or reported from, so there is no dataset record to extend."
-    reviewedAt: "2026-11-21"
+    reviewedAt: "2026-11-20"
     revisitWhen: "Any dataset is added to this repository, or a fixture begins being used as data rather than as a test input."
 
   # ---- deployment ----
@@ -176,7 +176,7 @@ applicability:
   framing.population-and-ml-motivation-stated:
     status: not-applicable
     reason: "This repository formulates no prediction problem and chooses no population or learning method. It contains normative documents, a command-line tool, and its tests."
-    reviewedAt: "2026-11-21"
+    reviewedAt: "2026-11-20"
     revisitWhen: "Any modelling work is added to this repository."
 
   # ---- integrity ----
