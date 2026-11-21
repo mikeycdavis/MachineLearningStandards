@@ -67,6 +67,20 @@ dataset nobody trained on. This connects to [Standard 4](04-dataset-versioning.m
 the identifiers, and [Standard 17](17-feature-lineage.md), which extends the same reasoning to
 individual features.
 
+### R5 — The record states purpose, owner, size, sampling and suitability
+
+**The dataset record SHOULD state the purpose and task the dataset was created for, who created it and on behalf of which entity, the total number of instances for each task type, and, where the dataset is a sample of a larger set, the sampling strategy and why that set suits the task.** It SHOULD also say why the dataset is suitable for the modelling task at hand.
+
+Purpose explains label and sampling choices; an owner is whom to ask; counts and sampling strategy bound what the data can support.
+
+### R6 — Missing information, errors, noise and redundancy are recorded
+
+**The record SHOULD describe information missing from individual instances and why, give the percentage of missing data (split by class for a categorical outcome), and describe known errors, sources of noise and redundancies.** This extends R3: R3 records what was removed; this records what was never there or is known to be wrong.
+
+### R7 — Out-of-scope uses and effects on future uses are stated
+
+**The record SHOULD name the tasks for which the dataset should not be used, and anything in its composition, collection, preprocessing, cleaning or labelling that might affect future uses.**
+
 ## Prohibitions
 
 ### P1 — No fabricated datasets
@@ -111,6 +125,7 @@ mentioned, is this prohibition.
 | R1, R2 | A dataset card or provenance document naming origin, collection, population, and unit of observation | `scan` looks for `DATASET.md`, `DATA_CARD.md`, or a document carrying `## Provenance` / `## Collection` headings | Partial — presence of the document, never the truth of its contents |
 | R3 | An `## Exclusions` section listing each rule with counts and proportions | Same document scan | Partial — the heading's presence is structural; whether it lists *every* exclusion cannot be established from the repository |
 | R4 | Input dataset versions named in the derived dataset's record | Manual review | None |
+| R5, R6, R7 | The same document, covering purpose, owner, counts, sampling, missingness, known errors and out-of-scope uses | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that the data is what its documentation says it is | Manual review only | None |
 | P2 | Attestation that exclusions were rule-driven and pre-specified, with the record from R3 as supporting evidence | Manual review only | None |
 
@@ -133,6 +148,7 @@ visible.
   possible violation.
 - R4's extension of provenance to derived datasets, and the treatment of synthetic data in P1.
   Both are this standard's reasoning about cases the source does not name.
+- R5 to R7 are recommendations added by the C7 completeness work (issue #44, Story 1). Each answers a documentation question from the Datasheets-for-datasets and REFORMS reference sets that this standard did not ask. They are SHOULD-level and carry no detector.
 - The observation that dropping rows with missing values removes a population rather than noise.
 
 ## Relationship to other standards

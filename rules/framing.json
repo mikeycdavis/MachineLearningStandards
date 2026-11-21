@@ -48,6 +48,30 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "framing.population-and-ml-motivation-stated",
+      "kind": "recommendation",
+      "title": "The motivation for the population and for using machine learning is stated",
+      "standard": 1,
+      "requirement": "R7",
+      "category": "framing",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [],
+      "introducedIn": "1.2.0",
+      "description": "The problem-definition record states why this population or distribution was chosen and why machine-learning methods are used for the problem at all.",
+      "rationale": "A population chosen by convenience and a method chosen by habit produce a model whose scope and necessity nobody can later defend. Stating the motivation exposes both to review before modelling begins.",
+      "remediation": "Add two short statements to the problem-definition record: why this population or distribution, and why machine learning rather than a non-learned approach.",
+      "evidenceExpected": "A problem-definition record containing the population-choice motivation and the motivation for using machine learning.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement is accurate and sufficient is a judgement about prose, and a scan cannot make it.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

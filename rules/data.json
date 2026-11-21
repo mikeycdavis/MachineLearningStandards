@@ -106,6 +106,87 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "data.purpose-and-composition-recorded",
+      "kind": "recommendation",
+      "title": "The dataset's purpose, owner, size, sampling and suitability are recorded",
+      "standard": 3,
+      "requirement": "R5",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record states the purpose and task the dataset was created for, who created it and on whose behalf, the total number of instances for each task type, the sampling strategy if it is a sample of a larger set, why the set it was drawn from suits the task, and why the dataset is suitable for the modelling task at hand.",
+      "rationale": "A dataset assembled for one purpose and reused for another carries label and sampling choices that were reasonable for the first and unexamined for the second. Without the owner, the size and the sampling strategy, a reader cannot judge what the data can support or whom to ask.",
+      "remediation": "Extend the dataset card with purpose, creator and owning entity, instance counts per task type, the sampling strategy and the justification for the sampling frame, and a short statement of why the dataset suits the modelling task.",
+      "evidenceExpected": "A dataset card or provenance document stating purpose, creator, instance counts, sampling strategy, sampling-frame justification and task suitability.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement is accurate and sufficient is a judgement about prose, and a scan cannot make it.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "data.quality-limitations-recorded",
+      "kind": "recommendation",
+      "title": "Missing information, errors, noise and redundancy are recorded with their rates",
+      "standard": 3,
+      "requirement": "R6",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record describes information missing from individual instances and why it is missing, states the percentage of missing data (split by class for a categorical outcome), and describes known errors, sources of noise and redundancies.",
+      "rationale": "Missingness and noise are properties of the data that no model-side check recovers. A model trained on data whose missing values are concentrated in one class learns that concentration as signal.",
+      "remediation": "Add to the dataset record the missing-data description and its cause, the percentage of missing data (split by class where the outcome is categorical), and the known errors, noise sources and redundancies.",
+      "evidenceExpected": "A dataset record with the percentage of missing data (split by class where the outcome is categorical), the reason for missingness, and a list of known errors, noise and redundancy.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement is accurate and sufficient is a judgement about prose, and a scan cannot make it.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "data.permitted-use-recorded",
+      "kind": "recommendation",
+      "title": "The dataset record states what it must not be used for and what may affect future uses",
+      "standard": 3,
+      "requirement": "R7",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record states the tasks for which the dataset should not be used, and anything about its composition, collection, preprocessing, cleaning or labelling that might affect future uses.",
+      "rationale": "Conclusions drawn from a dataset are valid only for the uses its composition supports. A recorded boundary lets a later project check its use against it instead of rediscovering the limit through failure.",
+      "remediation": "Add an intended-use and out-of-scope-use section to the dataset record, including known collection and preprocessing effects on later use.",
+      "evidenceExpected": "A dataset record section naming unsuitable tasks and known composition or preprocessing impacts on future uses.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a written statement is accurate and sufficient is a judgement about prose, and a scan cannot make it.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
