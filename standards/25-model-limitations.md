@@ -76,7 +76,7 @@ missing, and the correction belongs in the document rather than only in the inci
 
 ### R7 — Independent involvement in assessments is recorded
 
-**Regular assessments and updates of the model SHOULD involve internal experts who did not serve as front-line developers, or independent assessors. Where none is available the record states the reason.** This is a SHOULD with a recorded reason, not an unconditional MUST: small teams and early projects cannot always supply an independent reviewer, and an unsatisfiable requirement teaches waiving.
+**Regular assessments and updates of the model SHOULD involve internal experts who did not serve as front-line developers, or independent assessors. Where none is available the record states the reason.** This is a SHOULD with a recorded reason, not an unconditional rule: small teams and early projects cannot always supply an independent reviewer, and an unsatisfiable requirement teaches waiving.
 
 ### R8 — The model is explained and its output is interpreted in context
 

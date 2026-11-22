@@ -31,3 +31,9 @@ test("nothing outside the unreleased 2.0.0 additions claims a new requirement or
   const added = [...catalog.rules.values()].filter((r) => r.introducedIn === "1.2.0" && r.kind !== "recommendation");
   assert.deepEqual(added, []);
 });
+
+test("independent assessment is a recommendation with a recorded reason when unavailable", () => {
+  const r = catalog.rules.get("evaluation.independent-assessment-recorded");
+  assert.match(r.description, /Where no such reviewer is available, the record states the reason/);
+  assert.equal(r.level, "recommended");
+});
