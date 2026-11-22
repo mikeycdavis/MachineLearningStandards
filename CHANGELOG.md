@@ -60,6 +60,10 @@ this tree; they are recorded as unreconciled and are not reconciled here.
 
 - `monitoring.staleness-impact-known` (Standard 24 R7); `monitoring.model-age-bounded` (Standard 24 R8); `monitoring.numerical-stability-checked` (Standard 24 R9). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 3 baseline entries appended, pending human review.
 
+### Added (recommendations, MINOR class; Story 9 of issue #44, #78)
+
+- `evaluation.metric-appropriateness-reassessed` (Standard 12 R7); `evaluation.evaluation-process-effectiveness-assessed` (Standard 12 R8); `evaluation.independent-assessment-recorded` (Standard 25 R7); `evaluation.model-explained-and-output-interpreted` (Standard 25 R8). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 4 baseline entries appended, pending human review.
+
 ### Added (requirements)
 
 - `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where

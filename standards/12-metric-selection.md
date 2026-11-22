@@ -82,6 +82,14 @@ different segments, are not disagreeing — they are reporting different quantit
 
 **Where a model is judged offline by a proxy metric but its impact is measured online, the metric rationale SHOULD state whether the offline metric has been checked against that online impact, and how.** Where it has not been checked the rationale says so. A proxy that improves while the online outcome does not is a common way a model ships on a number that has stopped meaning anything.
 
+### R7 — Metric appropriateness is reassessed periodically
+
+**The appropriateness of the chosen metrics, and the effectiveness of the controls around them, SHOULD be reassessed on a stated cadence or on defined triggers, taking account of reported errors and impacts, and each reassessment and its outcome SHOULD be recorded.** R2 fixes the metric before results exist; this asks that the choice be revisited as the use changes.
+
+### R8 — The evaluation process is itself evaluated
+
+**The record SHOULD state how the effectiveness of the evaluation metrics and processes was itself evaluated — for example by confirming they would detect a seeded defect or a known regression — and document the outcome, or state that it has not been done.**
+
 ## Prohibitions
 
 ### P1 — Metrics are chosen for the problem, not the result
@@ -125,6 +133,8 @@ does, because it weights the two identically by construction.
 | R3, R5 | An evaluation document reporting the agreed metric set with thresholds and populations | Manual review | None |
 | R4 | A limitations note beside each reported metric | Manual review | None |
 | R6 | A metric rationale stating the online outcome and the offline-to-online comparison, or that none has been made | Manual review | None — a recommendation; no detector |
+| R7 | A stated reassessment cadence or triggers, and a dated record of each reassessment | Manual review | None — a recommendation; no detector |
+| R8 | A record of the check made on the evaluation process and its outcome, or a statement that none was made | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that the metric was fixed before its value was known, with the R2 record as supporting evidence | Manual review only | None |
 | P2 | Attestation that accuracy, where reported, was chosen against the problem's cost structure | Manual review only | None |
 
@@ -152,6 +162,8 @@ right ones. Every rule and both prohibitions here report `not-evaluated`.
   inadequate on a balanced problem with asymmetric costs, which the imbalance framing alone misses.
 - The specific limitation examples in R4, which are illustrative and authored.
 - R6 is a recommendation added by the C7 completeness work (issue #44, Story 7, #76), from the source's offline-proxy-versus-online-impact item.
+- R7 is a recommendation added by the C7 completeness work (issue #44, Story 9, #78), from the source's regular-assessment-of-metrics item.
+- R8 is a recommendation added by the C7 completeness work (issue #44, Story 9, #78), from the source's effectiveness-of-TEVV item.
 
 ## Relationship to other standards
 

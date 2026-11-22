@@ -401,3 +401,27 @@ applicability:
     reason: "No model is trained or served here, so there are no numeric values to check."
     reviewedAt: "2026-11-22"
     revisitWhen: "Any training or serving code is added to this repository."
+
+  evaluation.metric-appropriateness-reassessed:
+    status: not-applicable
+    reason: "No model is evaluated here, so there are no metrics to reassess."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any model evaluation is added to this repository."
+
+  evaluation.evaluation-process-effectiveness-assessed:
+    status: not-applicable
+    reason: "No evaluation process is run here, so there is none to assess."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any model evaluation is added to this repository."
+
+  evaluation.independent-assessment-recorded:
+    status: not-applicable
+    reason: "No model is developed or assessed here, so there is no assessment to involve an independent reviewer in."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any model development or assessment is added to this repository."
+
+  evaluation.model-explained-and-output-interpreted:
+    status: not-applicable
+    reason: "No model is produced here, so there is no model to explain or output to interpret."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any model or model card is added to this repository."

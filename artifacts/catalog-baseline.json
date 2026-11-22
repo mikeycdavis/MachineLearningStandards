@@ -752,6 +752,46 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true
+    },
+    {
+      "id": "evaluation.metric-appropriateness-reassessed",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "evaluation.evaluation-process-effectiveness-assessed",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "evaluation.independent-assessment-recorded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "evaluation.model-explained-and-output-interpreted",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
     }
   ]
 }
