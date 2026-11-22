@@ -40,6 +40,10 @@ this tree; they are recorded as unreconciled and are not reconciled here.
 
 - `data.errata-and-update-policy-recorded` (Standard 4 R5) and `data.prior-uses-recorded` (R6). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. Two baseline entries appended, pending human review.
 
+### Added (recommendations, MINOR class; Story 4 of issue #44, #73)
+
+- `evaluation.fairness-applicability-assessed` (Standard 25 R6) and `data.subpopulations-identified-or-unknown` (Standard 3 R10), under the conditional scope of ADR 0009. Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. No protected attribute is required to be collected. Two baseline entries appended, pending human review.
+
 ### Added (requirements)
 
 - `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where

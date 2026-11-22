@@ -612,6 +612,26 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true
+    },
+    {
+      "id": "evaluation.fairness-applicability-assessed",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "data.subpopulations-identified-or-unknown",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
     }
   ]
 }

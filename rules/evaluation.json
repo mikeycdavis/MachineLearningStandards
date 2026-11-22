@@ -470,6 +470,33 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "evaluation.fairness-applicability-assessed",
+      "kind": "recommendation",
+      "title": "Whether group-performance analysis applies is assessed and the outcome recorded",
+      "standard": 25,
+      "requirement": "R6",
+      "category": "evaluation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code",
+        "deployment-surface"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The evaluation or model card states whether the model makes, informs, ranks, allocates, denies, recommends or materially influences outcomes for people or identifiable groups, and records one of three outcomes: applicable, with the group performance differences examined and the results documented; not applicable, with the basis; or not evaluated, recorded as unknown with the reason, for example that no lawful group attribute is available. The assessment covers inclusion and fairness considerations.",
+      "rationale": "The absence of group attributes is not evidence that fairness is irrelevant, and the two are routinely confused in the direction that makes the question disappear. Recording one of three outcomes separates not applicable from not looked at. No protected attribute needs to be collected to satisfy it, since collecting one solely to measure fairness can itself be unlawful or a privacy harm.",
+      "remediation": "Add a short applicability statement to the evaluation or model card: who the model's outputs affect, and then applicable with the group results, not applicable with the basis, or not evaluated with the reason. Do not collect a protected attribute only to fill this in.",
+      "evidenceExpected": "An applicability statement in the evaluation document or model card with one of the three outcomes and its basis, and the documented group results where it is applicable.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a system affects people, whether the chosen groups are the meaningful ones, and whether a not-applicable basis is sound are judgements about the system's use; a scan cannot read any of them. Concealment of a known weak segment stays with evaluation.no-hidden-segments.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
