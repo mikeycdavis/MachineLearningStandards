@@ -497,6 +497,85 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "evaluation.offline-online-metric-correlation-checked",
+      "kind": "recommendation",
+      "title": "Offline proxy metrics are checked against the online impact they stand for",
+      "standard": 12,
+      "requirement": "R6",
+      "category": "evaluation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code",
+        "deployment-surface"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "Where a model is judged offline by a proxy metric but its real impact is measured online, for example by engagement or user outcomes, the record states whether the offline metric has been checked against that online impact, and how. Where it has not been checked, the record says so.",
+      "rationale": "An offline metric that improves while the online outcome does not is the common way a model is shipped on the strength of a number that no longer means anything. Recording whether the correlation was checked separates a validated proxy from an assumed one.",
+      "remediation": "Add a statement to the metric rationale: which online outcome the offline metric stands for, how the two were compared, or that the comparison has not been made.",
+      "evidenceExpected": "A metric rationale stating the online outcome, the comparison made between it and the offline metric, or that none has been made.",
+      "$assuranceNote": "Nothing automated establishes this. Whether an offline metric tracks an online outcome is an empirical question about a deployed system that the repository does not hold.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "evaluation.model-family-choice-justified",
+      "kind": "recommendation",
+      "title": "The choice of model types implemented is justified",
+      "standard": 19,
+      "requirement": "R5",
+      "category": "evaluation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The record justifies the choice of the model types that were implemented and compared, stating why those families were chosen and what simpler or alternative families were considered.",
+      "rationale": "A model family chosen by habit or novelty, with no stated alternatives, cannot be told apart from one chosen for good reason, and a stronger or simpler alternative may never have been tried.",
+      "remediation": "Add a short justification of the model families chosen and the alternatives considered, including a simple baseline.",
+      "evidenceExpected": "A statement in the comparison record giving the reason for each model type implemented and the alternatives considered.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a justification is sound is a judgement about the problem and the candidates that a scan does not read.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "evaluation.statistical-test-justified",
+      "kind": "recommendation",
+      "title": "The choice of statistical test is justified and its assumptions checked",
+      "standard": 19,
+      "requirement": "R6",
+      "category": "evaluation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "Where a statistical test is used to compare models, the record justifies the choice of test and states how its assumptions, such as independence or distributional form, were checked or why they are believed to hold.",
+      "rationale": "A test applied where its assumptions fail produces a confident number about nothing. Cross-validation folds, for instance, are not independent, and a test that assumes independence overstates certainty.",
+      "remediation": "State which test was used and why, and record the check of its assumptions or the reason they are expected to hold.",
+      "evidenceExpected": "A statement beside each reported test giving the reason for the test and the assumption check made.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a test suits the data and whether its assumptions hold are statistical judgements about work the repository records only as output.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
