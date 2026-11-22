@@ -89,6 +89,10 @@ Purpose explains label and sampling choices; an owner is whom to ask; counts and
 
 **The record SHOULD state whether the data may be confidential or legally privileged, whether individuals can be identified from it directly or indirectly and on what basis, and whether it holds sensitive content; this includes training, validation and vocabulary data.** An unassessed question is recorded as unknown, not left blank. **No protected or sensitive attribute needs to be collected to answer it.** Privacy and legal controls on the data are outside this standard's scope; they belong to a privacy and data-governance standard, and this recommendation only requires that the record states what is known.
 
+### R10 — Subpopulations are identified, or recorded as not identified or unknown
+
+**The dataset record SHOULD state whether the dataset identifies any subpopulations, for example by age or gender, and if it does, how they are identified and how the data is distributed across them.** Where it does not, or where recording such an attribute would be unlawful or inappropriate, the record says so, and an unassessed question is recorded as unknown. **No protected or sensitive attribute needs to be collected to answer it.** What the dataset can name bounds what group-level analysis can show; see [Standard 25 R6](25-model-limitations.md) and [ADR 0009](../artifacts/adr/0009-fairness-is-conditionally-in-scope.md).
+
 ## Prohibitions
 
 ### P1 — No fabricated datasets
@@ -135,6 +139,7 @@ mentioned, is this prohibition.
 | R4 | Input dataset versions named in the derived dataset's record | Manual review | None |
 | R5, R6, R7 | The same document, covering purpose, owner, counts, sampling, missingness, known errors and out-of-scope uses | Manual review | None — a recommendation; no detector |
 | R8, R9 | The dataset record's distribution, licence, restriction, confidentiality, identifiability and sensitivity statements | Manual review | None — a recommendation; no detector |
+| R10 | The dataset record's subpopulation statement | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that the data is what its documentation says it is | Manual review only | None |
 | P2 | Attestation that exclusions were rule-driven and pre-specified, with the record from R3 as supporting evidence | Manual review only | None |
 
@@ -159,6 +164,7 @@ visible.
   Both are this standard's reasoning about cases the source does not name.
 - R5 to R7 are recommendations added by the C7 completeness work (issue #44, Story 1). Each answers a documentation question from the Datasheets-for-datasets and REFORMS reference sets that this standard did not ask. They are SHOULD-level and carry no detector.
 - R8 and R9 are recommendations added by the C7 completeness work (issue #44, Story 2, #71). Privacy and legal controls are a recorded scope exclusion; R9 asks only that the record state the known status or unknown.
+- R10 is a recommendation added by the C7 completeness work (issue #44, Story 4, #73), under the conditional scope of [ADR 0009](../artifacts/adr/0009-fairness-is-conditionally-in-scope.md). It asks the record to say what is identified, not to collect anything.
 - The observation that dropping rows with missing values removes a population rather than noise.
 
 ## Relationship to other standards

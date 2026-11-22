@@ -70,6 +70,10 @@ document does not contain.** Monitoring under [Standard 24](24-monitoring.md) pr
 evidence: a segment whose realised performance has degraded is a limitation the model card is
 missing, and the correction belongs in the document rather than only in the incident record.
 
+### R6 — Whether group-performance analysis applies is assessed, and the outcome recorded
+
+**The evaluation or model card SHOULD state whether the model makes, informs, ranks, allocates, denies, recommends or materially influences outcomes for people or identifiable groups, and record one of three outcomes: applicable, with the group performance differences examined and the results documented; not applicable, with the basis; or not evaluated, recorded as unknown with the reason.** This is the conditional scope of [ADR 0009](../artifacts/adr/0009-fairness-is-conditionally-in-scope.md): it is not a requirement to report protected-group performance. **No protected attribute needs to be collected to satisfy it**, and the absence of group attributes is not evidence that the question is irrelevant. Concealing a known weak segment remains P1's concern.
+
 ## Prohibitions
 
 ### P1 — Weak segments are reported, not hidden
@@ -103,6 +107,7 @@ that the number exists, and only the first can be waived.
 | R3 | A stated assumptions section naming period, population, and upstream dependencies | Manual review, supported by A8's structural finding | None for content |
 | R4 | Failure modes stated with the condition and its prevalence | Manual review only | None |
 | R5 | A revision history tying document updates to production findings | Manual review only | None |
+| R6 | An applicability statement with one of three outcomes and its basis | Manual review only | None — a recommendation; no detector |
 | P1 | Attestation that the reported segments are the full set computed, with any withheld segment disclosed | Manual review only | None |
 
 **What the automated check cannot establish.** Detector A8 reports whether a model-card document or
@@ -135,6 +140,7 @@ does not is indistinguishable from a model with no meaningful segments.
   the treatment of post-hoc reaggregation as a form of hiding. The source names the act; separating
   it from R2's oversight case is this standard's interpretation, without which every incomplete
   evaluation reads as a possible violation.
+- R6 is a recommendation added by the C7 completeness work (issue #44, Story 4, #73). It covers the source's inclusion, ethics and fairness-evaluation items as an applicability assessment under ADR 0009, not as a fairness metric requirement.
 - The bounded exemption in P1 for segments withheld for privacy or legal reasons, together with the
   requirement that the withholding itself be disclosed.
 

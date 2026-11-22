@@ -293,6 +293,33 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "data.subpopulations-identified-or-unknown",
+      "kind": "recommendation",
+      "title": "Whether the dataset identifies subpopulations, and how, is recorded or recorded as unknown",
+      "standard": 3,
+      "requirement": "R10",
+      "category": "data",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "data-artifacts",
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The dataset record states whether the dataset identifies any subpopulations, for example by age or gender, and if it does, how they are identified and what the distribution across them is. Where subpopulations are not identified, or where recording them would be unlawful or inappropriate, the record says so rather than leaving the question blank.",
+      "rationale": "Group-level analysis is only possible for groups the data can name, so what the dataset does and does not identify bounds what any later analysis can show. Recording it, including recording not identified or unknown, keeps a missing attribute from being read as an absence of the issue. No protected or sensitive attribute needs to be collected to answer it.",
+      "remediation": "Add a subpopulation statement to the dataset record: whether subpopulations are identified, by what method, and their distribution, or not identified, or unknown, with the reason.",
+      "evidenceExpected": "A dataset record with a subpopulation statement for each dataset: identified with method and distribution, not identified, or unknown, each with a reason.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a stated identification method is accurate, and whether an attribute should be recorded at all, are judgements about the data and the law that a scan does not read.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
