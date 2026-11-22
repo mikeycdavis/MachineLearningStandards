@@ -56,6 +56,10 @@ this tree; they are recorded as unreconciled and are not reconciled here.
 
 - `evaluation.offline-online-metric-correlation-checked` (Standard 12 R6); `split.hyperparameter-coverage-stated` (Standard 14 R5); `evaluation.model-family-choice-justified` (Standard 19 R5); `evaluation.statistical-test-justified` (Standard 19 R6). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 4 baseline entries appended, pending human review.
 
+### Added (recommendations, MINOR class; Story 8 of issue #44, #77)
+
+- `monitoring.staleness-impact-known` (Standard 24 R7); `monitoring.model-age-bounded` (Standard 24 R8); `monitoring.numerical-stability-checked` (Standard 24 R9). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 3 baseline entries appended, pending human review.
+
 ### Added (requirements)
 
 - `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where

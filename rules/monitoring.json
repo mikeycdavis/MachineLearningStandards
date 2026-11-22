@@ -122,6 +122,85 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "monitoring.staleness-impact-known",
+      "kind": "recommendation",
+      "title": "The effect of model staleness on quality is known",
+      "standard": 24,
+      "requirement": "R7",
+      "category": "monitoring",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "deployment-surface"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "Where the model serves non-stationary data, the record states how much prediction quality is lost as the model ages, for example by evaluating an older model version on current data, or states that the effect has not been measured.",
+      "rationale": "Without knowing how fast a model decays, a retraining schedule is a guess. Measuring the decay, or recording that it has not been measured, turns the schedule into a decision with a basis.",
+      "remediation": "Evaluate a previous model version on recent data and record the quality difference against model age, or record that the effect is unknown.",
+      "evidenceExpected": "A record of quality as a function of model age, or a statement that the effect of staleness has not been measured.",
+      "$assuranceNote": "Nothing automated establishes this. The measurement needs production data and model history that live outside the repository, and whether it was done soundly is a judgement about that data.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "monitoring.model-age-bounded",
+      "kind": "recommendation",
+      "title": "Model age is monitored against a stated limit",
+      "standard": 24,
+      "requirement": "R8",
+      "category": "monitoring",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "deployment-surface"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The monitoring specification states the maximum acceptable age of the deployed model, informed by the measured effect of staleness where known, and the age of the deployed model is monitored against that limit with a defined response when it is exceeded.",
+      "rationale": "A model that nobody is watching the age of becomes stale silently. A stated limit and an alert on it make staleness an operational signal rather than a surprise.",
+      "remediation": "Add a model-age signal to the monitoring specification with the limit, its basis and the response when it is exceeded.",
+      "evidenceExpected": "A monitoring specification entry for model age with a limit, its basis and a defined response.",
+      "$assuranceNote": "Nothing automated establishes this. The signal and its alert live in the running service, and whether the limit is adequate is a judgement about the system.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "monitoring.numerical-stability-checked",
+      "kind": "recommendation",
+      "title": "The model is checked for numerical stability",
+      "standard": 24,
+      "requirement": "R9",
+      "category": "monitoring",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code",
+        "deployment-surface"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "Training and serving include checks for invalid or implausible numeric values, such as NaN or infinite values in weights, activations, losses or outputs, and the record states what is checked, where, and what happens when one is found.",
+      "rationale": "Invalid numeric values can appear during training or serving without raising an error, and then propagate silently into results. A check that fails loudly converts a silent corruption into a visible one.",
+      "remediation": "Add checks for NaN, infinite and out-of-range values to training and serving, and record what each check covers and the response when it fires.",
+      "evidenceExpected": "A description of the numeric checks in training and serving, what they cover and the response when one fires.",
+      "$assuranceNote": "Nothing automated establishes this. Whether the checks cover the values that matter, and whether they run in production, are judgements about the code and the service.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

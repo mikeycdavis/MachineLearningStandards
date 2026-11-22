@@ -82,6 +82,18 @@ no evidence at all.
 
 **Training speed, serving latency, throughput and memory use SHOULD be tracked over time against a stated baseline**, so that a sudden regression or a slow leak is noticed and dispositioned. Cost degradation rarely trips a single threshold, which is why it needs a trend rather than only an alert. Recording the resources of a run is [Standard 15 R5](15-reproducibility.md).
 
+### R7 — The effect of model staleness is known
+
+**Where a model serves non-stationary data, the monitoring record SHOULD state how much prediction quality is lost as the model ages — for example by evaluating an older model version on current data — or that the effect has not been measured.** This is the evidence a retraining schedule under [Standard 22](22-retraining.md) rests on.
+
+### R8 — Model age is monitored against a stated limit
+
+**The monitoring specification SHOULD state the maximum acceptable age of the deployed model, informed by R7 where known, and the model's age SHOULD be monitored against that limit with a defined response when it is exceeded.**
+
+### R9 — The model is checked for numerical stability
+
+**Training and serving SHOULD include checks for invalid or implausible numeric values — NaN or infinite values in weights, activations, losses or outputs — and the record SHOULD state what is checked, where, and the response when one is found.** Such values can arise without an explicit error and propagate silently into results.
+
 ## Evidence and verification
 
 | Rule | What demonstrates compliance | How it is verified | Assurance |
@@ -92,6 +104,9 @@ no evidence at all.
 | R4 | Thresholds and named owners recorded against each alerting signal | Manual review only | None |
 | R5 | Staleness or heartbeat checks on the monitoring signals themselves | Manual review only | None |
 | R6 | Baselines and regression tracking for training speed, latency, throughput and memory | Manual review only | None |
+| R7 | A record of quality against model age, or a statement that it is unmeasured | Manual review | None — a recommendation; no detector |
+| R8 | A model-age signal with a limit, its basis and a response | Manual review | None — a recommendation; no detector |
+| R9 | A description of the numeric checks in training and serving, their coverage and response | Manual review | None — a recommendation; no detector |
 
 **Why nothing automated applies here.** `monitoring.production-monitoring-defined` is not evaluated.
 Every subject of this standard is outside the repository: the running service, the metrics backend,
@@ -120,6 +135,9 @@ attestation that names the monitoring specification and the on-call arrangement 
 - The inclusion of the malformed-input rejection rate from [Standard 23](23-inference-behavior.md)
   among R1's input-health signals.
 - R6 is a recommendation added by the C7 completeness work (issue #44, Story 5, #74), from the source's computational-regression monitoring item.
+- R7 is a recommendation added by the C7 completeness work (issue #44, Story 8, #77), from the source's staleness-impact item.
+- R8 is a recommendation added by the C7 completeness work (issue #44, Story 8, #77), from the source's models-are-not-too-stale item.
+- R9 is a recommendation added by the C7 completeness work (issue #44, Story 8, #77), from the source's numerical-stability item.
 
 ## Relationship to other standards
 

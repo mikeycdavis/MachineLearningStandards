@@ -722,6 +722,36 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true
+    },
+    {
+      "id": "monitoring.staleness-impact-known",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "monitoring.model-age-bounded",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "monitoring.numerical-stability-checked",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
     }
   ]
 }
