@@ -341,3 +341,21 @@ applicability:
     reason: "No model is deployed or served here, so there is no training speed, latency, throughput or memory use to track."
     reviewedAt: "2026-11-22"
     revisitWhen: "Any deployed model or serving component is added to this repository."
+
+  reproducibility.compute-environment-described:
+    status: not-applicable
+    reason: "No experiments are run here, so there is no computing infrastructure to describe."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any experiment or training run is added to this repository."
+
+  reproducibility.reproduction-instructions-provided:
+    status: not-applicable
+    reason: "No results are reported from this repository, so there is nothing to reproduce."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any experiment or reported result is added to this repository."
+
+  reproducibility.pipeline-integration-tested:
+    status: not-applicable
+    reason: "There is no ML pipeline in this repository to integration test."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any training or data pipeline is added to this repository."
