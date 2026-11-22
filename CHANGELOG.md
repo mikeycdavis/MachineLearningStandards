@@ -48,6 +48,10 @@ this tree; they are recorded as unreconciled and are not reconciled here.
 
 - `reproducibility.resource-cost-recorded` (Standard 15 R5) and `monitoring.computational-cost-regression-tracked` (Standard 24 R6). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. Two baseline entries appended, pending human review.
 
+### Added (recommendations, MINOR class; Story 6 of issue #44, #75)
+
+- `reproducibility.compute-environment-described` (Standard 15 R6); `reproducibility.reproduction-instructions-provided` (Standard 15 R7); `reproducibility.pipeline-integration-tested` (Standard 15 R8). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 3 baseline entries appended, pending human review.
+
 ### Added (requirements)
 
 - `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where

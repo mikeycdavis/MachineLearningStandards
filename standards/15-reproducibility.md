@@ -70,6 +70,18 @@ generously.
 
 **The experiment record SHOULD state the computational resources used to train and manage the model — hardware, run time and, where it can be estimated, energy or emissions — and whether the environmental impact and sustainability of that activity were assessed.** An unassessed question is recorded as unknown. Resource cost also bounds what reproduction on different hardware will take; see [Standard 24 R6](24-monitoring.md) for tracking cost regressions in production.
 
+### R6 — The computing infrastructure is described
+
+**The experiment record SHOULD describe the computing infrastructure used to produce reported results — hardware and accelerators, operating system, and the runtime or container image —** at a level that lets a reader judge whether the environment could change a result. This complements the pinned dependencies of R2 and the resource record of R5.
+
+### R7 — Reproduction instructions and a script are provided
+
+**A project SHOULD provide a README or equivalent with instructions for generating the reported results from the provided dataset and code, and a reproduction script that produces all reported results.** A result that cannot be produced by script is listed with the reason. Demonstrating that the script works is R4's concern, not this requirement's.
+
+### R8 — The full pipeline is integration tested
+
+**The full ML pipeline, from assembling training data through feature generation, training and validation to serving or export, SHOULD be exercised by an integration test on a small dataset or fixture that fails when a stage breaks.** Stage-level tests do not establish that the stages agree with one another.
+
 ## Prohibitions
 
 ### P1 — Reproducibility claims require the configuration
@@ -120,6 +132,9 @@ permission to deceive.
 | R3 | Notebooks committed with cleared outputs and monotonic execution counts | Detector A5 reports `.ipynb` code cells with committed non-empty `outputs` and non-monotonic `execution_count` | Partial — evidence of unrefreshed state, not proof of irreproducibility |
 | R4 | A record of a reproduction attempt and its outcome | Manual review only | None |
 | R5 | A resource and environmental-impact statement in the experiment record | Manual review only | None — a recommendation; no detector |
+| R6 | An infrastructure description in the experiment record | Manual review | None — a recommendation; no detector |
+| R7 | Reproduction instructions in the README and a reproduction script or documented command sequence | Manual review | None — a recommendation; no detector |
+| R8 | An integration test that runs the pipeline end to end on a fixture | Manual review | None — a recommendation; no detector |
 | P1 | The R1 record, plus attestation that no reproducibility claim exceeds it | Manual review only | None |
 | P2 | Attestation that every reported training figure came from a completed run | Manual review only | None |
 
@@ -151,6 +166,9 @@ than no check, because it would attach a green result to the precise question it
 - The enumeration of quiet fabrication forms in P2 — a figure from an incomplete run, a number
   carried forward from a different configuration, an expected result described as obtained.
 - R5 is a recommendation added by the C7 completeness work (issue #44, Story 5, #74). It pairs resource-cost recording with the source's environmental-impact assessment item.
+- R6 is a recommendation added by the C7 completeness work (issue #44, Story 6, #75), from the source's computing-infrastructure item.
+- R7 is a recommendation added by the C7 completeness work (issue #44, Story 6, #75), from the source's reproduction-instructions and reproduction-script items.
+- R8 is a recommendation added by the C7 completeness work (issue #44, Story 6, #75), from the source's full-pipeline integration-test item.
 
 ## Relationship to other standards
 

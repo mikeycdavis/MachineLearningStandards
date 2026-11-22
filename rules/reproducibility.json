@@ -157,6 +157,84 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "reproducibility.compute-environment-described",
+      "kind": "recommendation",
+      "title": "The computing infrastructure used is described",
+      "standard": 15,
+      "requirement": "R6",
+      "category": "reproducibility",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The experiment record describes the computing infrastructure used to produce the results, such as hardware, accelerators, operating system and the runtime environment, at a level that lets another party judge whether differences in the environment could change a result.",
+      "rationale": "Results can depend on hardware, library builds and accelerator behaviour in ways a pinned dependency list does not capture. An undescribed environment leaves a failed reproduction unexplained.",
+      "remediation": "Add an infrastructure description to the experiment record: hardware and accelerators, operating system, and the runtime or container image used.",
+      "evidenceExpected": "An infrastructure description in the experiment record for each reported result or experiment series.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a description is complete, and whether it matches what actually ran, are judgements about runs the repository records only as output.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "reproducibility.reproduction-instructions-provided",
+      "kind": "recommendation",
+      "title": "Instructions and a script for reproducing the reported results are provided",
+      "standard": 15,
+      "requirement": "R7",
+      "category": "reproducibility",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The repository provides a README or equivalent with instructions for generating the reported results from the provided dataset and code, and a reproduction script that produces all reported results. Where a result cannot be reproduced by script, the record says which and why.",
+      "rationale": "A configuration record says what was run; it does not say how to run it. Without instructions and a script, reproduction depends on knowledge held by the original author, which is the dependency reproducibility exists to remove.",
+      "remediation": "Add reproduction instructions to the README and a single script, or documented command sequence, that produces every reported result; list any result it cannot produce and the reason.",
+      "evidenceExpected": "A README section with reproduction instructions, and a reproduction script or command sequence covering the reported results, with exceptions listed.",
+      "$assuranceNote": "Nothing automated establishes this. A script that exists is not evidence that it produces the reported results, and whether it does is established only by running it, which R4 addresses.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
+    },
+    {
+      "id": "reproducibility.pipeline-integration-tested",
+      "kind": "recommendation",
+      "title": "The full ML pipeline is integration tested",
+      "standard": 15,
+      "requirement": "R8",
+      "category": "reproducibility",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The full pipeline, from assembling training data through feature generation, training, validation and serving or export, is exercised by an integration test that runs on a small dataset or a recorded fixture and fails when a stage breaks.",
+      "rationale": "Each stage can pass its own tests while the stages disagree about a schema, an ordering or a type. A pipeline run end to end on a small fixture catches that class of break before it reaches a long training run.",
+      "remediation": "Add an integration test that runs the pipeline end to end on a small fixture, and run it in CI or before each training run.",
+      "evidenceExpected": "An integration test or script that runs the pipeline stages end to end on a fixture, and a record of it passing.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a test exercises every stage, and whether its fixture is representative, are judgements about the pipeline that a scan does not make.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
