@@ -78,6 +78,10 @@ interpretation the project would not have endorsed.
 population it was computed over.** Two teams quoting "recall of 0.82" at different thresholds, or on
 different segments, are not disagreeing — they are reporting different quantities under one name.
 
+### R6 — Offline proxy metrics are checked against online impact
+
+**Where a model is judged offline by a proxy metric but its impact is measured online, the metric rationale SHOULD state whether the offline metric has been checked against that online impact, and how.** Where it has not been checked the rationale says so. A proxy that improves while the online outcome does not is a common way a model ships on a number that has stopped meaning anything.
+
 ## Prohibitions
 
 ### P1 — Metrics are chosen for the problem, not the result
@@ -120,6 +124,7 @@ does, because it weights the two identically by construction.
 | R2 | The rationale committed before the evaluation it governs, or a dated record of the change | Manual review of history | None |
 | R3, R5 | An evaluation document reporting the agreed metric set with thresholds and populations | Manual review | None |
 | R4 | A limitations note beside each reported metric | Manual review | None |
+| R6 | A metric rationale stating the online outcome and the offline-to-online comparison, or that none has been made | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that the metric was fixed before its value was known, with the R2 record as supporting evidence | Manual review only | None |
 | P2 | Attestation that accuracy, where reported, was chosen against the problem's cost structure | Manual review only | None |
 
@@ -146,6 +151,7 @@ right ones. Every rule and both prohibitions here report `not-evaluated`.
 - The reading of P2 as covering symmetric-cost failures as well as imbalance — accuracy is
   inadequate on a balanced problem with asymmetric costs, which the imbalance framing alone misses.
 - The specific limitation examples in R4, which are illustrative and authored.
+- R6 is a recommendation added by the C7 completeness work (issue #44, Story 7, #76), from the source's offline-proxy-versus-online-impact item.
 
 ## Relationship to other standards
 

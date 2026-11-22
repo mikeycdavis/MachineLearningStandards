@@ -93,6 +93,14 @@ classification in R3.** A comparison that ends in a table leaves the inference t
 the inference the reader draws is "the highest number won" — which is the reasoning P2 forbids,
 performed by someone who never saw the standard.
 
+### R5 — The choice of model types is justified
+
+**The comparison record SHOULD justify the choice of the model types that were implemented, stating why they were chosen and what alternatives, including a simple baseline, were considered.** This concerns the family, not the selected model's reason, which is R4.
+
+### R6 — The choice of statistical test is justified
+
+**Where a statistical test is used to compare models, the record SHOULD justify the choice of test and state how its assumptions were checked or why they are believed to hold.** This sits beside the uncertainty reporting already required of comparisons and does not replace it.
+
 ## Prohibitions
 
 ### P1 — Comparisons share data and splits
@@ -158,6 +166,8 @@ true`, and a policy that names it in an exception is itself reported as an attem
 | R1, R2 | A comparison table recording dataset version, split identifier, metric, threshold, population, and date per arm | Manual review, supported by the identifiers [Standard 4](04-dataset-versioning.md) requires | None |
 | R3 | Each claimed improvement labelled as statistical, practically meaningful, or production-relevant, with the basis for each label | Manual review | None |
 | R4 | A stated selection with its reason expressed in R3's terms | Manual review | None |
+| R5 | A justification of each model type implemented and the alternatives considered | Manual review | None — a recommendation; no detector |
+| R6 | A justification of the statistical test and the assumption check beside each reported test | Manual review | None — a recommendation; no detector |
 | P1 | Attestation that every arm shared the recorded conditions, with the R2 record as supporting evidence | Manual review only | None |
 | P2 | Attestation that a complexity increase was justified against its cost, not by margin alone | Manual review only | None |
 | P3 | Attestation, naming the reviewer, that every reported figure traces to a recorded evaluation run | Manual review only | None |
@@ -188,6 +198,8 @@ text at all — not that evidence is merely missing.
   placeholders as a form of P3.
 - The observation in P3 that harm does not depend on intent, which is why the placeholder case is
   not treated as lesser.
+- R5 is a recommendation added by the C7 completeness work (issue #44, Story 7, #76), from the source's model-type-justification item.
+- R6 is a recommendation added by the C7 completeness work (issue #44, Story 7, #76), from the source's statistical-test justification and assumption-check item.
 
 ## Relationship to other standards
 

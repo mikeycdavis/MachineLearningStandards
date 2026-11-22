@@ -97,6 +97,32 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "split.hyperparameter-coverage-stated",
+      "kind": "recommendation",
+      "title": "Which hyperparameters were tuned, and which were fixed and why, is stated",
+      "standard": 14,
+      "requirement": "R5",
+      "category": "split",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The experiment record lists the hyperparameters of the model, states which were tuned and which were left at fixed or default values, and gives the reason for each fixed value that is likely to matter.",
+      "rationale": "A model with untuned hyperparameters can look worse than it is, and a comparison where one side was tuned and the other was not is not a comparison. Stating what was and was not tuned makes either case visible.",
+      "remediation": "List every hyperparameter and mark it tuned or fixed; for each fixed one that plausibly affects results, give the value's source or reason.",
+      "evidenceExpected": "A hyperparameter table in the experiment record marking each as tuned or fixed, with reasons for the consequential fixed values.",
+      "$assuranceNote": "Nothing automated establishes this. Whether a hyperparameter list is complete, and whether a fixed value is reasonable, are judgements about the model that a scan does not make.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

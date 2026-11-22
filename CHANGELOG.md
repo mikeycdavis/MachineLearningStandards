@@ -52,6 +52,10 @@ this tree; they are recorded as unreconciled and are not reconciled here.
 
 - `reproducibility.compute-environment-described` (Standard 15 R6); `reproducibility.reproduction-instructions-provided` (Standard 15 R7); `reproducibility.pipeline-integration-tested` (Standard 15 R8). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 3 baseline entries appended, pending human review.
 
+### Added (recommendations, MINOR class; Story 7 of issue #44, #76)
+
+- `evaluation.offline-online-metric-correlation-checked` (Standard 12 R6); `split.hyperparameter-coverage-stated` (Standard 14 R5); `evaluation.model-family-choice-justified` (Standard 19 R5); `evaluation.statistical-test-justified` (Standard 19 R6). Manual-review, attestable, assurance none, `introducedIn: "1.2.0"`. 4 baseline entries appended, pending human review.
+
 ### Added (requirements)
 
 - `framing.proxy-label-relationship-recorded` (Standard 1 R6, N3). Conditional: applies only where

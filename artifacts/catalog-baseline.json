@@ -682,6 +682,46 @@
       "assurance": "none",
       "nonExemptible": false,
       "attestable": true
+    },
+    {
+      "id": "evaluation.offline-online-metric-correlation-checked",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "split.hyperparameter-coverage-stated",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "evaluation.model-family-choice-justified",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
+    },
+    {
+      "id": "evaluation.statistical-test-justified",
+      "kind": "recommendation",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true
     }
   ]
 }

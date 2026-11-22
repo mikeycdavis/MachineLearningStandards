@@ -359,3 +359,27 @@ applicability:
     reason: "There is no ML pipeline in this repository to integration test."
     reviewedAt: "2026-11-22"
     revisitWhen: "Any training or data pipeline is added to this repository."
+
+  evaluation.offline-online-metric-correlation-checked:
+    status: not-applicable
+    reason: "No model is evaluated or deployed here, so there is no offline metric standing in for an online outcome."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any model evaluation or deployed model is added to this repository."
+
+  split.hyperparameter-coverage-stated:
+    status: not-applicable
+    reason: "No model is trained here, so there are no hyperparameters to tune or fix."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any training code is added to this repository."
+
+  evaluation.model-family-choice-justified:
+    status: not-applicable
+    reason: "No models are implemented or compared here, so there is no model-type choice to justify."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any model training or comparison is added to this repository."
+
+  evaluation.statistical-test-justified:
+    status: not-applicable
+    reason: "No statistical comparison is run here, so there is no test to justify."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any statistical comparison of models is added to this repository."

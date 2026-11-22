@@ -80,6 +80,10 @@ receive it. A score reported with "selected by inner five-fold cross-validation 
 sixty configurations, test set scored once" is an estimate. The same score reported alone is a
 claim whose optimism cannot be bounded.
 
+### R5 — Tuned and fixed hyperparameters are stated
+
+**The experiment record SHOULD list the model's hyperparameters, state which were tuned and which were left fixed or at defaults, and give a reason for each fixed value likely to matter.** This does not change R1: tuning is still conducted against validation data only. It makes a comparison between a tuned and an untuned model visible as one.
+
 ## Prohibitions
 
 ### P1 — The final test set is not a tuning signal
@@ -124,6 +128,7 @@ the evidence the tuning destroyed.
 | R2 | A recorded search space, procedure, trial count, and selection criterion in the experiment record | Manual review, supported by the experiment-configuration check in [Standard 15](15-reproducibility.md) | None for the search's completeness |
 | R3 | An experiment log or tracking record covering manually initiated runs | Manual review only | None |
 | R4 | A results document stating the selection procedure beside the test score | Manual review only | None |
+| R5 | A hyperparameter table marking each as tuned or fixed, with reasons for consequential fixed values | Manual review | None — a recommendation; no detector |
 | P1 | Detector A2 reporting no finding, plus attestation that no indirect selection on test results occurred | Code analysis, then attestation | Partial — see below |
 
 **What the automated check cannot establish.** Detector A2 fires an error when a fitting call's
@@ -151,6 +156,7 @@ mistake that is written down.
   the act; the list of its disguises is authored here.
 - The observation in R2 that a best configuration without its trial count cannot be interpreted,
   because the optimism in a search's winner grows with the number of candidates it beat.
+- R5 is a recommendation added by the C7 completeness work (issue #44, Story 7, #76), from the source's all-hyperparameters-tuned item, restated as a statement of coverage because requiring every hyperparameter to be tuned would be unbounded.
 
 ## Relationship to other standards
 
