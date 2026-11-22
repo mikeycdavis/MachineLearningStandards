@@ -330,3 +330,14 @@ applicability:
     reason: "This repository holds no dataset, so there are no subpopulations to identify or record."
     reviewedAt: "2026-11-22"
     revisitWhen: "Any dataset, training or evaluation code is added to this repository."
+
+  reproducibility.resource-cost-recorded:
+    status: not-applicable
+    reason: "No model is trained or managed here, so there are no compute resources or environmental impact to record."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any experiment or training run is added to this repository."
+  monitoring.computational-cost-regression-tracked:
+    status: not-applicable
+    reason: "No model is deployed or served here, so there is no training speed, latency, throughput or memory use to track."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any deployed model or serving component is added to this repository."

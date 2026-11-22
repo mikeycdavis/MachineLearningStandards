@@ -96,6 +96,32 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "monitoring.computational-cost-regression-tracked",
+      "kind": "recommendation",
+      "title": "Training speed, serving latency, throughput and memory use are tracked for regressions",
+      "standard": 24,
+      "requirement": "R6",
+      "category": "monitoring",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "deployment-surface"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "Training speed, serving latency, throughput and memory use are tracked over time with a stated baseline, so that a sudden regression or a slow leak is noticed and dispositioned rather than found when a limit is hit.",
+      "rationale": "Computational performance degrades quietly: a slow leak or a gradual slowdown never trips a single threshold, and by the time it is noticed the cause is buried in many changes. A baseline and a trend turn it into a signal.",
+      "remediation": "Add the cost signals to the monitoring specification with a baseline and a review cadence or alert threshold, and record a disposition when one regresses.",
+      "evidenceExpected": "A monitoring specification entry for training speed, serving latency, throughput and memory use, each with a baseline and how a regression is noticed.",
+      "$assuranceNote": "Nothing automated establishes this. The signals live in the running service and its metrics backend, outside the repository, and whether a threshold is adequate is a judgement about the service.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }

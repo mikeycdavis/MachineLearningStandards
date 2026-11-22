@@ -78,6 +78,10 @@ indistinguishable from a healthy model. Staleness checks on each signal, and an 
 when a metric stops arriving, convert an absence of alerts into weak positive evidence rather than
 no evidence at all.
 
+### R6 — Computational cost is tracked for regressions
+
+**Training speed, serving latency, throughput and memory use SHOULD be tracked over time against a stated baseline**, so that a sudden regression or a slow leak is noticed and dispositioned. Cost degradation rarely trips a single threshold, which is why it needs a trend rather than only an alert. Recording the resources of a run is [Standard 15 R5](15-reproducibility.md).
+
 ## Evidence and verification
 
 | Rule | What demonstrates compliance | How it is verified | Assurance |
@@ -87,6 +91,7 @@ no evidence at all.
 | R3 | Segment definitions recorded before deployment, and per-segment reporting | Manual review only | None |
 | R4 | Thresholds and named owners recorded against each alerting signal | Manual review only | None |
 | R5 | Staleness or heartbeat checks on the monitoring signals themselves | Manual review only | None |
+| R6 | Baselines and regression tracking for training speed, latency, throughput and memory | Manual review only | None |
 
 **Why nothing automated applies here.** `monitoring.production-monitoring-defined` is not evaluated.
 Every subject of this standard is outside the repository: the running service, the metrics backend,
@@ -114,6 +119,7 @@ attestation that names the monitoring specification and the on-call arrangement 
   most projects treat as evidence of health.
 - The inclusion of the malformed-input rejection rate from [Standard 23](23-inference-behavior.md)
   among R1's input-health signals.
+- R6 is a recommendation added by the C7 completeness work (issue #44, Story 5, #74), from the source's computational-regression monitoring item.
 
 ## Relationship to other standards
 

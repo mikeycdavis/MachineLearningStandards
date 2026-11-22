@@ -66,6 +66,10 @@ This requirement is the constructive half of P1. Together they say: record enoug
 recorded, and where verification has not happened, describe the state accurately rather than
 generously.
 
+### R5 — Compute resources and environmental impact are recorded
+
+**The experiment record SHOULD state the computational resources used to train and manage the model — hardware, run time and, where it can be estimated, energy or emissions — and whether the environmental impact and sustainability of that activity were assessed.** An unassessed question is recorded as unknown. Resource cost also bounds what reproduction on different hardware will take; see [Standard 24 R6](24-monitoring.md) for tracking cost regressions in production.
+
 ## Prohibitions
 
 ### P1 — Reproducibility claims require the configuration
@@ -115,6 +119,7 @@ permission to deceive.
 | R2 | Exact pins in `requirements*.txt`, a lockfile beside `pyproject.toml`, `=` on `environment.yml` deps | Detector A4 lists the exact unpinned entries it found | Partial — see below |
 | R3 | Notebooks committed with cleared outputs and monotonic execution counts | Detector A5 reports `.ipynb` code cells with committed non-empty `outputs` and non-monotonic `execution_count` | Partial — evidence of unrefreshed state, not proof of irreproducibility |
 | R4 | A record of a reproduction attempt and its outcome | Manual review only | None |
+| R5 | A resource and environmental-impact statement in the experiment record | Manual review only | None — a recommendation; no detector |
 | P1 | The R1 record, plus attestation that no reproducibility claim exceeds it | Manual review only | None |
 | P2 | Attestation that every reported training figure came from a completed run | Manual review only | None |
 
@@ -145,6 +150,7 @@ than no check, because it would attach a green result to the precise question it
   obligation with its own evidence is this standard's reading.
 - The enumeration of quiet fabrication forms in P2 — a figure from an incomplete run, a number
   carried forward from a different configuration, an expected result described as obtained.
+- R5 is a recommendation added by the C7 completeness work (issue #44, Story 5, #74). It pairs resource-cost recording with the source's environmental-impact assessment item.
 
 ## Relationship to other standards
 
