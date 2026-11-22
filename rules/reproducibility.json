@@ -131,6 +131,32 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null
+    },
+    {
+      "id": "reproducibility.resource-cost-recorded",
+      "kind": "recommendation",
+      "title": "Compute resources and environmental impact of training and management are assessed and recorded",
+      "standard": 15,
+      "requirement": "R5",
+      "category": "reproducibility",
+      "level": "recommended",
+      "severity": "warning",
+      "verification": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "attestable": true,
+      "triggers": [
+        "training-code"
+      ],
+      "introducedIn": "1.2.0",
+      "description": "The experiment record states the computational resources used to train and manage the model, such as hardware, run time and, where it can be estimated, energy or emissions, and records whether the environmental impact and sustainability of that activity were assessed. An unassessed question is recorded as unknown rather than left blank.",
+      "rationale": "Cost that nobody wrote down cannot be compared across experiments or weighed against the benefit of a change, and an unassessed environmental impact reads as no impact. Recording the resources, or recording that the impact was not assessed, separates not looked at from looked at and small. It also supports reproduction on different hardware.",
+      "remediation": "Add a resource section to the experiment record: hardware, wall-clock or GPU hours for training and for routine management such as retraining, an energy or emissions estimate where a method is available, or unknown with the reason.",
+      "evidenceExpected": "A resource and environmental-impact statement in the experiment record for each training run or experiment series, answered with figures, an estimate, or unknown.",
+      "$assuranceNote": "Nothing automated establishes this. Whether recorded figures are accurate, and whether an environmental assessment is adequate, are judgements about runs the repository records only as output.",
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null
     }
   ]
 }
