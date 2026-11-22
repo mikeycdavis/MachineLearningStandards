@@ -383,3 +383,21 @@ applicability:
     reason: "No statistical comparison is run here, so there is no test to justify."
     reviewedAt: "2026-11-22"
     revisitWhen: "Any statistical comparison of models is added to this repository."
+
+  monitoring.staleness-impact-known:
+    status: not-applicable
+    reason: "No model is deployed here, so there is no staleness to measure."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any deployed model is added to this repository."
+
+  monitoring.model-age-bounded:
+    status: not-applicable
+    reason: "No model is deployed here, so there is no model age to monitor."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any deployed model is added to this repository."
+
+  monitoring.numerical-stability-checked:
+    status: not-applicable
+    reason: "No model is trained or served here, so there are no numeric values to check."
+    reviewedAt: "2026-11-22"
+    revisitWhen: "Any training or serving code is added to this repository."
